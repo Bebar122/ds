@@ -11016,7 +11016,7 @@ addcmd('dupetools', {'clonetools'}, function(args, speaker)
 				v.Parent = workspace
 			end
 		end
-		wait(.1)
+		wait(2.1)
 	end
 end)
 
