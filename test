@@ -11239,6 +11239,21 @@ addcmd('deletehats',{'nohats','rhats'},function(args, speaker)
 end)
 
 addcmd('droptools',{'droptool'},function(args, speaker)
+	if speaker.Character then
+		for _,obj in pairs(speaker.Character:GetChildren()) do
+			if obj:IsA("Tool") then
+				obj.CanBeDropped = true
+			end
+		end
+	end
+	if speaker:FindFirstChildOfClass("Backpack") then
+		for _,obj in pairs(speaker:FindFirstChildOfClass("Backpack"):GetChildren()) do
+			if obj:IsA("Tool") then
+				obj.CanBeDropped = true
+			end
+		end
+	end
+
 	for i,v in pairs(Players.LocalPlayer.Backpack:GetChildren()) do
 		if v:IsA("Tool") then
 			v.Parent = Players.LocalPlayer.Character
