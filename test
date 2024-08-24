@@ -4665,9 +4665,9 @@ CMDs[#CMDs + 1] = {NAME = 'droptools', DESC = 'Drops your tools'}
 CMDs[#CMDs + 1] = {NAME = 'droppabletools', DESC = 'Makes your tools droppable'}
 CMDs[#CMDs + 1] = {NAME = 'equiptools', DESC = 'Equips every tool in your inventory at once'}
 CMDs[#CMDs + 1] = {NAME = 'unequiptools', DESC = 'Unequips every tool you are currently holding at once'}
-CMDs[#CMDs + 1] = {NAME = 'removespecifictool [name]', DESC = 'Automatically remove a specific tool from your inventory'}
+CMDs[#CMDs + 1] = {NAME = 'removespecifictool / rst [name]', DESC = 'Automatically remove a specific tool from your inventory'}
 CMDs[#CMDs + 1] = {NAME = 'unremovespecifictool [name]', DESC = 'Stops removing a specific tool from your inventory'}
-CMDs[#CMDs + 1] = {NAME = 'clearremovespecifictool', DESC = 'Stop removing all specific tools from your inventory'}
+CMDs[#CMDs + 1] = {NAME = 'clearremovespecifictool / clrst', DESC = 'Stop removing all specific tools from your inventory'}
 CMDs[#CMDs + 1] = {NAME = 'reach [num]', DESC = 'Increases the hitbox of your held tool'}
 CMDs[#CMDs + 1] = {NAME = 'unreach / noreach', DESC = 'Turns off reach'}
 CMDs[#CMDs + 1] = {NAME = 'grippos [X Y Z]', DESC = 'Changes your current tools grip position'}
@@ -10726,7 +10726,7 @@ addcmd('nograbtools',{'ungrabtools'},function(args, speaker)
 end)
 
 local specifictoolremoval = {}
-addcmd('removespecifictool',{},function(args, speaker)
+addcmd('removespecifictool',{rst},function(args, speaker)
 	if args[1] and speaker:FindFirstChildOfClass("Backpack") then
 		local tool = string.lower(getstring(1))
 		local RST = RunService.RenderStepped:Connect(function()
@@ -10752,7 +10752,7 @@ addcmd('unremovespecifictool',{},function(args, speaker)
 	end
 end)
 
-addcmd('clearremovespecifictool',{},function(args, speaker)
+addcmd('clearremovespecifictool',{clrst},function(args, speaker)
 	for obj in pairs(specifictoolremoval) do
 		specifictoolremoval[obj]:Disconnect()
 		specifictoolremoval[obj] = nil
