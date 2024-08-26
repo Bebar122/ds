@@ -11610,7 +11610,7 @@ end)
 function kill(speaker,target,fast)
 	local targetPosition = target.Character.HumanoidRootPart.Position
 	local spawnPosition = target.Character.HumanoidRootPart.Position+Vector3.new(10, 10, 10)
-	workspace.asdsdfsad0.RocketJumper.FireRocket:FireServer(targetPosition, spawnPosition)
+	game:GetService'Players'.LocalPlayer.Character.RocketJumper.FireRocket:FireServer(targetPosition, spawnPosition)
 end
 
 addcmd('kill',{'fekill'},function(args, speaker)
