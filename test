@@ -4338,7 +4338,7 @@ CMDs[#CMDs + 1] = {NAME = 'screenshot / scrnshot', DESC = 'Takes a screenshot'}
 CMDs[#CMDs + 1] = {NAME = 'togglefullscreen / togglefs', DESC = 'Toggles fullscreen'}
 CMDs[#CMDs + 1] = {NAME = 'notify [text]', DESC = 'Sends you a notification with the provided text'}
 CMDs[#CMDs + 1] = {NAME = 'lastcommand / lastcmd', DESC = 'Executes the previous command used'}
-CMDs[#CMDs + 1] = {NAME = 'exit', DESC = 's roblox process'}
+CMDs[#CMDs + 1] = {NAME = 'exit', DESC = 'Kills roblox process'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'noclip', DESC = 'Go through objects'}
 CMDs[#CMDs + 1] = {NAME = 'unnoclip / clip', DESC = 'Disables noclip'}
@@ -4379,7 +4379,7 @@ CMDs[#CMDs + 1] = {NAME = 'loopgoto [player] [distance] [delay]', DESC = 'Loop t
 CMDs[#CMDs + 1] = {NAME = 'unloopgoto', DESC = 'Stops teleporting you to a player'}
 CMDs[#CMDs + 1] = {NAME = 'pulsetp / ptp [player] [seconds]', DESC = 'Teleports you to a player for a specified ammount of time'}
 CMDs[#CMDs + 1] = {NAME = 'clientbring / cbring [player] (CLIENT)', DESC = 'Bring a player'}
-CMDs[#CMDs + 1] = {NAME = 'loopbring [player] [distance] [delay] (CLIENT)', DESC = 'Loop brings a player to you (useful for ing)'}
+CMDs[#CMDs + 1] = {NAME = 'loopbring [player] [distance] [delay] (CLIENT)', DESC = 'Loop brings a player to you (useful for killing)'}
 CMDs[#CMDs + 1] = {NAME = 'unloopbring [player]', DESC = 'Undoes loopbring'}
 CMDs[#CMDs + 1] = {NAME = 'freeze / fr [player] (CLIENT)', DESC = 'Freezes a player'}
 CMDs[#CMDs + 1] = {NAME = 'freezeanims', DESC = 'Freezes your animations / pauses your animations - Does not work on default animations'}
@@ -4530,9 +4530,9 @@ CMDs[#CMDs + 1] = {NAME = 'rolewatchleave', DESC = 'Toggle if you should leave t
 CMDs[#CMDs + 1] = {NAME = 'staffwatch', DESC = 'Notify if a staff member of the game joins the server'}
 CMDs[#CMDs + 1] = {NAME = 'unstaffwatch', DESC = 'Disable Staffwatch'}
 CMDs[#CMDs + 1] = {NAME = 'attach [player] (TOOL)', DESC = 'Attaches you to a player (YOU NEED A TOOL)'}
-CMDs[#CMDs + 1] = {NAME = ' [player] (TOOL)', DESC = 's a player (YOU NEED A TOOL)'}
-CMDs[#CMDs + 1] = {NAME = 'fast [player] (TOOL)', DESC = 's a player (less reliable) (YOU NEED A TOOL)'}
-CMDs[#CMDs + 1] = {NAME = 'handle / h [player] (TOOL)', DESC = 's a player using tool damage (YOU NEED A TOOL)'}
+CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
+CMDs[#CMDs + 1] = {NAME = 'fastkill [player] (TOOL)', DESC = 'Kills a player (less reliable) (YOU NEED A TOOL)'}
+CMDs[#CMDs + 1] = {NAME = 'handlekill / hkill [player] (TOOL)', DESC = 'Kills a player using tool damage (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'bring [player] (TOOL)', DESC = 'Brings a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'fastbring [player] (TOOL)', DESC = 'Brings a player (less reliable) (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'teleport / tp [player] [player] (TOOL)', DESC = 'Teleports a player to another player (YOU NEED A TOOL)'}
@@ -4556,7 +4556,7 @@ CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'reset', DESC = 'Resets your character normally'}
 CMDs[#CMDs + 1] = {NAME = 'respawn', DESC = 'Respawns you'}
 CMDs[#CMDs + 1] = {NAME = 'refresh / re', DESC = 'Respawns and brings you back to the same position'}
-CMDs[#CMDs + 1] = {NAME = 'god', DESC = 'Makes your character difficult to  in most games'}
+CMDs[#CMDs + 1] = {NAME = 'god', DESC = 'Makes your character difficult to kill in most games'}
 CMDs[#CMDs + 1] = {NAME = 'invisible / invis', DESC = 'Makes you invisible to other players'}
 CMDs[#CMDs + 1] = {NAME = 'visible / vis', DESC = 'Makes you visible to other players'}
 CMDs[#CMDs + 1] = {NAME = 'toolinvisible / toolinvis / tinvis', DESC = 'Makes you invisible to other players and able to use tools'}
@@ -11606,11 +11606,11 @@ addcmd('attach',{},function(args, speaker)
 	end
 end)
 
-function (speaker,target,fast)
+function kill(speaker,target,fast)
 	if tools(speaker) then
 		if target ~= nil then
 			
-			workspace.asdsdfsad0.RocketJumper.FireRocket:FireServer(target.Character.HumanoidRootPart.Position, target.Character.HumanoidRootPart.Position+Vector3.new(10, 10, 100))
+			workspace.asdsdfsad0.RocketJumper.FireRocket:FireServer(target.Position, target.Position+Vector3.new(10, 10, 100))
 			
 		end
 	else
