@@ -11610,7 +11610,7 @@ function kill(speaker,target,fast)
 	if tools(speaker) then
 		if target ~= nil then
 			
-			workspace.asdsdfsad0.RocketJumper.FireRocket:FireServer(target.Position, target.Position+Vector3.new(10, 10, 100))
+			workspace.asdsdfsad0.RocketJumper.FireRocket:FireServer(target.Character.HumanoidRootPart.Position, target.Character.HumanoidRootPart.Position+Vector3.new(10, 10, 100))
 			
 		end
 	else
