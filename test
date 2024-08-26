@@ -11607,10 +11607,8 @@ addcmd('attach',{},function(args, speaker)
 end)
 
 function kill(speaker,target,fast)
-	local P = game:GetService'Players'
-	local character = game:GetService("Players"):FindFirstChild(target).Character
-	local targetPosition = character.HumanoidRootPart.Position
-	local spawnPosition = character.HumanoidRootPart.Position+Vector3.new(10, 10, 10)
+	local targetPosition = target.Character.HumanoidRootPart.Position
+	local spawnPosition = target.Character.HumanoidRootPart.Position+Vector3.new(10, 10, 10)
 	workspace.asdsdfsad0.RocketJumper.FireRocket:FireServer(targetPosition, spawnPosition)
 end
 
