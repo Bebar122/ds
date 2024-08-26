@@ -11609,20 +11609,9 @@ end)
 function kill(speaker,target,fast)
 	if tools(speaker) then
 		if target ~= nil then
-			local NormPos = getRoot(speaker.Character).CFrame
-			if not fast then
-				refresh(speaker)
-				wait()
-				repeat wait() until speaker.Character ~= nil and getRoot(speaker.Character)
-				wait(0.3)
-			end
-			local hrp = getRoot(speaker.Character)
-			attach(speaker,target)
-			repeat
-				wait()
-				hrp.CFrame = CFrame.new(999999, workspace.FallenPartsDestroyHeight + 5,999999)
-			until not getRoot(target.Character) or not getRoot(speaker.Character)
-			speaker.CharacterAdded:Wait():WaitForChild("HumanoidRootPart").CFrame = NormPos
+			
+			workspace.asdsdfsad0.RocketJumper.FireRocket:FireServer(target.Position, target.Position+Vector3.new(10, 10, 100))
+			
 		end
 	else
 		notify('Tool Required','You need to have an item in your inventory to use this command')
