@@ -11628,12 +11628,20 @@ addcmd("killstop", {}, function(args, speaker)
 end)
 
 addcmd("giveblocks", {}, function(args, speaker)
-	for _ = 1,50 do
-		ReplicatedStorage.SpawnLuckyBlock:FireServer()
-		ReplicatedStorage.SpawnSuperBlock:FireServer()
-		ReplicatedStorage.SpawnDiamondBlock:FireServer()
-		ReplicatedStorage.SpawnRainbowBlock:FireServer()
+	for _ = 1,100 do
 		ReplicatedStorage.SpawnGalaxyBlock:FireServer()
+	end
+	for _ = 1,100 do
+		ReplicatedStorage.SpawnRainbowBlock:FireServer()
+	end
+	for _ = 1,100 do
+		ReplicatedStorage.SpawnDiamondBlock:FireServer()
+	end
+	for _ = 1,200 do
+		ReplicatedStorage.SpawnSuperBlock:FireServer()
+	end
+	for _ = 1,200 do
+		ReplicatedStorage.SpawnLuckyBlock:FireServer()
 	end
 end)
 
