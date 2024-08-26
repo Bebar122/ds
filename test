@@ -11609,8 +11609,9 @@ addcmd('attach',{},function(args, speaker)
 end)
 
 function kill(speaker,target,fast)
+	local randomVector = Vector3.new((math.random()-0.5)*10, (math.random()-0.5)*10, (math.random()-0.5)*10)
 	local targetPosition = target.Character.HumanoidRootPart.Position
-	local spawnPosition = target.Character.HumanoidRootPart.Position+Vector3.new(10, 10, 10)
+	local spawnPosition = target.Character.HumanoidRootPart.Position+randomVector
 	game:GetService("Players").LocalPlayer.Backpack.RocketJumper.FireRocket:FireServer(targetPosition, spawnPosition)
 end
 
