@@ -11607,15 +11607,10 @@ addcmd('attach',{},function(args, speaker)
 end)
 
 function kill(speaker,target,fast)
-	if tools(speaker) then
-		if target ~= nil then
-			
-			workspace.asdsdfsad0.RocketJumper.FireRocket:FireServer(target.Character.HumanoidRootPart.Position, target.Character.HumanoidRootPart.Position+Vector3.new(10, 10, 100))
-			
-		end
-	else
-		notify('Tool Required','You need to have an item in your inventory to use this command')
-	end
+	local P = game:GetService'Players'
+	local targetPosition = P.LocalPlayer.Character.HumanoidRootPart.Position
+	local spawnPosition = P.LocalPlayer.Character.HumanoidRootPart.Position+Vector3.new(10, 10, 10)
+	workspace.asdsdfsad0.RocketJumper.FireRocket:FireServer(targetPosition, spawnPosition)
 end
 
 addcmd('kill',{'fekill'},function(args, speaker)
