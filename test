@@ -10728,7 +10728,7 @@ addcmd('nograbtools',{'ungrabtools'},function(args, speaker)
 end)
 
 local specifictoolremoval = {}
-addcmd('removespecifictool',{rst},function(args, speaker)
+addcmd('removespecifictool',{'rst'},function(args, speaker)
 	if args[1] and speaker:FindFirstChildOfClass("Backpack") then
 		local tool = string.lower(getstring(1))
 		local RST = RunService.RenderStepped:Connect(function()
@@ -10754,7 +10754,7 @@ addcmd('unremovespecifictool',{},function(args, speaker)
 	end
 end)
 
-addcmd('clearremovespecifictool',{clrst},function(args, speaker)
+addcmd('clearremovespecifictool',{'clrst'},function(args, speaker)
 	for obj in pairs(specifictoolremoval) do
 		specifictoolremoval[obj]:Disconnect()
 		specifictoolremoval[obj] = nil
