@@ -4531,6 +4531,7 @@ CMDs[#CMDs + 1] = {NAME = 'staffwatch', DESC = 'Notify if a staff member of the 
 CMDs[#CMDs + 1] = {NAME = 'unstaffwatch', DESC = 'Disable Staffwatch'}
 CMDs[#CMDs + 1] = {NAME = 'attach [player] (TOOL)', DESC = 'Attaches you to a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
+CMDs[#CMDs + 1] = {NAME = '1kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'killstop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'giveblocks', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'fastkill [player] (TOOL)', DESC = 'Kills a player (less reliable) (YOU NEED A TOOL)'}
@@ -11629,6 +11630,13 @@ addcmd('kill',{'fekill'},function(args, speaker)
 			kill(speaker,Players[v])
 		end
 	end)
+end)
+
+addcmd('1kill',{'1fekill'},function(args, speaker)
+	local players = getPlayer(args[1], speaker)
+	for i,v in pairs(players) do
+		kill(speaker,Players[v])
+	end
 end)
 
 addcmd("killstop", {}, function(args, speaker)
