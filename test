@@ -10975,6 +10975,14 @@ addcmd('equiptools',{},function(args, speaker)
 	end
 end)
 
+addcmd('permhold',{},function(args, speaker)
+	for i = 1, 300 do
+		game:GetService("Players").LocalPlayer.Backpack.SnowyGravityCoil.Parent = speaker.Character
+		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
+		wait(0.004)
+	end
+end)
+
 addcmd('unequiptools',{},function(args, speaker)
 	speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 end)
