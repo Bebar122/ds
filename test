@@ -10985,9 +10985,18 @@ addcmd('permhold',{},function(args, speaker)
 		RS.wait()
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 
+		speaker.Backpack.EnergySword.Parent = speaker.Character
+		RS.wait()
+		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
+
 		speaker.Backpack.SpectralSword.Parent = speaker.Character
 		RS.wait()
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
+
+		speaker.Backpack.EnergySword.Parent = speaker.Character
+		RS.wait()
+		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
+		
 	end
 end)
 
