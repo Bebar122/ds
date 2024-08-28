@@ -4673,7 +4673,6 @@ CMDs[#CMDs + 1] = {NAME = 'unequiptools', DESC = 'Unequips every tool you are cu
 CMDs[#CMDs + 1] = {NAME = 'removespecifictool / rst [name]', DESC = 'Automatically remove a specific tool from your inventory'}
 CMDs[#CMDs + 1] = {NAME = 'unremovespecifictool [name]', DESC = 'Stops removing a specific tool from your inventory'}
 CMDs[#CMDs + 1] = {NAME = 'clearremovespecifictool / clrst', DESC = 'Stop removing all specific tools from your inventory'}
-CMDs[#CMDs + 1] = {NAME = 'dupeselectedtool / dpst', DESC = 'Stop removing all specific tools from your inventory'}
 CMDs[#CMDs + 1] = {NAME = 'reach [num]', DESC = 'Increases the hitbox of your held tool'}
 CMDs[#CMDs + 1] = {NAME = 'unreach / noreach', DESC = 'Turns off reach'}
 CMDs[#CMDs + 1] = {NAME = 'grippos [X Y Z]', DESC = 'Changes your current tools grip position'}
@@ -11033,8 +11032,6 @@ addcmd('equiptools',{},function(args, speaker)
 		end
 	end
 end)
-
-
 
 addcmd('permhold',{},function(args, speaker)
 	local LOOP_NUM = tonumber(args[1]) or 1
