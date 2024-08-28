@@ -7683,7 +7683,7 @@ addcmd('dupeselectedtool', {'dpst'}, function(args, speaker)
                 wait()
             end
         end
-        wait(1)
+        wait(0.5)
     end
 
     -- Сброс всех инструментов
