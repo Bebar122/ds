@@ -8753,7 +8753,7 @@ end)
 
 addcmd('dupeselectedtool',{'dpst'},function(args, speaker)
 	local stool
-	local LOOP_NUM=args[1]
+	local LOOP_NUM=tonumber(args[1]) or 1
 	for i,v in pairs(speaker.Character:GetDescendants()) do
 		if v:IsA('Tool') or v:IsA('HopperBin') then
 			stool=v.Name:lower()
