@@ -10986,7 +10986,7 @@ addcmd('permhold',{},function(args, speaker)
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 
 		speaker.Backpack.SpectralSword.Parent = speaker.Character
-		wait(0.0001)
+		
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 		
 	end
