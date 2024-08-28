@@ -4660,7 +4660,7 @@ CMDs[#CMDs + 1] = {NAME = 'tools', DESC = 'Copies tools from ReplicatedStorage a
 CMDs[#CMDs + 1] = {NAME = 'notools / removetools / deletetools', DESC = 'Removes tools from character and backpack'}
 CMDs[#CMDs + 1] = {NAME = 'deleteselectedtool / dst', DESC = 'Removes any currently selected tools'}
 CMDs[#CMDs + 1] = {NAME = 'grabtools', DESC = 'Automatically get tools that are dropped'}
-CMDs[#CMDs + 1] = {NAME = 'permhold', DESC = 'Automatically get tools that are dropped'}
+CMDs[#CMDs + 1] = {NAME = '', DESC = 'Automatically get tools that are dropped'}
 CMDs[#CMDs + 1] = {NAME = 'ungrabtools / nograbtools', DESC = 'Disables grabtools'}
 CMDs[#CMDs + 1] = {NAME = 'copytools [player] (CLIENT)', DESC = 'Copies a players tools'}
 CMDs[#CMDs + 1] = {NAME = 'dupetools / clonetools [num]', DESC = 'Duplicates your inventory tools a set ammount of times'}
@@ -10979,34 +10979,22 @@ end)
 
 addcmd('permhold',{},function(args, speaker)
 	local LOOP_NUM = tonumber(args[1]) or 1
-	
+	local RS = RunService.RenderStepped
 	for i = 1, LOOP_NUM do
 		speaker.Backpack.EnergySword.Parent = speaker.Character
-		local startTime = tick()
-		while tick() - startTime < 0.004 do
-		    -- Пустой цикл для создания задержки
-		end
+		RS.wait()
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 
 		speaker.Backpack.EnergySword.Parent = speaker.Character
-		local startTime = tick()
-		while tick() - startTime < 0.004 do
-		    -- Пустой цикл для создания задержки
-		end
+		RS.wait()
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 
 		speaker.Backpack.SpectralSword.Parent = speaker.Character
-		local startTime = tick()
-		while tick() - startTime < 0.004 do
-		    -- Пустой цикл для создания задержки
-		end
+		RS.wait()
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 
 		speaker.Backpack.EnergySword.Parent = speaker.Character
-		local startTime = tick()
-		while tick() - startTime < 0.004 do
-		    -- Пустой цикл для создания задержки
-		end
+		RS.wait()
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 		
 	end
