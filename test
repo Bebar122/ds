@@ -11621,7 +11621,7 @@ function kill(speaker,target,fast)
    	local targetVelocity = targetHRP.Velocity
 
     -- Время полёта ракеты (можно настроить по необходимости)
-   	local rocketSpeed = 100 -- Скорость ракеты
+   	local rocketSpeed = 200 -- Скорость ракеты
     	local distance = (targetPosition - speaker.Character.HumanoidRootPart.Position).Magnitude
     	local travelTime = distance / rocketSpeed
 
@@ -11630,7 +11630,7 @@ function kill(speaker,target,fast)
 
     -- Добавляем случайное отклонение
     	local randomVector = Vector3.new((math.random() - 0.5) * 5, 5, (math.random() - 0.5) * 5)
-    	local spawnPosition = futurePosition + randomVector
+    	local spawnPosition = futurePosition + Vector3.new(0, 5, 0)
 
     -- Запускаем ракету
     	game:GetService("Players").LocalPlayer.Backpack.RocketJumper.FireRocket:FireServer(futurePosition, spawnPosition)
