@@ -11629,11 +11629,11 @@ function kill(speaker,target,fast)
     	local futurePosition = targetPosition + targetVelocity * travelTime
 
     -- Добавляем случайное отклонение
-    	local randomVector = Vector3.new((math.random() - 0.5) * 5, 5, (math.random() - 0.5) * 5)
-    	local spawnPosition = futurePosition + Vector3.new(0, 5, 0)
+    	local randomVector = Vector3.new((math.random() - 0.5) * 1, (math.random() - 0.5) * 1, (math.random() - 0.5) * 1)
+    	local spawnPosition = futurePosition + randomVector
 
     -- Запускаем ракету
-    	game:GetService("Players").LocalPlayer.Backpack.RocketJumper.FireRocket:FireServer(futurePosition, spawnPosition)
+    	game:GetService("Players").LocalPlayer.Backpack.RocketJumper.FireRocket:FireServer(targetPosition, spawnPosition)
 end
 
 addcmd('kill',{'fekill'},function(args, speaker)
