@@ -10978,14 +10978,14 @@ end)
 
 addcmd('permhold',{},function(args, speaker)
 	local LOOP_NUM = tonumber(args[1]) or 1
-	local DELAYED = tonumber(args[2]) or 1
+	
 	for i = 1, LOOP_NUM do
 		speaker.Backpack.EnergySword.Parent = speaker.Character
-		wait(DELAYED)
+		wait(0.001)
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 
 		speaker.Backpack.SpectralSword.Parent = speaker.Character
-		wait(DELAYED)
+		wait(0.001)
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 		
 	end
