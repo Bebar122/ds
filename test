@@ -10979,7 +10979,7 @@ end)
 addcmd('permhold',{},function(args, speaker)
 	for i = 1, 300 do
 		speaker.Backpack.SnowyGravityCoil.Parent = speaker.Character
-		wait(0.004)
+		wait(0.001)
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 		
 	end
