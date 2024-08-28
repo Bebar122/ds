@@ -10982,18 +10982,31 @@ addcmd('permhold',{},function(args, speaker)
 	
 	for i = 1, LOOP_NUM do
 		speaker.Backpack.EnergySword.Parent = speaker.Character
-		wait(0.0001)
+		local startTime = tick()
+		while tick() - startTime < 0.004 do
+		    -- Пустой цикл для создания задержки
+		end
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 
 		speaker.Backpack.EnergySword.Parent = speaker.Character
-		wait(0.0001)
+		local startTime = tick()
+		while tick() - startTime < 0.004 do
+		    -- Пустой цикл для создания задержки
+		end
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 
 		speaker.Backpack.SpectralSword.Parent = speaker.Character
+		local startTime = tick()
+		while tick() - startTime < 0.004 do
+		    -- Пустой цикл для создания задержки
+		end
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 
 		speaker.Backpack.EnergySword.Parent = speaker.Character
-		wait(0.0001)
+		local startTime = tick()
+		while tick() - startTime < 0.004 do
+		    -- Пустой цикл для создания задержки
+		end
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 		
 	end
