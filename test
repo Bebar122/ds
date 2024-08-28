@@ -4498,6 +4498,7 @@ CMDs[#CMDs + 1] = {NAME = 'noglobalshadows / nogshadows (CLIENT)', DESC = 'Disab
 CMDs[#CMDs + 1] = {NAME = 'restorelighting / rlighting', DESC = 'Restores Lighting properties'}
 CMDs[#CMDs + 1] = {NAME = 'light [radius] [brightness] (CLIENT)', DESC = 'Gives your player dynamic light'}
 CMDs[#CMDs + 1] = {NAME = 'nolight / unlight', DESC = 'Removes dynamic light from your player'}
+CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'inspect / examine [player]', DESC = 'Opens InspectMenu for a certain player'}
 CMDs[#CMDs + 1] = {NAME = 'age [player]', DESC = 'Tells you the age of a player'}
 CMDs[#CMDs + 1] = {NAME = 'chatage [player]', DESC = 'Chats the age of a player'}
@@ -4666,7 +4667,6 @@ CMDs[#CMDs + 1] = {NAME = 'dupetools / clonetools [num]', DESC = 'Duplicates you
 CMDs[#CMDs + 1] = {NAME = 'givetool / givetools', DESC = 'Gives all the tools you\'re holding to [player] using the attach method.'}
 CMDs[#CMDs + 1] = {NAME = 'droptools', DESC = 'Drops your tools'}
 CMDs[#CMDs + 1] = {NAME = 'droppabletools', DESC = 'Makes your tools droppable'}
-CMDs[#CMDs + 1] = {NAME = '', DESC = 'Drops your tool2s'}
 CMDs[#CMDs + 1] = {NAME = 'equiptools', DESC = 'Equips every tool in your inventory at once'}
 CMDs[#CMDs + 1] = {NAME = 'unequiptools', DESC = 'Unequips every tool you are currently holding at once'}
 CMDs[#CMDs + 1] = {NAME = 'removespecifictool / rst [name]', DESC = 'Automatically remove a specific tool from your inventory'}
@@ -8749,60 +8749,6 @@ addcmd('goto',{'to'},function(args, speaker)
 		end
 	end
 	execCmd('breakvelocity')
-end)
-
-addcmd('dupeselectedtool',{'dpst'},function(args, speaker)
-	local stool
-	local LOOP_NUM=tonumber(args[1]) or 1
-	for i,v in pairs(speaker.Character:GetDescendants()) do
-		if v:IsA('Tool') or v:IsA('HopperBin') then
-			stool=v.Name:lower()
-		end
-	end
-	for i = 1, LOOP_NUM do
-		for i,v in pairs(speaker:FindFirstChildOfClass("Backpack"):GetChildren()) do
-			if v.Name:lower() = stool then
-				v.Parent = speaker.Character
-				wait()
-			end
-		end
-		wait()
-	end
-
-	speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
-	wait()
-
-	local LOOP_NUM = 1
-	local OrigPos = speaker.Character.HumanoidRootPart.Position
-	local Tools, TempPos = {}, Vector3.new(math.random(-2e5, 2e5), 2e5, math.random(-2e5, 2e5))
-	for i = 1, LOOP_NUM do
-		if speaker.Character then
-			for _,obj in pairs(speaker.Character:GetChildren()) do
-				if obj:IsA("Tool") then
-					obj.CanBeDropped = true
-				end
-			end
-		end
-		if speaker:FindFirstChildOfClass("Backpack") then
-			for _,obj in pairs(speaker:FindFirstChildOfClass("Backpack"):GetChildren()) do
-				if obj:IsA("Tool") then
-					obj.CanBeDropped = true
-				end
-			end
-		end
-
-		for i,v in pairs(Players.LocalPlayer.Backpack:GetChildren()) do
-			if v:IsA("Tool") and v.Name:lower() = stool then
-				v.Parent = Players.LocalPlayer.Character
-			end
-		end
-		wait()
-		for i,v in pairs(Players.LocalPlayer.Character:GetChildren()) do
-			if v:IsA("Tool") and v.Name:lower() = stool then
-				v.Parent = workspace
-			end
-		end
-	end
 end)
 
 addcmd('tweengoto',{'tgoto','tto','tweento'},function(args, speaker)
