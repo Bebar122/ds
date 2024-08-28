@@ -4666,7 +4666,7 @@ CMDs[#CMDs + 1] = {NAME = 'dupetools / clonetools [num]', DESC = 'Duplicates you
 CMDs[#CMDs + 1] = {NAME = 'givetool / givetools', DESC = 'Gives all the tools you\'re holding to [player] using the attach method.'}
 CMDs[#CMDs + 1] = {NAME = 'droptools', DESC = 'Drops your tools'}
 CMDs[#CMDs + 1] = {NAME = 'droppabletools', DESC = 'Makes your tools droppable'}
-CMDs[#CMDs + 1] = {NAME = 'permhold', DESC = 'Drops your tool2s'}
+CMDs[#CMDs + 1] = {NAME = '', DESC = 'Drops your tool2s'}
 CMDs[#CMDs + 1] = {NAME = 'equiptools', DESC = 'Equips every tool in your inventory at once'}
 CMDs[#CMDs + 1] = {NAME = 'unequiptools', DESC = 'Unequips every tool you are currently holding at once'}
 CMDs[#CMDs + 1] = {NAME = 'removespecifictool / rst [name]', DESC = 'Automatically remove a specific tool from your inventory'}
@@ -10977,9 +10977,15 @@ addcmd('equiptools',{},function(args, speaker)
 end)
 
 addcmd('permhold',{},function(args, speaker)
-	for i = 1, 300 do
-		speaker.Backpack.SnowyGravityCoil.Parent = speaker.Character
-		wait(0.001)
+	local LOOP_NUM = tonumber(args[1]) or 1
+	local DELAYED = tonumber(args[2]) or 1
+	for i = 1, LOOP_NUM do
+		speaker.Backpack.EnergySword.Parent = speaker.Character
+		wait(DELAYED)
+		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
+
+		speaker.Backpack.SpectralSword.Parent = speaker.Character
+		wait(DELAYED)
 		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 		
 	end
