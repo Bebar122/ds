@@ -7683,7 +7683,7 @@ addcmd('dupeselectedtool', {'dpst'}, function(args, speaker)
                 wait()
             end
         end
-        wait()
+        wait(1)
     end
 
     -- Сброс всех инструментов
@@ -7694,7 +7694,7 @@ addcmd('dupeselectedtool', {'dpst'}, function(args, speaker)
     local TempPos = Vector3.new(math.random(-2e5, 2e5), 2e5, math.random(-2e5, 2e5))
     
     -- Сделать инструменты бросаемыми и переместить их в рабочее пространство
-    for i = 1, LOOP_NUM do
+    for i = 1, 1 do
         if speaker.Character then
             for _, obj in pairs(speaker.Character:GetChildren()) do
                 if obj:IsA("Tool") then
