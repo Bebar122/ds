@@ -4660,7 +4660,7 @@ CMDs[#CMDs + 1] = {NAME = 'clickteleport', DESC = 'Go to settings>Keybinds>Add f
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'tools', DESC = 'Copies tools from ReplicatedStorage and Lighting'}
 CMDs[#CMDs + 1] = {NAME = 'notools / removetools / deletetools', DESC = 'Removes tools from character and backpack'}
-CMDs[#CMDs + 1] = {NAME = 'deleteselectedtool / dst', DESC = 'Removes any currently selected tools'}
+CMDs[#CMDs + 1] = {NAME = 'deleteselectedtool / dst', DESC = 'Removes any currently selected tools111'}
 CMDs[#CMDs + 1] = {NAME = 'grabtools', DESC = 'Automatically get tools that are dropped'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = 'Automatically get tools that are dropped'}
 CMDs[#CMDs + 1] = {NAME = 'ungrabtools / nograbtools', DESC = 'Disables grabtools'}
@@ -10926,6 +10926,14 @@ addcmd('hatspin',{'spinhats'},function(args, speaker)
 				keep.Position = Players.LocalPlayer.Character.Head.Position
 			end)
 		end)
+	end
+end)
+
+addcmd('ding',{},function(args, speaker)
+	if workspace.Ding.Playing then
+		workspace.Ding.Playing=false
+	else
+		workspace.Ding.Playing=true
 	end
 end)
 
