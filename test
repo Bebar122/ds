@@ -11753,6 +11753,27 @@ addcmd('1kill',{'1fekill'},function(args, speaker)
 	end
 end)
 
+addcmd('3kill', {'3laserkill'}, function(args, speaker)
+    local players = getPlayer(args[1], speaker)  -- Получаем список игроков-целей
+    for i, v in pairs(players) do
+        -- Находим HumanoidRootPart цели
+        local targetHRP = Players[v].Character:FindFirstChild("HumanoidRootPart")
+        if targetHRP then
+            -- Позиция центра цели
+            local targetPosition = targetHRP.Position
+            
+            -- Аргументы для стрельбы
+            local args = {
+                [1] = targetPosition
+            }
+            
+            -- Стрельба из оружия
+            speaker.Character.TriLaserGun.Click:FireServer(unpack(args))
+        end
+    end
+end)
+
+
 addcmd("killstop", {}, function(args, speaker)
     if killServ then killServ:Disconnect() end
 end)
