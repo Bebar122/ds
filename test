@@ -11802,9 +11802,7 @@ addcmd('hkillstop',{'hks'},function(args, speaker)
 end)
 
 addcmd('dropclone', {'drc'}, function(args, speaker)
-	
 	local RS = RunService.RenderStepped
-	workspace["asdsdfsad0's Clone"]
 	local Tool = workspace["asdsdfsad0's Clone"].FindFirstChildWhichIsA(workspace["asdsdfsad0's Clone"], "Tool")
 	local Handle = Tool and Tool.FindFirstChild(Tool, "Handle")
 	if not Tool or not Handle then
