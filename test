@@ -11042,26 +11042,26 @@ addcmd('equiptools',{},function(args, speaker)
 end)
 
 addcmd('permhold',{},function(args, speaker)
-	local LOOP_NUM = tonumber(args[1]) or 1
-	local RS = RunService.RenderStepped
-	for i = 1, LOOP_NUM do
-		speaker.Backpack.EnergySword.Parent = speaker.Character
-		RS.wait()
-		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
-
-		speaker.Backpack.EnergySword.Parent = speaker.Character
-		RS.wait()
-		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
-
-		speaker.Backpack.SpectralSword.Parent = speaker.Character
-		RS.wait()
-		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
-
-		speaker.Backpack.EnergySword.Parent = speaker.Character
-		RS.wait()
-		speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
-		
-	end
+	    local stool
+	    local LOOP_NUM = tonumber(args[1]) or 1
+	
+	    -- Найти выбранный инструмент в инвентаре игрока
+	    for i, v in pairs(speaker.Character:GetDescendants()) do
+	        if v:IsA('Tool') or v:IsA('HopperBin') then
+	            stool = v.Name:lower()
+	        end
+	    end
+	
+	    -- Дублирование инструмента LOOP_NUM раз
+	    for i = 1, LOOP_NUM do
+	        for i, v in pairs(speaker:FindFirstChildOfClass("Backpack"):GetChildren()) do
+	            if v.Name:lower() == stool then
+	                v.Parent = speaker.Character
+	                wait()
+	            end
+	        end
+	        wait(0.5)
+	    end
 end)
 
 addcmd('unequiptools',{},function(args, speaker)
