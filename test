@@ -11802,25 +11802,39 @@ addcmd('hkillstop',{'hks'},function(args, speaker)
 end)
 
 addcmd('dropclone', {'drc'}, function(args, speaker)
-	local RS = RunService.RenderStepped
-	local Tool = workspace["asdsdfsad0's Clone"].FindFirstChildWhichIsA(workspace["asdsdfsad0's Clone"], "Tool")
-	local Handle = Tool and Tool.FindFirstChild(Tool, "Handle")
-	if not Tool or not Handle then
-		return notify("Handle Kill", "You need to hold a \"Tool\" that does damage on touch. For example the default \"Sword\" tool.")
-	end
-	task.spawn(function()
-		while Tool and workspace["asdsdfsad0's Clone"] and speaker.Character and Tool.Parent == workspace["asdsdfsad0's Clone"] do
-			local Human = speaker.Character.FindFirstChildWhichIsA(workspace["asdsdfsad0's Clone"], "Humanoid")
-			if not Human or Human.Health <= 0 or hkillstop then
-				break
-			end
-			for _, v1 in ipairs(speaker.Character.GetChildren(speaker.Character)) do
-				v1 = ((v1.IsA(v1, "BasePart") and firetouchinterest(Handle, v1, 1, (RS.Wait(RS) and nil) or firetouchinterest(Handle, v1, 0)) and nil) or v1) or v1
-			end
-		end
-		notify("Handle Kill Stopped!", speaker.Name .. " died/left or you unequipped the tool!")
-	end)
+    local RS = game:GetService("RunService").RenderStepped
+    local clone = workspace:FindFirstChild("asdsdfsad0's Clone")
+    
+    if not clone then
+        return notify("Handle Kill", "Клон не найден в рабочем пространстве.")
+    end
+    
+    local Tool = clone:FindFirstChildWhichIsA("Tool")
+    local Handle = Tool and Tool:FindFirstChild("Handle")
+    
+    if not Tool or not Handle then
+        return notify("Handle Kill", "Необходимо держать \"Tool\", который наносит урон при касании. Например, стандартный \"Sword\".")
+    end
+    
+    task.spawn(function()
+        while Tool and clone and speaker.Character and Tool.Parent == clone do
+            local Human = clone:FindFirstChildWhichIsA("Humanoid")
+            if not Human or Human.Health <= 0 or hkillstop then
+                break
+            end
+            
+            for _, v1 in ipairs(speaker.Character:GetChildren()) do
+                if v1:IsA("BasePart") then
+                    firetouchinterest(Handle, v1, 1)
+                    RS:Wait()
+                    firetouchinterest(Handle, v1, 0)
+                end
+            end
+        end
+        notify("Handle Kill Stopped!", speaker.Name .. " умер/вышел или вы убрали инструмент!")
+    end)
 end)
+
 
 local hb = RunService.Heartbeat
 addcmd('tpwalk', {'teleportwalk'}, function(args, speaker)
