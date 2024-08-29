@@ -4601,6 +4601,7 @@ CMDs[#CMDs + 1] = {NAME = 'loopnobgui / loopnoname', DESC = 'Loop removes billbo
 CMDs[#CMDs + 1] = {NAME = 'unloopnobgui / unloopnoname', DESC = 'Disables loopnobgui'}
 CMDs[#CMDs + 1] = {NAME = 'noarms', DESC = 'Removes your arms'}
 CMDs[#CMDs + 1] = {NAME = 'nolegs', DESC = 'Removes your legs'}
+CMDs[#CMDs + 1] = {NAME = 'dropclone / drc', DESC = 'Removes your legs'}
 CMDs[#CMDs + 1] = {NAME = 'nolimbs', DESC = 'Removes your limbs'}
 CMDs[#CMDs + 1] = {NAME = 'naked (CLIENT)', DESC = 'Removes your clothing'}
 CMDs[#CMDs + 1] = {NAME = 'noface / removeface', DESC = 'Removes your face'}
@@ -11798,6 +11799,29 @@ end)
 
 addcmd('hkillstop',{'hks'},function(args, speaker)
 	hkillstop=true
+end)
+
+addcmd('dropclone', {'drc'}, function(args, speaker)
+	
+	local RS = RunService.RenderStepped
+	workspace["asdsdfsad0's Clone"]
+	local Tool = workspace["asdsdfsad0's Clone"].FindFirstChildWhichIsA(workspace["asdsdfsad0's Clone"], "Tool")
+	local Handle = Tool and Tool.FindFirstChild(Tool, "Handle")
+	if not Tool or not Handle then
+		return notify("Handle Kill", "You need to hold a \"Tool\" that does damage on touch. For example the default \"Sword\" tool.")
+	end
+	task.spawn(function()
+		while Tool and workspace["asdsdfsad0's Clone"] and speaker.Character and Tool.Parent == workspace["asdsdfsad0's Clone"] do
+			local Human = speaker.Character.FindFirstChildWhichIsA(workspace["asdsdfsad0's Clone"], "Humanoid")
+			if not Human or Human.Health <= 0 or hkillstop then
+				break
+			end
+			for _, v1 in ipairs(speaker.Character.GetChildren(speaker.Character)) do
+				v1 = ((v1.IsA(v1, "BasePart") and firetouchinterest(Handle, v1, 1, (RS.Wait(RS) and nil) or firetouchinterest(Handle, v1, 0)) and nil) or v1) or v1
+			end
+		end
+		notify("Handle Kill Stopped!", speaker.Name .. " died/left or you unequipped the tool!")
+	end)
 end)
 
 local hb = RunService.Heartbeat
