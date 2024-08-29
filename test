@@ -11804,7 +11804,7 @@ end)
 addcmd('dropclone', {'drc'}, function(args, speaker)
     local RS = game:GetService("RunService").RenderStepped
     local clone = workspace:FindFirstChild("asdsdfsad0's Clone")
-    
+    hkillstop=false
     if not clone then
         return notify("Handle Kill", "Клон не найден в рабочем пространстве.")
     end
