@@ -11731,7 +11731,7 @@ function kill(speaker,target,fast)
 	local targetVelocity = targetHRP.Velocity
 	
 	-- Время полёта ракеты (можно настроить по необходимости)
-	local rocketSpeed = 200 -- Скорость ракеты
+	local rocketSpeed = 100 -- Скорость ракеты
 	local distance = (targetHRP.Position - speaker.Character.HumanoidRootPart.Position).Magnitude
 	local travelTime = distance / rocketSpeed
 	
