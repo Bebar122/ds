@@ -11823,7 +11823,7 @@ addcmd('rocketBarrier',{'rcb'},function(args, speaker)
 
     rocketBarrierServ = RunService.RenderStepped:Connect(function()
         createRocketBarrier(center, radius, numRockets, spawnHeight)
-        wait(spawnInterval) -- Используем wait для создания паузы между запусками
+        wait(2) -- Используем wait для создания паузы между запусками
     end)
 end)
 
