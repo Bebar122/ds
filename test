@@ -11795,6 +11795,7 @@ addcmd("killstop", {}, function(args, speaker)
 end)
 
 local rocketBarrierServ
+local isRunning = false
 
 function createRocketBarrier(center, radius, numRockets, spawnHeight)
     for i = 1, numRockets do
@@ -11810,39 +11811,42 @@ function createRocketBarrier(center, radius, numRockets, spawnHeight)
 end
 
 function startRocketBarrier(center, radius, numRockets, spawnHeight, spawnInterval)
-    while true do
+    isRunning = true
+    while isRunning do
         createRocketBarrier(center, radius, numRockets, spawnHeight)
         wait(spawnInterval)
     end
 end
 
-addcmd('rocketBarrier',{'rcb'},function(args, speaker)
+addcmd('rocketBarrier',{'rocketcircle'},function(args, speaker)
     if rocketBarrierServ then
-        rocketBarrierServ:Disconnect()
+        isRunning = false
+        wait(0.1)  -- Даем время для завершения текущей корутины
         rocketBarrierServ = nil
     end
 
-    local radius = tonumber(args[1]) or 20 -- Радиус круга, по умолчанию 10
+    local radius = tonumber(args[1]) or 18 -- Радиус круга, по умолчанию 10
     local numRockets = tonumber(args[2]) or 14 -- Количество ракет, по умолчанию 8
-    local spawnHeight = tonumber(args[3]) or 50 -- Высота спавна ракет, по умолчанию 100
+    local spawnHeight = tonumber(args[3]) or 60 -- Высота спавна ракет, по умолчанию 100
     local centerX = tonumber(args[4]) or speaker.Character.HumanoidRootPart.Position.X -- X координата центра
     local centerY = tonumber(args[5]) or speaker.Character.HumanoidRootPart.Position.Y -- Y координата центра
     local centerZ = tonumber(args[6]) or speaker.Character.HumanoidRootPart.Position.Z -- Z координата центра
     local spawnInterval = tonumber(args[7]) or 1.1 -- Интервал между запусками ракет, по умолчанию 0.1 секунд
     local center = Vector3.new(centerX, centerY, centerZ)
 
-    -- Запуск корутины для спавна ракет
     rocketBarrierServ = coroutine.wrap(function()
         startRocketBarrier(center, radius, numRockets, spawnHeight, spawnInterval)
     end)
     rocketBarrierServ()
 end)
 
-addcmd('stopBarrier',{'stoprcb'},function()
+addcmd('stopBarrier',{'stoprocket'},function()
     if rocketBarrierServ then
+        isRunning = false
         rocketBarrierServ = nil
     end
 end)
+
 
 addcmd("giveblocks", {}, function(args, speaker)
 	for _ = 1,100 do
