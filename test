@@ -4514,7 +4514,7 @@ CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'carpet [player]', DESC = 'Be someones carpet'}
 CMDs[#CMDs + 1] = {NAME = 'uncarpet', DESC = 'Undoes carpet'}
-CMDs[#CMDs + 1] = {NAME = 'rcl', DESC = 'Undoes carpet'}
+CMDs[#CMDs + 1] = {NAME = 'rcl', DESC = 'U1111ndoes carpet'}
 CMDs[#CMDs + 1] = {NAME = 'friend [player]', DESC = 'Sends a friend request to certain players'}
 CMDs[#CMDs + 1] = {NAME = 'unfriend [player]', DESC = 'Unfriends certain players'}
 CMDs[#CMDs + 1] = {NAME = 'headsit [player]', DESC = 'Sit on a players head'}
@@ -11894,10 +11894,10 @@ addcmd('rocketLine', {'rcl'}, function(args, speaker)
     local topLeftZ = tonumber(args[2]) or -80 -- Z координата верхнего левого угла
     local bottomRightX = tonumber(args[3]) or -867 -- X координата нижнего правого угла
     local bottomRightZ = tonumber(args[4]) or 265 -- Z координата нижнего правого угла
-    local spawnHeight = tonumber(args[5]) or 30 -- Высота спавна ракет, по умолчанию 100
+    local spawnHeight = tonumber(args[5]) or 230 -- Высота спавна ракет, по умолчанию 100
     local numRockets = tonumber(args[6]) or 20 -- Количество ракет в линии
     local moveInterval = tonumber(args[7]) or 0.8 -- Интервал между движениями линии
-    local lineSpeed = tonumber(args[8]) or 1 -- Скорость движения линии
+    local lineSpeed = tonumber(args[8]) or 10 -- Скорость движения линии
 
     local topLeft = Vector3.new(topLeftX, 0, topLeftZ)
     local bottomRight = Vector3.new(bottomRightX, 0, bottomRightZ)
