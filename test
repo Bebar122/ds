@@ -11826,13 +11826,13 @@ addcmd('rocketBarrier',{'rcb'},function(args, speaker)
         rocketBarrierServ = nil
     end
 
-    local radius = tonumber(args[7]) or 18 -- Радиус круга, по умолчанию 10
-    local numRockets = tonumber(args[5]) or 14 -- Количество ракет, по умолчанию 8
-    local spawnHeight = tonumber(args[6]) or 20 -- Высота спавна ракет, по умолчанию 100
+    local radius = tonumber(args[7]) or 20 -- Радиус круга, по умолчанию 10
+    local numRockets = tonumber(args[5]) or 16 -- Количество ракет, по умолчанию 8
+    local spawnHeight = tonumber(args[6]) or 14 -- Высота спавна ракет, по умолчанию 100
     local centerX = tonumber(args[1]) or speaker.Character.HumanoidRootPart.Position.X -- X координата центра
     local centerY = tonumber(args[2]) or speaker.Character.HumanoidRootPart.Position.Y -- Y координата центра
     local centerZ = tonumber(args[3]) or speaker.Character.HumanoidRootPart.Position.Z -- Z координата центра
-    local spawnInterval = tonumber(args[4]) or 1.1 -- Интервал между запусками ракет, по умолчанию 0.1 секунд
+    local spawnInterval = tonumber(args[4]) or 0.6 -- Интервал между запусками ракет, по умолчанию 0.1 секунд
     local center = Vector3.new(centerX, centerY, centerZ)
 
     rocketBarrierServ = coroutine.wrap(function()
