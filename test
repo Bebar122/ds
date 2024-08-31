@@ -4514,6 +4514,7 @@ CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'carpet [player]', DESC = 'Be someones carpet'}
 CMDs[#CMDs + 1] = {NAME = 'uncarpet', DESC = 'Undoes carpet'}
+CMDs[#CMDs + 1] = {NAME = 'rcl', DESC = 'Undoes carpet'}
 CMDs[#CMDs + 1] = {NAME = 'friend [player]', DESC = 'Sends a friend request to certain players'}
 CMDs[#CMDs + 1] = {NAME = 'unfriend [player]', DESC = 'Unfriends certain players'}
 CMDs[#CMDs + 1] = {NAME = 'headsit [player]', DESC = 'Sit on a players head'}
@@ -11845,6 +11846,72 @@ addcmd('stopBarrier',{'stoprcb'},function()
     if rocketBarrierServ then
         isRunning = false
         rocketBarrierServ = nil
+    end
+end)
+
+
+
+local rocketLineServ
+local isRunning = false
+
+function fireRocketLine(startX, endX, z, spawnHeight, numRockets)
+    -- Стреляем ракетами вдоль линии
+    for i = 0, numRockets - 1 do
+        local x = startX + (i / (numRockets - 1)) * (endX - startX)
+        local spawnPosition = Vector3.new(x, spawnHeight, z)
+        local targetPosition = Vector3.new(x, 0, z)
+
+        -- Запускаем ракету
+        game:GetService("Players").LocalPlayer.Backpack.RocketJumper.FireRocket:FireServer(targetPosition, spawnPosition)
+    end
+end
+
+function startRocketLine(topLeft, bottomRight, spawnHeight, numRockets, moveInterval, lineSpeed)
+    isRunning = true
+    local direction = 1 -- Направление движения линии
+    local z = topLeft.Z -- Начальная позиция по оси Z
+
+    while isRunning do
+        fireRocketLine(topLeft.X, bottomRight.X, z, spawnHeight, numRockets)
+        
+        z = z + direction * lineSpeed
+        if z >= bottomRight.Z or z <= topLeft.Z then
+            direction = -direction -- Меняем направление, когда достигаем края квадрата
+        end
+
+        wait(moveInterval)
+    end
+end
+
+addcmd('rocketLine', {'rcl'}, function(args, speaker)
+    if rocketLineServ then
+        isRunning = false
+        wait(0.1)
+        rocketLineServ = nil
+    end
+
+    local topLeftX = tonumber(args[1]) or -1215 -- X координата верхнего левого угла
+    local topLeftZ = tonumber(args[2]) or -80 -- Z координата верхнего левого угла
+    local bottomRightX = tonumber(args[3]) or -867 -- X координата нижнего правого угла
+    local bottomRightZ = tonumber(args[4]) or 265 -- Z координата нижнего правого угла
+    local spawnHeight = tonumber(args[5]) or 30 -- Высота спавна ракет, по умолчанию 100
+    local numRockets = tonumber(args[6]) or 20 -- Количество ракет в линии
+    local moveInterval = tonumber(args[7]) or 0.8 -- Интервал между движениями линии
+    local lineSpeed = tonumber(args[8]) or 1 -- Скорость движения линии
+
+    local topLeft = Vector3.new(topLeftX, 0, topLeftZ)
+    local bottomRight = Vector3.new(bottomRightX, 0, bottomRightZ)
+
+    rocketLineServ = coroutine.wrap(function()
+        startRocketLine(topLeft, bottomRight, spawnHeight, numRockets, moveInterval, lineSpeed)
+    end)
+    rocketLineServ()
+end)
+
+addcmd('stopLine', {'stoprcl'}, function()
+    if rocketLineServ then
+        isRunning = false
+        rocketLineServ = nil
     end
 end)
 
