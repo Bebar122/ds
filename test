@@ -4534,6 +4534,7 @@ CMDs[#CMDs + 1] = {NAME = 'attach [player] (TOOL)', DESC = 'Attaches you to a pl
 CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = '1kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'killstop', DESC = 'Disables orbit'}
+CMDs[#CMDs + 1] = {NAME = 'rocketBarrier / rcb', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'giveblocks', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'fastkill [player] (TOOL)', DESC = 'Kills a player (less reliable) (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'handlekill / hkill [player] (TOOL)', DESC = 'Kills a player using tool damage (YOU NEED A TOOL)'}
@@ -11791,6 +11792,34 @@ end)
 addcmd("killstop", {}, function(args, speaker)
     if killServ then killServ:Disconnect() end
 end)
+
+function createRocketBarrier(center, radius, numRockets, rocketSpeed)
+    -- numRockets определяет количество ракет, которые образуют круг
+    -- center - центр круга
+    -- radius - радиус круга
+    -- rocketSpeed - скорость падения ракет
+
+    for i = 1, numRockets do
+        local angle = (i / numRockets) * 2 * math.pi
+        local x = center.X + radius * math.cos(angle)
+        local z = center.Z + radius * math.sin(angle)
+        local spawnPosition = Vector3.new(x, center.Y + 100, z) -- Позиция ракет сверху
+        local targetPosition = Vector3.new(x, center.Y, z) -- Позиция на земле
+
+        -- Запускаем ракету
+        game:GetService("Players").LocalPlayer.Backpack.RocketJumper.FireRocket:FireServer(targetPosition, spawnPosition)
+    end
+end
+
+addcmd('rocketBarrier',{'rcb'},function(args, speaker)
+    local center = speaker.Character.HumanoidRootPart.Position
+    local radius = tonumber(args[1]) or 10 -- Радиус круга, по умолчанию 10
+    local numRockets = tonumber(args[2]) or 8 -- Количество ракет, по умолчанию 8
+    local rocketSpeed = tonumber(args[3]) or 1 -- Скорость ракет, по умолчанию 1
+
+    createRocketBarrier(center, radius, numRockets, rocketSpeed)
+end)
+
 
 addcmd("giveblocks", {}, function(args, speaker)
 	for _ = 1,100 do
