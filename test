@@ -11812,27 +11812,18 @@ end
 addcmd('rocketBarrier',{'rcb'},function(args, speaker)
     if rocketBarrierServ then rocketBarrierServ:Disconnect() end
 
-    local radius = tonumber(args[1]) or 15 -- Радиус круга, по умолчанию 10
+    local radius = tonumber(args[1]) or 10 -- Радиус круга, по умолчанию 10
     local numRockets = tonumber(args[2]) or 8 -- Количество ракет, по умолчанию 8
-    local spawnHeight = tonumber(args[3]) or 50 -- Высота спавна ракет, по умолчанию 100
+    local spawnHeight = tonumber(args[3]) or 100 -- Высота спавна ракет, по умолчанию 100
     local centerX = tonumber(args[4]) or speaker.Character.HumanoidRootPart.Position.X -- X координата центра
     local centerY = tonumber(args[5]) or speaker.Character.HumanoidRootPart.Position.Y -- Y координата центра
     local centerZ = tonumber(args[6]) or speaker.Character.HumanoidRootPart.Position.Z -- Z координата центра
     local spawnInterval = tonumber(args[7]) or 0.1 -- Интервал между запусками ракет, по умолчанию 0.1 секунд
     local center = Vector3.new(centerX, centerY, centerZ)
 
-    rocketBarrierServ = RunService.RenderStepped:Connect(function(deltaTime)
-        -- Обновляем задержку
-        if not rocketBarrierServ._lastFireTime then
-            rocketBarrierServ._lastFireTime = 0
-        end
-
-        rocketBarrierServ._lastFireTime = rocketBarrierServ._lastFireTime + deltaTime
-
-        if rocketBarrierServ._lastFireTime >= spawnInterval then
-            createRocketBarrier(center, radius, numRockets, spawnHeight)
-            rocketBarrierServ._lastFireTime = 0
-        end
+    rocketBarrierServ = RunService.RenderStepped:Connect(function()
+        createRocketBarrier(center, radius, numRockets, spawnHeight)
+        wait(spawnInterval) -- Используем wait для создания паузы между запусками
     end)
 end)
 
@@ -11842,6 +11833,7 @@ addcmd('stopBarrier',{'stoprcb'},function()
         rocketBarrierServ = nil
     end
 end)
+
 
 
 
