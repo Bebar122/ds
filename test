@@ -4291,7 +4291,7 @@ end
 
 CMDs = {}
 CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to the Infinite Yield support server.'}
-CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Loads old Roblox consol111e'}
+CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Loads old Roblox consol222e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'remotespy / rspy', DESC = 'Opens Simple Spy V3'}
@@ -5271,8 +5271,9 @@ SpecialPlayerCases = {
 	end,
 	["cursor"] = function(speaker)
 		local plrs = {}
+		notify("cursor", "start")
 		local v = GetClosestPlayerFromCursor()
-		wait()
+		wait(.1)
 		if v ~= nil then 
 			table.insert(plrs, v) 
 		else
