@@ -5271,10 +5271,11 @@ SpecialPlayerCases = {
 	end,
 	["cursor"] = function(speaker)
 		local plrs = {}
-		notify("cursor", "start")
+		
 		local v = GetClosestPlayerFromCursor()
 		wait(.1)
 		if v ~= nil then 
+			notify("cursor", "found")
 			table.insert(plrs, v) 
 		else
 			notify("cursor", "null")
