@@ -5272,6 +5272,7 @@ SpecialPlayerCases = {
 	["cursor"] = function(speaker)
 		local plrs = {}
 		local v = GetClosestPlayerFromCursor()
+		wait()
 		if v ~= nil then table.insert(plrs, v) end
 		return plrs
 	end,
