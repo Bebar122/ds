@@ -11998,20 +11998,35 @@ addcmd('handleTouch', {'htouch'}, function(args, speaker)
                 targetPlayer.Character:FindFirstChild("Right Leg")
             }
 
-            -- Касаемся каждой конечности по одному разу
-            for _, limb in ipairs(limbs) do
-                if limb and limb:IsA("BasePart") then
-                    firetouchinterest(Handle, limb, 1)
-                    firetouchinterest(Handle, limb, 0)
-                end
-            end
+            -- Касаемся каждой конечности до тех пор, пока они не разрушены
+            task.spawn(function()
+                while Tool and speaker.Character and targetPlayer.Character and Tool.Parent == speaker.Character do
+                    local allLimbsDestroyed = true
 
-            notify("Handle Touch", "Touched " .. playerName .. "'s limbs once.")
+                    for _, limb in ipairs(limbs) do
+                        if limb and limb:IsA("BasePart") and limb.Parent then
+                            firetouchinterest(Handle, limb, 1)
+                            firetouchinterest(Handle, limb, 0)
+                            allLimbsDestroyed = false
+                        end
+                    end
+
+                    -- Прерываем цикл, если все конечности разрушены
+                    if allLimbsDestroyed then
+                        break
+                    end
+
+                    wait(0.1)  -- Задержка между касаниями для предотвращения перегрузки
+                end
+
+                notify("Handle Touch", playerName .. "'s limbs have been destroyed.")
+            end)
         else
             notify("Handle Touch", playerName .. " not found or not in game.")
         end
     end
 end)
+
 
 
 
