@@ -12005,9 +12005,9 @@ addcmd('handlekill', {'hkill'}, function(args, speaker)
 	for _, v in ipairs(getPlayer(args[1], speaker)) do
 		v = Players[v]
 		task.spawn(function()
-			while Tool and speaker.Character and v.Character and Tool.Parent == speaker.Character do
+			while Tool and speaker.Character and Tool.Parent == speaker.Character do
 				local Human = v.Character.FindFirstChildWhichIsA(v.Character, "Humanoid")
-				--if not Human or Human.Health <= 0 or hkillstop then
+				-- if not Human or Human.Health <= 0 or hkillstop then
 				if hkillstop then
 					break
 				end
