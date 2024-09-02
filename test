@@ -12007,8 +12007,7 @@ addcmd('handlekill', {'hkill'}, function(args, speaker)
 		task.spawn(function()
 			while Tool and speaker.Character and v.Character and Tool.Parent == speaker.Character do
 				local Human = v.Character.FindFirstChildWhichIsA(v.Character, "Humanoid")
-				--if not Human or Human.Health <= 0 or hkillstop then
-				if hkillstop then
+				if not Human or Human.Health <= 0 or hkillstop then
 					break
 				end
 				for _, v1 in ipairs(v.Character.GetChildren(v.Character)) do
@@ -12024,6 +12023,8 @@ addcmd('hkillstop',{'hks'},function(args, speaker)
 	hkillstop=true
 end)
 
+local activeKills = {}
+
 addcmd('boneKill', {'bkill'}, function(args, speaker)
     if not firetouchinterest then
         return notify('Incompatible Exploit', 'Your exploit does not support this command (missing firetouchinterest)')
@@ -12034,7 +12035,8 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
         return notify("Error", "BoneSword not found in backpack.")
     end
 
-
+    -- Берем костяной меч в руки
+    boneSword.Parent = speaker.Character
 
     local Tool = boneSword
     local Handle = Tool and Tool:FindFirstChild("Handle")
@@ -12045,25 +12047,42 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
     for _, playerName in ipairs(getPlayer(args[1], speaker)) do
         local targetPlayer = game:GetService("Players")[playerName]
         if targetPlayer and targetPlayer.Character then
+            activeKills[playerName] = true
             task.spawn(function()
-                while Tool and speaker.Character and targetPlayer.Character do
-                    local humanoid = targetPlayer.Character:FindFirstChildWhichIsA("Humanoid")
-                    if not humanoid or humanoid.Health <= 0 then
+                while activeKills[playerName] do
+                    if not Tool or Tool.Parent ~= speaker.Character then
                         break
                     end
 
-                    for _, part in ipairs(targetPlayer.Character:GetChildren()) do
-                        if part:IsA("BasePart") then
-                            firetouchinterest(Handle, part, 1)
-                            firetouchinterest(Handle, part, 0)
+                    local targetCharacter = targetPlayer.Character
+                    if targetCharacter then
+                        local humanoid = targetCharacter:FindFirstChildWhichIsA("Humanoid")
+                        if humanoid and humanoid.Health > 0 then
+                            for _, part in ipairs(targetCharacter:GetChildren()) do
+                                if part:IsA("BasePart") then
+                                    firetouchinterest(Handle, part, 1)
+                                    firetouchinterest(Handle, part, 0)
+                                end
+                            end
                         end
                     end
+                    task.wait(0.1) -- Small delay to prevent script from overloading
                 end
-                notify("Bone Kill Stopped!", targetPlayer.Name .. " died or the BoneSword was unequipped!")
+                notify("Bone Kill Stopped!", targetPlayer.Name .. " is no longer targeted or the BoneSword was unequipped!")
             end)
         else
             notify("Error", playerName .. " not found or not in game.")
         end
+    end
+end)
+
+addcmd('stopBoneKill', {'stopbk'}, function(args, speaker)
+    local playerName = args[1]
+    if activeKills[playerName] then
+        activeKills[playerName] = nil
+        notify("Stopped", "Bone Kill has been stopped for " .. playerName)
+    else
+        notify("Error", "No active kill found for " .. playerName)
     end
 end)
 
