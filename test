@@ -5444,7 +5444,7 @@ addcmd('godmode', {'godm'}, function(args, speaker)
     end
 
     -- 2. Активируем щит
-    wait(0.5)  -- Ждем немного, чтобы убедиться, что меч экипирован
+    wait(0.1)  -- Ждем немного, чтобы убедиться, что меч экипирован
     local shieldArgs = {
         [1] = Enum.KeyCode.Q
     }
@@ -5462,14 +5462,14 @@ addcmd('godmode', {'godm'}, function(args, speaker)
     end
 
     -- 5. Стреляем ракетой прямо вниз
-    wait(0.5)  -- Ждем немного, чтобы убедиться, что ракетница экипирована
+    wait(0.1)  -- Ждем немного, чтобы убедиться, что ракетница экипирована
     local rocketArgs = {
         [1] = player.Character.HumanoidRootPart.Position - Vector3.new(0, 5, 0)  -- Стреляем прямо вниз
     }
     player.Character.LockonLauncher.Remote:FireServer(unpack(rocketArgs))
 
     -- 6. Убираем ракетницу из рук
-    wait(0.5)
+    wait(0.1)
     humanoid:UnequipTools()
 
     notify("Sequence", "Action sequence completed.")
