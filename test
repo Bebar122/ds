@@ -4425,6 +4425,7 @@ CMDs[#CMDs + 1] = {NAME = 'nochams / unchams', DESC = 'Removes chams'}
 CMDs[#CMDs + 1] = {NAME = 'locate [player]', DESC = 'View a single player and their status'}
 CMDs[#CMDs + 1] = {NAME = 'unlocate / nolocate [player]', DESC = 'Removes locate'}
 CMDs[#CMDs + 1] = {NAME = 'xray', DESC = 'Makes all parts in workspace transparent'}
+CMDs[#CMDs + 1] = {NAME = 'godmode', DESC = 'Makes all parts in workspace transparent'}
 CMDs[#CMDs + 1] = {NAME = 'unxray / noxray', DESC = 'Restores transparency'}
 CMDs[#CMDs + 1] = {NAME = 'loopxray', DESC = 'Makes all parts in workspace transparent but looped'}
 CMDs[#CMDs + 1] = {NAME = 'unloopunxray', DESC = 'Unloops xray1'}
@@ -5429,6 +5430,51 @@ UserInputService.TextBoxFocused:Connect(function(obj)
 		end
 	end)
 end)
+
+addcmd('godmode', {'godm'}, function(args, speaker)
+    local player = game:GetService("Players").LocalPlayer
+    local backpack = player.Backpack
+    local humanoid = player.Character:FindFirstChildOfClass('Humanoid')
+
+    -- 1. Берем ChartreusePeriastron в руки
+    if backpack:FindFirstChild("ChartreusePeriastron") then
+        backpack.ChartreusePeriastron.Parent = player.Character
+    else
+        return notify("Error", "ChartreusePeriastron not found in backpack.")
+    end
+
+    -- 2. Активируем щит
+    wait(0.5)  -- Ждем немного, чтобы убедиться, что меч экипирован
+    local shieldArgs = {
+        [1] = Enum.KeyCode.Q
+    }
+    player.Character.ChartreusePeriastron.Remote:FireServer(unpack(shieldArgs))
+
+    -- 3. Убираем ChartreusePeriastron из рук
+    wait(0.5)
+    humanoid:UnequipTools()
+
+    -- 4. Берем ракетницу в руки
+    if backpack:FindFirstChild("LockonLauncher") then
+        backpack.LockonLauncher.Parent = player.Character
+    else
+        return notify("Error", "LockonLauncher not found in backpack.")
+    end
+
+    -- 5. Стреляем ракетой прямо вниз
+    wait(0.5)  -- Ждем немного, чтобы убедиться, что ракетница экипирована
+    local rocketArgs = {
+        [1] = player.Character.HumanoidRootPart.Position - Vector3.new(0, 5, 0)  -- Стреляем прямо вниз
+    }
+    player.Character.LockonLauncher.Remote:FireServer(unpack(rocketArgs))
+
+    -- 6. Убираем ракетницу из рук
+    wait(0.5)
+    humanoid:UnequipTools()
+
+    notify("Sequence", "Action sequence completed.")
+end)
+
 
 UserInputService.InputBegan:Connect(function(input,gameProcessed)
 	if gameProcessed then
