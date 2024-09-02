@@ -11797,7 +11797,7 @@ function kill(speaker,target,fast)
 	local futurePosition = targetHRP.Position + targetVelocity * travelTime
 	
 	-- Добавляем случайное отклонение
-	local randomVector = Vector3.new((math.random() - 0.5) * 1, (math.random() - 0.5) * 50, (math.random() - 0.5) * 1)
+	local randomVector = Vector3.new((math.random() - 0.5) * 1, (math.random() - 0.5) + 50, (math.random() - 0.5) * 1)
 	local spawnPosition = futurePosition + randomVector
 	
 	-- Находим среднюю точку между spawnPosition и targetHRP.Position
@@ -11811,7 +11811,7 @@ function kill(speaker,target,fast)
 	    -- Находим ракету в Workspace
 	    local rocket = nil
 	    for _, obj in ipairs(workspace:GetChildren()) do
-	        if obj:IsA("Model") and obj.Name == "Rocket" then
+	        if obj:IsA("Part") and obj.Name == "Rocket" then
 	            rocket = obj
 	            break
 	        end
