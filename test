@@ -5469,7 +5469,7 @@ addcmd('godmode', {'godm'}, function(args, speaker)
     player.Character.LockonLauncher.Remote:FireServer(unpack(rocketArgs))
 
     -- 6. Убираем ракетницу из рук
-    wait(0.1)
+    wait(0.3)
     humanoid:UnequipTools()
 
     notify("Sequence", "Action sequence completed.")
