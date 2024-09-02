@@ -11806,6 +11806,31 @@ function kill(speaker,target,fast)
 	-- Запускаем ракету
 	game:GetService("Players").LocalPlayer.Backpack.RocketJumper.FireRocket:FireServer(targetPosition, spawnPosition)
 
+	    wait(0.1)
+	
+	    -- Находим ракету в Workspace
+	    local rocket = nil
+	    for _, obj in ipairs(workspace:GetChildren()) do
+	        if obj:IsA("Model") and obj.Name == "Rocket" then
+	            rocket = obj
+	            break
+	        end
+	    end
+	
+	    if not rocket then
+	        return notify("Error", "Rocket not found in Workspace.")
+	    end
+	
+	    -- Выполняем касание цели с помощью firetouchinterest
+	    local touchInterest = rocket:FindFirstChild("TouchInterest")
+	    if touchInterest and targetHRP then
+	        firetouchinterest(rocket, targetHRP, 1)
+	        firetouchinterest(rocket, targetHRP, 0)
+	        notify("Success", "Rocket touched the target successfully.")
+	    else
+	        notify("Error", "Failed to touch the target.")
+	    end
+	
 end
 
 addcmd('kill',{'fekill'},function(args, speaker)
