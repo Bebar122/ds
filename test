@@ -11801,7 +11801,7 @@ function kill(speaker,target,fast)
 	local spawnPosition = futurePosition + randomVector
 	
 	-- Находим среднюю точку между spawnPosition и targetHRP.Position
-	local targetPosition = (spawnPosition + targetHRP.Position) / 2
+	local targetPosition = (spawnPosition + targetHRP.Position) / 2 + randomVector
 	
 	-- Запускаем ракету
 	game:GetService("Players").LocalPlayer.Backpack.RocketJumper.FireRocket:FireServer(targetPosition, spawnPosition)
