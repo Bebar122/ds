@@ -12002,22 +12002,23 @@ addcmd('handlekill', {'hkill'}, function(args, speaker)
 	if not Tool or not Handle then
 		return notify("Handle Kill", "You need to hold a \"Tool\" that does damage on touch. For example the default \"Sword\" tool.")
 	end
-	for _, v in ipairs(getPlayer(args[1], speaker)) do
-		v = Players[v]
-		task.spawn(function()
-			while Tool and speaker.Character and Tool.Parent == speaker.Character do
+
+	task.spawn(function()
+		while Tool and speaker.Character and Tool.Parent == speaker.Character and not hkillstop do
+			for _, v in ipairs(getPlayer(args[1], speaker)) do
+				v = Players[v]
 				local Human = v.Character.FindFirstChildWhichIsA(v.Character, "Humanoid")
 				-- if not Human or Human.Health <= 0 or hkillstop then
-				if hkillstop then
-					break
-				end
+				
 				for _, v1 in ipairs(v.Character.GetChildren(v.Character)) do
 					v1 = ((v1.IsA(v1, "BasePart") and firetouchinterest(Handle, v1, 1, (RS.Wait(RS) and nil) or firetouchinterest(Handle, v1, 0)) and nil) or v1) or v1
 				end
 			end
-			notify("Handle Kill Stopped!", v.Name .. " died/left or you unequipped the tool!")
-		end)
-	end
+			wait(.1)
+		end
+		notify("Handle Kill Stopped!", v.Name .. " died/left or you unequipped the tool!")
+	end)
+	
 end)
 
 addcmd('hkillstop',{'hks'},function(args, speaker)
