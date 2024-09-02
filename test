@@ -4358,6 +4358,7 @@ CMDs[#CMDs + 1] = {NAME = 'vehicleclip / vclip / unvnoclip', DESC = 'Enables veh
 CMDs[#CMDs + 1] = {NAME = 'float /  platform', DESC = 'Spawns a platform beneath you causing you to float'}
 CMDs[#CMDs + 1] = {NAME = 'unfloat / noplatform', DESC = 'Removes the platform'}
 CMDs[#CMDs + 1] = {NAME = 'swim', DESC = 'Allows you to swim in the air'}
+CMDs[#CMDs + 1] = {NAME = 'bonekill / bkill', DESC = 'Allows you to swim in the air'}
 CMDs[#CMDs + 1] = {NAME = 'unswim / noswim', DESC = 'Stops you from swimming everywhere'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'setwaypoint / swp [name]', DESC = 'Sets a waypoint at your position'}
@@ -11797,40 +11798,15 @@ function kill(speaker,target,fast)
 	local futurePosition = targetHRP.Position + targetVelocity * travelTime
 	
 	-- Добавляем случайное отклонение
-	local randomVector = Vector3.new((math.random() - 0.5) * 1, (math.random() - 0.5) + 50, (math.random() - 0.5) * 1)
+	local randomVector = Vector3.new((math.random() - 0.5) * 1, (math.random() - 0.5) * 1, (math.random() - 0.5) * 1)
 	local spawnPosition = futurePosition + randomVector
 	
 	-- Находим среднюю точку между spawnPosition и targetHRP.Position
-	local targetPosition = (spawnPosition + targetHRP.Position) / 2 + randomVector
+	local targetPosition = (spawnPosition + targetHRP.Position) / 2
 	
 	-- Запускаем ракету
 	game:GetService("Players").LocalPlayer.Backpack.RocketJumper.FireRocket:FireServer(targetPosition, spawnPosition)
 
-	    wait(0.1)
-	
-	    -- Находим ракету в Workspace
-	    local rocket = nil
-	    for _, obj in ipairs(workspace:GetChildren()) do
-	        if obj:IsA("Part") and obj.Name == "Rocket" then
-	            rocket = obj
-	            break
-	        end
-	    end
-	
-	    if not rocket then
-	        return notify("Error", "Rocket not found in Workspace.")
-	    end
-	
-	    -- Выполняем касание цели с помощью firetouchinterest
-	    local touchInterest = rocket:FindFirstChild("TouchInterest")
-	    if touchInterest and targetHRP then
-	        firetouchinterest(rocket, targetHRP, 1)
-	        firetouchinterest(rocket, targetHRP, 0)
-	        notify("Success", "Rocket touched the target successfully.")
-	    else
-	        notify("Error", "Failed to touch the target.")
-	    end
-	
 end
 
 addcmd('kill',{'fekill'},function(args, speaker)
@@ -12046,6 +12022,50 @@ end)
 addcmd('hkillstop',{'hks'},function(args, speaker)
 	hkillstop=true
 end)
+
+addcmd('boneKill', {'bkill'}, function(args, speaker)
+    if not firetouchinterest then
+        return notify('Incompatible Exploit', 'Your exploit does not support this command (missing firetouchinterest)')
+    end
+
+    local boneSword = game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("BoneSword")
+    if not boneSword then
+        return notify("Error", "BoneSword not found in backpack.")
+    end
+
+
+
+    local Tool = boneSword
+    local Handle = Tool and Tool:FindFirstChild("Handle")
+    if not Handle then
+        return notify("Error", "Handle not found on BoneSword.")
+    end
+
+    for _, playerName in ipairs(getPlayer(args[1], speaker)) do
+        local targetPlayer = game:GetService("Players")[playerName]
+        if targetPlayer and targetPlayer.Character then
+            task.spawn(function()
+                while Tool and speaker.Character and targetPlayer.Character do
+                    local humanoid = targetPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+                    if not humanoid or humanoid.Health <= 0 then
+                        break
+                    end
+
+                    for _, part in ipairs(targetPlayer.Character:GetChildren()) do
+                        if part:IsA("BasePart") then
+                            firetouchinterest(Handle, part, 1)
+                            firetouchinterest(Handle, part, 0)
+                        end
+                    end
+                end
+                notify("Bone Kill Stopped!", targetPlayer.Name .. " died or the BoneSword was unequipped!")
+            end)
+        else
+            notify("Error", playerName .. " not found or not in game.")
+        end
+    end
+end)
+
 
 addcmd('handleTouch', {'htouch'}, function(args, speaker)
     if not firetouchinterest then
