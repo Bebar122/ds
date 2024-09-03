@@ -4290,7 +4290,7 @@ function autoComplete(str,curText)
 end
 
 CMDs = {}
-CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 9988the Infinite Yield support server.'}
+CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 90800the Infinite Yield support server.'}
 CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Loads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
@@ -11818,7 +11818,7 @@ function kill(speaker, target, fast)
     -- Позиция спавна ракеты на расстоянии двух единичных векторов скорости от будущей позиции цели
     local spawnPosition
     if targetVelocity.Magnitude > 0 then
-        spawnPosition = futurePosition - (targetVelocity.Unit * 2)
+        spawnPosition = futurePosition + (targetVelocity.Unit * 4)
     else
         -- Если скорость равна нулю, спавним ракету на небольшом расстоянии от цели
         spawnPosition = futurePosition + Vector3.new(2, 2, 2)
