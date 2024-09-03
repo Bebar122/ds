@@ -4290,7 +4290,7 @@ function autoComplete(str,curText)
 end
 
 CMDs = {}
-CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 108the Infinite Yield support server.'}
+CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 112the Infinite Yield support server.'}
 CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Loads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
@@ -11792,7 +11792,7 @@ function kill(speaker, target, fast)
     local targetHRP = target.Character.HumanoidRootPart
     local targetVelocity = targetHRP.Velocity
     
-    local rocketSpeed = 1 -- Скорость ракеты
+    local rocketSpeed = 0.5 -- Скорость ракеты
 
 
     -- Предполагаемая позиция цели с учётом её скорости и ускорения
