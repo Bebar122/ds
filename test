@@ -11804,7 +11804,7 @@ function kill(speaker,target,fast)
 	local targetPosition = (targetHRP.Position + targetVelocity * rocketSpeed * 1.5 + targetHRP.Position) / 2 + randomVector
 
 	if targetVelocity.Magnitude > 0 then
-	    futurePosition = targetPosition + (targetVelocity.Unit * rocketSpeed) * targetVelocity.Magnitude / 15
+	    futurePosition = targetPosition + (targetVelocity.Unit * rocketSpeed) * 2
 	else
 	    futurePosition = targetHRP.Position
 	end
