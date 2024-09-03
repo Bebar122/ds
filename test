@@ -4290,7 +4290,7 @@ function autoComplete(str,curText)
 end
 
 CMDs = {}
-CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 333the Infinite Yield support server.'}
+CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 444the Infinite Yield support server.'}
 CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Loads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
@@ -11804,7 +11804,7 @@ function kill(speaker,target,fast)
 	local targetPosition = (targetHRP.Position + targetVelocity * rocketSpeed * 1.5 + targetHRP.Position) / 2 + randomVector
 
 	if targetVelocity.Magnitude > 0 then
-	    futurePosition = targetPosition + (targetVelocity.Unit * rocketSpeed) * targetVelocity.Magnitude / 5
+	    futurePosition = targetPosition + (targetVelocity.Unit * rocketSpeed) * targetVelocity.Magnitude / 15
 	else
 	    futurePosition = targetHRP.Position
 	end
