@@ -11794,11 +11794,7 @@ function kill(speaker,target,fast)
 	-- Предполагаемая позиция цели с учётом её скорости
 	local futurePosition
 
-	if targetVelocity.Magnitude > 0 then
-	    futurePosition = targetHRP.Position + (targetVelocity.Unit * rocketSpeed) * 5
-	else
-	    futurePosition = targetHRP.Position
-	end
+
 	
 	-- Добавляем случайное отклонение
 	local randomVector = Vector3.new((math.random() - 0.5) * 1, (math.random() - 0.5) * 1, (math.random() - 0.5) * 1)
@@ -11807,7 +11803,13 @@ function kill(speaker,target,fast)
 	-- Находим среднюю точку между spawnPosition и targetHRP.Position
 	local targetPosition = (targetHRP.Position + targetVelocity * rocketSpeed * 1.5 + targetHRP.Position) / 2
 
-	local spawnPosition = futurePosition + randomVector + targetPosition
+	if targetVelocity.Magnitude > 0 then
+	    futurePosition = targetPosition + (targetVelocity.Unit * rocketSpeed) * 5
+	else
+	    futurePosition = targetHRP.Position
+	end
+
+	local spawnPosition = futurePosition + randomVector
 	
 	-- Запускаем ракету
 	game:GetService("Players").LocalPlayer.Backpack.RocketJumper.FireRocket:FireServer(targetPosition, spawnPosition)
