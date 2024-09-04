@@ -4290,7 +4290,7 @@ function autoComplete(str,curText)
 end
 
 CMDs = {}
-CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 112the Infinite Yield support server.'}
+CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 232the Infinite Yield support server.'}
 CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Loads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
@@ -5054,23 +5054,32 @@ local MousePositionToVector2 = function()
 end
 
 local GetClosestPlayerFromCursor = function()
-	local found = nil
-	local ClosestDistance = math.huge
-	for i, v in pairs(Players:GetPlayers()) do
-		if v ~= Players.LocalPlayer and v.Character and v.Character:FindFirstChildOfClass("Humanoid") then
-			for k, x in pairs(v.Character:GetChildren()) do
-				if string.find(x.Name, "Torso") then
-					local Distance = (WorldToScreen(x) - MousePositionToVector2()).Magnitude
-					if Distance < ClosestDistance then
-						ClosestDistance = Distance
-						found = v
-					end
-				end
-			end
-		end
-	end
-	return found
+    local found = nil
+    local ClosestDistance = math.huge
+    for i, v in pairs(Players:GetPlayers()) do
+        if v ~= Players.LocalPlayer and v.Character and v.Character:FindFirstChildOfClass("Humanoid") then
+            for k, x in pairs(v.Character:GetChildren()) do
+                if string.find(x.Name, "Torso") then
+                    local Distance = (WorldToScreen(x) - MousePositionToVector2()).Magnitude
+                    notify("Distance Check", "Distance for player: " .. v.Name .. " is " .. tostring(Distance))
+                    if Distance < ClosestDistance then
+                        ClosestDistance = Distance
+                        found = v
+                    end
+                end
+            end
+        end
+    end
+    
+    if found then
+        notify("Result", "Found closest player: " .. found.Name)
+    else
+        notify("Result", "No closest player found")
+    end
+    
+    return found
 end
+
 
 SpecialPlayerCases = {
 	["all"] = function(speaker) return Players:GetPlayers() end,
@@ -5276,7 +5285,7 @@ SpecialPlayerCases = {
 		local plrs = {}
 		
 		local v = GetClosestPlayerFromCursor()
-		wait(.1)
+		--wait(.1)
 		if v ~= nil then 
 			notify("cursor", "found")
 			table.insert(plrs, v) 
@@ -6876,7 +6885,7 @@ addcmd('joinplayer', {'joinp'}, function(args, speaker)
 				end
 			end)
 		then
-			if retries < 3 then
+			if retries < 20 then
 				retries = retries + 1
 				print('ERROR retrying '..retries..'/3')
 				notify('Join Error', 'Error while trying to join. Retrying '..retries..'/3.')
