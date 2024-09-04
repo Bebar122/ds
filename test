@@ -4290,7 +4290,7 @@ function autoComplete(str,curText)
 end
 
 CMDs = {}
-CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 244the Infinite Yield support server.'}
+CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 334the Infinite Yield support server.'}
 CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Loads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
@@ -5056,23 +5056,55 @@ end
 local GetClosestPlayerFromCursor = function()
     local found = nil
     local ClosestDistance = math.huge
-    for i, v in pairs(Players:GetPlayers()) do
-        if v ~= Players.LocalPlayer and v.Character and v.Character:FindFirstChildOfClass("Humanoid") then
-            for k, x in pairs(v.Character:GetChildren()) do
-                if string.find(x.Name, "Torso") then
-                    local Distance = (WorldToScreen(x) - MousePositionToVector2()).Magnitude
-                    print("Distance for player:", v.Name, "is", Distance)
-                    if Distance < ClosestDistance then
-                        ClosestDistance = Distance
-                        found = v
+    local success, err = pcall(function()
+        for i, v in pairs(Players:GetPlayers()) do
+            if v ~= Players.LocalPlayer then
+                if v.Character then
+                    notify("Character Check", "Character found for player: " .. v.Name)
+
+                    if v.Character:FindFirstChildOfClass("Humanoid") then
+                        notify("Humanoid Check", "Humanoid found for player: " .. v.Name)
+
+                        local torsoFound = false
+                        for k, x in pairs(v.Character:GetChildren()) do
+                            if string.find(x.Name, "Torso") then
+                                torsoFound = true
+                                local Distance = (WorldToScreen(x) - MousePositionToVector2()).Magnitude
+                                notify("Distance Check", "Distance for player: " .. v.Name .. " is " .. tostring(Distance))
+
+                                if Distance < ClosestDistance then
+                                    ClosestDistance = Distance
+                                    found = v
+                                end
+                            end
+                        end
+
+                        if not torsoFound then
+                            notify("Torso Check", "No torso found for player: " .. v.Name)
+                        end
+                    else
+                        notify("Humanoid Check", "No humanoid found for player: " .. v.Name)
                     end
+                else
+                    notify("Character Check", "No character found for player: " .. v.Name)
                 end
             end
         end
+    end)
+
+    if not success then
+        notify("Error", "An error occurred: " .. tostring(err))
     end
-    print("Found closest player:", found and found.Name or "None")
+
+    if found then
+        notify("Result", "Found closest player: " .. found.Name)
+    else
+        notify("Result", "No closest player found")
+    end
+
     return found
 end
+
 
 
 SpecialPlayerCases = {
