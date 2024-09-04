@@ -4290,7 +4290,7 @@ function autoComplete(str,curText)
 end
 
 CMDs = {}
-CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 454the Infinite Yield support server.'}
+CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 664the Infinite Yield support server.'}
 CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Loads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
@@ -5053,35 +5053,73 @@ local MousePositionToVector2 = function()
 	return Vector2.new(IYMouse.X, IYMouse.Y)
 end
 
+local function customNotify(title, messages)
+    local fullMessage = table.concat(messages, "\n")
+    notify(title, fullMessage)
+end
+
 local GetClosestPlayerFromCursor = function()
     local found = nil
     local ClosestDistance = math.huge
+    local messages = {}
     
     for i, v in pairs(Players:GetPlayers()) do
-        if v ~= Players.LocalPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
-            local hrp = v.Character:FindFirstChild("HumanoidRootPart")
-            if hrp then
-                local Distance = (WorldToScreen(hrp.Position) - MousePositionToVector2()).Magnitude
-                notify("Distance Check", "Distance for player: " .. v.Name .. " is " .. tostring(Distance))
+        table.insert(messages, "Processing player: " .. v.Name)
+        
+        if v ~= Players.LocalPlayer then
+            if v.Character then
+                table.insert(messages, "Character found for player: " .. v.Name)
                 
-                if Distance < ClosestDistance then
-                    ClosestDistance = Distance
-                    found = v
+                local humanoid = v.Character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    table.insert(messages, "Humanoid found for player: " .. v.Name)
+                    
+                    local torsoFound = false
+                    for k, x in pairs(v.Character:GetChildren()) do
+                        if string.find(x.Name, "Torso") then
+                            table.insert(messages, "Torso found for player: " .. v.Name)
+                            torsoFound = true
+                            
+                            local success, result = pcall(function()
+                                local Distance = (WorldToScreen(x) - MousePositionToVector2()).Magnitude
+                                return Distance
+                            end)
+                            
+                            if success then
+                                table.insert(messages, "Distance for player: " .. v.Name .. " is " .. tostring(result))
+                                
+                                if result < ClosestDistance then
+                                    ClosestDistance = result
+                                    found = v
+                                end
+                            else
+                                table.insert(messages, "Error during distance calculation for player: " .. v.Name)
+                            end
+                        end
+                    end
+                    
+                    if not torsoFound then
+                        table.insert(messages, "No torso found for player: " .. v.Name)
+                    end
+                else
+                    table.insert(messages, "No humanoid found for player: " .. v.Name)
                 end
+            else
+                table.insert(messages, "No character found for player: " .. v.Name)
             end
         end
     end
     
     if found then
-        notify("Result", "Found closest player: " .. found.Name)
+        table.insert(messages, "Found closest player: " .. found.Name)
     else
-        notify("Result", "No closest player found")
+        table.insert(messages, "No closest player found")
     end
+    
+    customNotify("Result", messages)
     
     return found
 end
-
-
 
 
 SpecialPlayerCases = {
