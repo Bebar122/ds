@@ -4302,7 +4302,7 @@ CMDs[#CMDs + 1] = {NAME = 'notifyjobid', DESC = 'Notifies you the games JobId'}
 CMDs[#CMDs + 1] = {NAME = 'rejoin / rj', DESC = 'Makes you rejoin the game'}
 CMDs[#CMDs + 1] = {NAME = 'autorejoin / autorj', DESC = 'Automatically rejoins the server if you get kicked/disconnected'}
 CMDs[#CMDs + 1] = {NAME = 'serverhop / shop', DESC = 'Teleports you to a different server'}
-CMDs[#CMDs + 1] = {NAME = 'joinplayer [username / ID] [place ID]', DESC = 'Joins a specific players server'}
+CMDs[#CMDs + 1] = {NAME = 'joinplayer [username / ID] [place ID]', DESC = 'Jo1111ins a specific players server'}
 CMDs[#CMDs + 1] = {NAME = 'gameteleport / gametp [place ID]', DESC = 'Joins a game by ID'}
 CMDs[#CMDs + 1] = {NAME = 'antiidle / antiafk', DESC = 'Prevents the game from kicking you for being idle/afk'}
 CMDs[#CMDs + 1] = {NAME = 'datalimit [num]', DESC = 'Set outgoing KBPS limit'}
@@ -6823,45 +6823,52 @@ addcmd("serverhop", {"shop"}, function(args, speaker)
     end
 end)
 
-addcmd('joinplayer',{'joinp'},function(args, speaker)
+addcmd('joinplayer', {'joinp'}, function(args, speaker)
 	local retries = 0
-	function ToServer(User,Place)	
+	function ToServer(User, Place)
 		if args[2] == nil then Place = PlaceId end
 		if not pcall(function()
 				local FoundUser, UserId = pcall(function()
 					if tonumber(User) then
 						return tonumber(User)
 					end
-
 					return Players:GetUserIdFromNameAsync(User)
 				end)
 				if not FoundUser then
-					notify('Join Error','Username/UserID does not exist')
+					notify('Join Error', 'Username/UserID does not exist')
 				else
-					notify('Join Player','Loading servers. Hold on a second.')
-					local URL2 = ("https://games.roblox.com/v1/games/"..Place.."/servers/Public?sortOrder=Asc&limit=500")
-					local Http = HttpService:JSONDecode(game:HttpGet(URL2))
+					notify('Join Player', 'Loading servers. Hold on a second.')
 					local GUID
-
-					function tablelength(T)
-						local count = 0
-						for _ in pairs(T) do count = count + 1 end
-						return count
-					end
-
-					for i=1,tonumber(tablelength(Http.data)) do
-						for j,k in pairs(Http.data[i].playerIds) do
-							if k == UserId then
-								GUID = Http.data[i].id
-							end
+					local cursor = ""
+					
+					repeat
+						local URL2 = ("https://games.roblox.com/v1/games/"..Place.."/servers/Public?sortOrder=Asc&limit=100&cursor="..cursor)
+						local Http = HttpService:JSONDecode(game:HttpGet(URL2))
+						
+						function tablelength(T)
+							local count = 0
+							for _ in pairs(T) do count = count + 1 end
+							return count
 						end
-					end
-
+						
+						for i=1, tonumber(tablelength(Http.data)) do
+							for j,k in pairs(Http.data[i].playerIds) do
+								if k == UserId then
+									GUID = Http.data[i].id
+									break
+								end
+							end
+							if GUID then break end
+						end
+						
+						cursor = Http.nextPageCursor
+					until not cursor or GUID
+					
 					if GUID ~= nil then
-						notify('Join Player','Joining '..User)
-						TeleportService:TeleportToPlaceInstance(Place,GUID,Players.LocalPlayer)
+						notify('Join Player', 'Joining '..User)
+						TeleportService:TeleportToPlaceInstance(Place, GUID, Players.LocalPlayer)
 					else
-						notify('Join Error','Unable to join user.')
+						notify('Join Error', 'Unable to join user.')
 					end
 				end
 			end)
@@ -6869,15 +6876,16 @@ addcmd('joinplayer',{'joinp'},function(args, speaker)
 			if retries < 3 then
 				retries = retries + 1
 				print('ERROR retrying '..retries..'/3')
-				notify('Join Error','Error while trying to join. Retrying '..retries..'/3.')
-				ToServer(User,Place)
+				notify('Join Error', 'Error while trying to join. Retrying '..retries..'/3.')
+				ToServer(User, Place)
 			else
-				notify('Join Error','Error while trying to join.')
+				notify('Join Error', 'Error while trying to join.')
 			end
 		end
 	end
-	ToServer(args[1],args[2])
+	ToServer(args[1], args[2])
 end)
+
 
 addcmd("exit", {}, function(args, speaker)
     game:Shutdown()
