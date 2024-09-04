@@ -6876,24 +6876,13 @@ end)
 addcmd('joinplayer', {'joinp'}, function(args, speaker)
     local retries = 0
     
-    function ToServer(User, Place)
+    function ToServer(Place, ServerIndex)
         Place = args[2] or PlaceId
-
-        local success, UserId = pcall(function()
-            if tonumber(User) then
-                return tonumber(User)
-            end
-            return Players:GetUserIdFromNameAsync(User)
-        end)
-
-        if not success then
-            notify('Join Error', 'Username/UserID does not exist')
-            return
-        end
-
+        ServerIndex = tonumber(args[1]) or 1  -- Default to first server if no index is provided
+        
         notify('Join Player', 'Loading servers. Hold on a second.')
 
-        local GUID
+        local allServers = {}
         local cursor = ""
         repeat
             local URL = ("https://games.roblox.com/v1/games/"..Place.."/servers/Public?sortOrder=Asc&limit=100"..(cursor ~= "" and "&cursor="..cursor or ""))
@@ -6904,14 +6893,8 @@ addcmd('joinplayer', {'joinp'}, function(args, speaker)
             
             if success and result then
                 for _, server in ipairs(result.data) do
-                    if server.playing and server.playing > 0 then
-                        for _, playerId in ipairs(server.playerTokens or {}) do
-                            if playerId == UserId then
-                                GUID = server.id
-                                break
-                            end
-                        end
-                        if GUID then break end
+                    if server.ping then
+                        table.insert(allServers, server)
                     end
                 end
                 
@@ -6920,29 +6903,35 @@ addcmd('joinplayer', {'joinp'}, function(args, speaker)
                 notify('Join Error', 'Failed to load server data.')
                 break
             end
-        until not cursor or GUID
+        until not cursor
         
-        if GUID then
-            notify('Join Player', 'Joining '..User)
-            TeleportService:TeleportToPlaceInstance(Place, GUID, Players.LocalPlayer)
+        -- Sort servers by ping in ascending order
+        table.sort(allServers, function(a, b) return a.ping < b.ping end)
+
+        -- Check if the requested server index is valid
+        if ServerIndex <= #allServers and allServers[ServerIndex] then
+            local selectedServer = allServers[ServerIndex]
+            notify('Join Player', 'Joining server '..ServerIndex..' with ping: '..selectedServer.ping)
+            TeleportService:TeleportToPlaceInstance(Place, selectedServer.id, Players.LocalPlayer)
         else
-            notify('Join Error', 'Unable to join user.')
+            notify('Join Error', 'Invalid server index or no servers available.')
         end
     end
     
-    local function RetryJoin(User, Place)
+    local function RetryJoin(Place, ServerIndex)
         if retries < 3 then
             retries = retries + 1
             notify('Join Error', 'Error while trying to join. Retrying '..retries..'/3.')
             wait(1)
-            ToServer(User, Place)
+            ToServer(Place, ServerIndex)
         else
             notify('Join Error', 'Error while trying to join.')
         end
     end
 
-    ToServer(args[1], args[2])
+    ToServer(args[2], args[1])  -- Pass PlaceId and ServerIndex
 end)
+
 
 
 
