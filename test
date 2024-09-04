@@ -6839,7 +6839,7 @@ addcmd('joinplayer',{'joinp'},function(args, speaker)
 					notify('Join Error','Username/UserID does not exist')
 				else
 					notify('Join Player','Loading servers. Hold on a second.')
-					local URL2 = ("https://games.roblox.com/v1/games/"..Place.."/servers/Public?sortOrder=Asc&limit=100")
+					local URL2 = ("https://games.roblox.com/v1/games/"..Place.."/servers/Public?sortOrder=Asc&limit=500")
 					local Http = HttpService:JSONDecode(game:HttpGet(URL2))
 					local GUID
 
