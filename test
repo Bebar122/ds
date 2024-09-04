@@ -4302,7 +4302,7 @@ CMDs[#CMDs + 1] = {NAME = 'notifyjobid', DESC = 'Notifies you the games JobId'}
 CMDs[#CMDs + 1] = {NAME = 'rejoin / rj', DESC = 'Makes you rejoin the game'}
 CMDs[#CMDs + 1] = {NAME = 'autorejoin / autorj', DESC = 'Automatically rejoins the server if you get kicked/disconnected'}
 CMDs[#CMDs + 1] = {NAME = 'serverhop / shop', DESC = 'Teleports you to a different server'}
-CMDs[#CMDs + 1] = {NAME = 'joinplayer [username / ID] [place ID]', DESC = 'Jo1111ins a specific players server'}
+CMDs[#CMDs + 1] = {NAME = 'joinplayer [username / ID] [place ID]', DESC = 'Jo22221ins a specific players server'}
 CMDs[#CMDs + 1] = {NAME = 'gameteleport / gametp [place ID]', DESC = 'Joins a game by ID'}
 CMDs[#CMDs + 1] = {NAME = 'antiidle / antiafk', DESC = 'Prevents the game from kicking you for being idle/afk'}
 CMDs[#CMDs + 1] = {NAME = 'datalimit [num]', DESC = 'Set outgoing KBPS limit'}
@@ -6842,26 +6842,29 @@ addcmd('joinplayer', {'joinp'}, function(args, speaker)
 					local cursor = ""
 					
 					repeat
-						local URL2 = ("https://games.roblox.com/v1/games/"..Place.."/servers/Public?sortOrder=Asc&limit=100&cursor="..cursor)
-						local Http = HttpService:JSONDecode(game:HttpGet(URL2))
+						local URL2 = ("https://games.roblox.com/v1/games/"..Place.."/servers/Public?sortOrder=Asc&limit=100"..(cursor ~= "" and "&cursor="..cursor or ""))
+						local success, result = pcall(function()
+							return HttpService:JSONDecode(game:HttpGet(URL2))
+						end)
 						
-						function tablelength(T)
-							local count = 0
-							for _ in pairs(T) do count = count + 1 end
-							return count
-						end
-						
-						for i=1, tonumber(tablelength(Http.data)) do
-							for j,k in pairs(Http.data[i].playerIds) do
-								if k == UserId then
-									GUID = Http.data[i].id
-									break
+						if success and result then
+							local Http = result
+							
+							for _, server in ipairs(Http.data) do
+								for _, playerId in ipairs(server.playerIds) do
+									if playerId == UserId then
+										GUID = server.id
+										break
+									end
 								end
+								if GUID then break end
 							end
-							if GUID then break end
+							
+							cursor = Http.nextPageCursor
+						else
+							notify('Join Error', 'Failed to load server data.')
+							break
 						end
-						
-						cursor = Http.nextPageCursor
 					until not cursor or GUID
 					
 					if GUID ~= nil then
@@ -6877,6 +6880,7 @@ addcmd('joinplayer', {'joinp'}, function(args, speaker)
 				retries = retries + 1
 				print('ERROR retrying '..retries..'/3')
 				notify('Join Error', 'Error while trying to join. Retrying '..retries..'/3.')
+				wait(1)  -- Adding a small delay before retrying
 				ToServer(User, Place)
 			else
 				notify('Join Error', 'Error while trying to join.')
@@ -6885,6 +6889,7 @@ addcmd('joinplayer', {'joinp'}, function(args, speaker)
 	end
 	ToServer(args[1], args[2])
 end)
+
 
 
 addcmd("exit", {}, function(args, speaker)
