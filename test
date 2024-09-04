@@ -4290,7 +4290,7 @@ function autoComplete(str,curText)
 end
 
 CMDs = {}
-CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 664the Infinite Yield support server.'}
+CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 674the Infinite Yield support server.'}
 CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Loads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
@@ -6874,70 +6874,74 @@ addcmd("serverhop", {"shop"}, function(args, speaker)
 end)
 
 addcmd('joinplayer', {'joinp'}, function(args, speaker)
-	local retries = 0
-	function ToServer(User, Place)
-		if args[2] == nil then Place = PlaceId end
-		if not pcall(function()
-				local FoundUser, UserId = pcall(function()
-					if tonumber(User) then
-						return tonumber(User)
-					end
-					return Players:GetUserIdFromNameAsync(User)
-				end)
-				if not FoundUser then
-					notify('Join Error', 'Username/UserID does not exist')
-				else
-					notify('Join Player', 'Loading servers. Hold on a second.')
-					local GUID
-					local cursor = ""
-					
-					repeat
-						local URL2 = ("https://games.roblox.com/v1/games/"..Place.."/servers/Public?sortOrder=Asc&limit=100"..(cursor ~= "" and "&cursor="..cursor or ""))
-						local success, result = pcall(function()
-							return HttpService:JSONDecode(game:HttpGet(URL2))
-						end)
-						
-						if success and result then
-							local Http = result
-							
-							for _, server in ipairs(Http.data) do
-								for _, playerId in ipairs(server.playerIds) do
-									if playerId == UserId then
-										GUID = server.id
-										break
-									end
-								end
-								if GUID then break end
-							end
-							
-							cursor = Http.nextPageCursor
-						else
-							notify('Join Error', 'Failed to load server data.')
-							break
-						end
-					until not cursor or GUID
-					
-					if GUID ~= nil then
-						notify('Join Player', 'Joining '..User)
-						TeleportService:TeleportToPlaceInstance(Place, GUID, Players.LocalPlayer)
-					else
-						notify('Join Error', 'Unable to join user.')
-					end
-				end
-			end)
-		then
-			if retries < 20 then
-				retries = retries + 1
-				print('ERROR retrying '..retries..'/3')
-				notify('Join Error', 'Error while trying to join. Retrying '..retries..'/3.')
-				wait(1)  -- Adding a small delay before retrying
-				ToServer(User, Place)
-			else
-				notify('Join Error', 'Error while trying to join.')
-			end
-		end
-	end
-	ToServer(args[1], args[2])
+    local retries = 0
+    
+    function ToServer(User, Place)
+        Place = args[2] or PlaceId
+
+        local success, UserId = pcall(function()
+            if tonumber(User) then
+                return tonumber(User)
+            end
+            return Players:GetUserIdFromNameAsync(User)
+        end)
+
+        if not success then
+            notify('Join Error', 'Username/UserID does not exist')
+            return
+        end
+
+        notify('Join Player', 'Loading servers. Hold on a second.')
+
+        local GUID
+        local cursor = ""
+        repeat
+            local URL = ("https://games.roblox.com/v1/games/"..Place.."/servers/Public?sortOrder=Asc&limit=100"..(cursor ~= "" and "&cursor="..cursor or ""))
+            
+            local success, result = pcall(function()
+                return HttpService:JSONDecode(game:HttpGet(URL))
+            end)
+            
+            if success and result then
+                for _, server in ipairs(result.data) do
+                    if server.playing and server.playing > 0 then
+                        for _, playerId in ipairs(server.playerTokens or {}) do
+                            if playerId == UserId then
+                                GUID = server.id
+                                break
+                            end
+                        end
+                        if GUID then break end
+                    end
+                end
+                
+                cursor = result.nextPageCursor
+            else
+                notify('Join Error', 'Failed to load server data.')
+                break
+            end
+        until not cursor or GUID
+        
+        if GUID then
+            notify('Join Player', 'Joining '..User)
+            TeleportService:TeleportToPlaceInstance(Place, GUID, Players.LocalPlayer)
+        else
+            notify('Join Error', 'Unable to join user.')
+        end
+    end
+    
+    local function RetryJoin(User, Place)
+        if retries < 3 then
+            retries = retries + 1
+            notify('Join Error', 'Error while trying to join. Retrying '..retries..'/3.')
+            wait(1)
+            ToServer(User, Place)
+        else
+            notify('Join Error', 'Error while trying to join.')
+        end
+    end
+
+    ToServer(args[1], args[2])
 end)
 
 
