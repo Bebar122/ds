@@ -4290,7 +4290,7 @@ function autoComplete(str,curText)
 end
 
 CMDs = {}
-CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 232the Infinite Yield support server.'}
+CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 244the Infinite Yield support server.'}
 CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Loads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
@@ -5061,7 +5061,7 @@ local GetClosestPlayerFromCursor = function()
             for k, x in pairs(v.Character:GetChildren()) do
                 if string.find(x.Name, "Torso") then
                     local Distance = (WorldToScreen(x) - MousePositionToVector2()).Magnitude
-                    notify("Distance Check", "Distance for player: " .. v.Name .. " is " .. tostring(Distance))
+                    print("Distance for player:", v.Name, "is", Distance)
                     if Distance < ClosestDistance then
                         ClosestDistance = Distance
                         found = v
@@ -5070,13 +5070,7 @@ local GetClosestPlayerFromCursor = function()
             end
         end
     end
-    
-    if found then
-        notify("Result", "Found closest player: " .. found.Name)
-    else
-        notify("Result", "No closest player found")
-    end
-    
+    print("Found closest player:", found and found.Name or "None")
     return found
 end
 
