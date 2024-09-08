@@ -9629,7 +9629,12 @@ addcmd("godm2", {"god2"}, function(args, speaker)
 	        end)
 	    end
 	end)
-	tool.Parent = game.Players.LocalPlayer.Character
+
+	local toolb = game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Ghost: Disabled")
+
+
+	toolb.Parent = game:GetService("Players").LocalPlayer.Character
+
 end)
 
 
