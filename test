@@ -9629,7 +9629,8 @@ addcmd("godm2", {"god2"}, function(args, speaker)
 	        end)
 	    end
 	end)
-	
+
+	wait()
 	local toolb = game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Ghost")
 
 	toolb.Parent = game:GetService("Players").LocalPlayer.Character
