@@ -12247,18 +12247,22 @@ end)
 local activeKills = {}
 
 addcmd('boneKill', {'bkill'}, function(args, speaker)
-   
 
-    local boneSword = game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("BoneSword")
-    if not boneSword then
-        return notify("Error", "BoneSword not found in backpack.")
+    local function equipBoneSword()
+        while true do
+            local boneSword = speaker.Backpack:FindFirstChild("BoneSword") or speaker.Character:FindFirstChild("BoneSword")
+            if boneSword then
+                boneSword.Parent = speaker.Character
+                return boneSword
+            else
+                notify("Info", "Waiting for BoneSword to appear in inventory...")
+            end
+            task.wait(1) -- Ждем, пока меч появится в инвентаре
+        end
     end
 
-    -- Берем костяной меч в руки
-    boneSword.Parent = speaker.Character
-
-    local Tool = boneSword
-    local Handle = Tool and Tool:FindFirstChild("Handle")
+    local Tool = equipBoneSword()
+    local Handle = Tool:FindFirstChild("Handle")
     if not Handle then
         return notify("Error", "Handle not found on BoneSword.")
     end
@@ -12269,7 +12273,15 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
             activeKills[playerName] = true
             task.spawn(function()
                 while activeKills[playerName] do
-                    if not Tool or Tool.Parent ~= speaker.Character then
+                    -- Проверяем, жив ли игрок
+                    while not speaker.Character or not speaker.Character:FindFirstChild("Humanoid") or speaker.Character:FindFirstChild("Humanoid").Health <= 0 do
+                        task.wait(0.1)
+                    end
+
+                    -- Проверяем наличие меча в руках
+                    Tool = speaker.Character:FindFirstChild("BoneSword") or equipBoneSword()
+                    Handle = Tool:FindFirstChild("Handle")
+                    if not Handle then
                         break
                     end
 
@@ -12285,7 +12297,7 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
                             end
                         end
                     end
-                    task.wait(0.1) -- Small delay to prevent script from overloading
+                    task.wait(0.1) -- Небольшая задержка
                 end
                 notify("Bone Kill Stopped!", targetPlayer.Name .. " is no longer targeted or the BoneSword was unequipped!")
             end)
