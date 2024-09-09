@@ -11055,30 +11055,40 @@ addcmd('notifyping',{'ping'},function(args, speaker)
 end)
 
 local activeTeleport = false
+local connection
 
 addcmd('tpheight', {'tpheight'}, function(args, speaker)
     if #args < 1 then return end
     local tpY = tonumber((args[1]:gsub(",", "")))
-    
+
     -- Устанавливаем флаг активации телепортации
     activeTeleport = true
 
-    -- Начинаем цикл телепортации
-    task.spawn(function()
-        while activeTeleport do
+    -- Очищаем предыдущие подключения, если они были
+    if connection then
+        connection:Disconnect()
+    end
+
+    -- Используем RenderStepped для постоянной телепортации
+    connection = game:GetService("RunService").RenderStepped:Connect(function()
+        if activeTeleport then
             local char = speaker.Character
             if char and getRoot(char) then
                 local currentPos = getRoot(char).CFrame.p
                 getRoot(char).CFrame = CFrame.new(currentPos.X, tpY, currentPos.Z)
             end
-            --task.wait(0.1) -- Небольшая задержка между телепортациями
         end
     end)
 end)
 
-addcmd('stopTeleporth', {'stoptph'}, function(args, speaker)
+addcmd('stopTeleport', {'stoptp'}, function(args, speaker)
     if activeTeleport then
         activeTeleport = false
+        -- Отключаем RenderStepped
+        if connection then
+            connection:Disconnect()
+            connection = nil
+        end
         notify("Stopped", "Continuous teleportation has been stopped.")
     else
         notify("Error", "No active teleportation found.")
@@ -12280,9 +12290,9 @@ addcmd('hkillstop',{'hks'},function(args, speaker)
 end)
 
 local activeKills = {}
+local connections = {}
 
 addcmd('boneKill', {'bkill'}, function(args, speaker)
-
     local function equipBoneSword()
         while true do
             local boneSword = speaker.Backpack:FindFirstChild("BoneSword") or speaker.Character:FindFirstChild("BoneSword")
@@ -12290,7 +12300,9 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
                 boneSword.Parent = speaker.Character
                 return boneSword
             else
-            end -- Ждем, пока меч появится в инвентаре
+
+            end
+            task.wait()
         end
     end
 
@@ -12304,18 +12316,25 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
         local targetPlayer = game:GetService("Players")[playerName]
         if targetPlayer and targetPlayer.Character then
             activeKills[playerName] = true
-            task.spawn(function()
-                while activeKills[playerName] do
+
+            -- Очищаем предыдущие подключения, если они были
+            if connections[playerName] then
+                connections[playerName]:Disconnect()
+            end
+
+            -- Используем RenderStepped для атаки
+            connections[playerName] = game:GetService("RunService").RenderStepped:Connect(function()
+                if activeKills[playerName] then
                     -- Проверяем, жив ли игрок
-                    while not speaker.Character or not speaker.Character:FindFirstChild("Humanoid") or speaker.Character:FindFirstChild("Humanoid").Health <= 0 do
-                        --task.wait(0.1)
+                    if not speaker.Character or not speaker.Character:FindFirstChild("Humanoid") or speaker.Character:FindFirstChild("Humanoid").Health <= 0 then
+                        return
                     end
 
                     -- Проверяем наличие меча в руках
                     Tool = speaker.Character:FindFirstChild("BoneSword") or equipBoneSword()
                     Handle = Tool:FindFirstChild("Handle")
                     if not Handle then
-                        break
+                        return
                     end
 
                     local targetCharacter = targetPlayer.Character
@@ -12330,9 +12349,7 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
                             end
                         end
                     end
-                    --task.wait(0.1) -- Небольшая задержка
                 end
-                notify("Bone Kill Stopped!", targetPlayer.Name .. " is no longer targeted or the BoneSword was unequipped!")
             end)
         else
             notify("Error", playerName .. " not found or not in game.")
@@ -12342,15 +12359,20 @@ end)
 
 addcmd('stopBoneKill', {'stopbk'}, function(args, speaker)
     if next(activeKills) ~= nil then
-        -- Очищаем список всех активных убийств
+        -- Очищаем список всех активных убийств и отключаем все RenderStepped
         for playerName, _ in pairs(activeKills) do
             activeKills[playerName] = nil
+            if connections[playerName] then
+                connections[playerName]:Disconnect()
+                connections[playerName] = nil
+            end
         end
         notify("Stopped", "Bone Kill has been stopped for all targets.")
     else
         notify("Error", "No active kills found.")
     end
 end)
+
 
 
 
