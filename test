@@ -11071,7 +11071,7 @@ addcmd('tpheight', {'tpheight'}, function(args, speaker)
                 local currentPos = getRoot(char).CFrame.p
                 getRoot(char).CFrame = CFrame.new(currentPos.X, tpY, currentPos.Z)
             end
-            task.wait(0.1) -- Небольшая задержка между телепортациями
+            --task.wait(0.1) -- Небольшая задержка между телепортациями
         end
     end)
 end)
@@ -12290,9 +12290,7 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
                 boneSword.Parent = speaker.Character
                 return boneSword
             else
-                notify("Info", "Waiting for BoneSword to appear in inventory...")
-            end
-            task.wait(1) -- Ждем, пока меч появится в инвентаре
+            end -- Ждем, пока меч появится в инвентаре
         end
     end
 
@@ -12310,7 +12308,7 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
                 while activeKills[playerName] do
                     -- Проверяем, жив ли игрок
                     while not speaker.Character or not speaker.Character:FindFirstChild("Humanoid") or speaker.Character:FindFirstChild("Humanoid").Health <= 0 do
-                        task.wait(0.1)
+                        --task.wait(0.1)
                     end
 
                     -- Проверяем наличие меча в руках
@@ -12332,7 +12330,7 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
                             end
                         end
                     end
-                    task.wait(0.1) -- Небольшая задержка
+                    --task.wait(0.1) -- Небольшая задержка
                 end
                 notify("Bone Kill Stopped!", targetPlayer.Name .. " is no longer targeted or the BoneSword was unequipped!")
             end)
