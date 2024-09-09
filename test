@@ -4302,6 +4302,7 @@ CMDs[#CMDs + 1] = {NAME = 'notifyjobid', DESC = 'Notifies you the games JobId'}
 CMDs[#CMDs + 1] = {NAME = 'rejoin / rj', DESC = 'Makes you rejoin the game'}
 CMDs[#CMDs + 1] = {NAME = 'autorejoin / autorj', DESC = 'Automatically rejoins the server if you get kicked/disconnected'}
 CMDs[#CMDs + 1] = {NAME = 'serverhop / shop', DESC = 'Teleports you to a different server'}
+CMDs[#CMDs + 1] = {NAME = 'stopbonekill / stopbk', DESC = 'Opens Old DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'joinplayer [username / ID] [place ID]', DESC = 'Jo22221ins a specific players server'}
 CMDs[#CMDs + 1] = {NAME = 'gameteleport / gametp [place ID]', DESC = 'Joins a game by ID'}
 CMDs[#CMDs + 1] = {NAME = 'antiidle / antiafk', DESC = 'Prevents the game from kicking you for being idle/afk'}
@@ -4453,6 +4454,8 @@ CMDs[#CMDs + 1] = {NAME = 'minzoom [num]', DESC = 'Minimum camera zoom'}
 CMDs[#CMDs + 1] = {NAME = 'camdistance [num]', DESC = 'Changes camera distance from your player'}
 CMDs[#CMDs + 1] = {NAME = 'fov [num]', DESC = 'Adjusts field of view (default is 70)'}
 CMDs[#CMDs + 1] = {NAME = 'fixcam / restorecam', DESC = 'Fixes camera'}
+CMDs[#CMDs + 1] = {NAME = 'tpheight', DESC = 'Fixes camera'}
+CMDs[#CMDs + 1] = {NAME = 'stoptph', DESC = 'Fixes camera'}
 CMDs[#CMDs + 1] = {NAME = 'enableshiftlock / enablesl', DESC = 'Enables the shift lock option'}
 CMDs[#CMDs + 1] = {NAME = 'lookat [player]', DESC = 'Moves your camera view to a player'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
@@ -11051,6 +11054,38 @@ addcmd('notifyping',{'ping'},function(args, speaker)
 	notify("Ping", math.round(speaker:GetNetworkPing() * 1000) .. "ms")
 end)
 
+local activeTeleport = false
+
+addcmd('tpheight', {'tpheight'}, function(args, speaker)
+    if #args < 1 then return end
+    local tpY = tonumber((args[1]:gsub(",", "")))
+    
+    -- Устанавливаем флаг активации телепортации
+    activeTeleport = true
+
+    -- Начинаем цикл телепортации
+    task.spawn(function()
+        while activeTeleport do
+            local char = speaker.Character
+            if char and getRoot(char) then
+                local currentPos = getRoot(char).CFrame.p
+                getRoot(char).CFrame = CFrame.new(currentPos.X, tpY, currentPos.Z)
+            end
+            task.wait(0.1) -- Небольшая задержка между телепортациями
+        end
+    end)
+end)
+
+addcmd('stopTeleporth', {'stoptph'}, function(args, speaker)
+    if activeTeleport then
+        activeTeleport = false
+        notify("Stopped", "Continuous teleportation has been stopped.")
+    else
+        notify("Error", "No active teleportation found.")
+    end
+end)
+
+
 addcmd('grabtools', {}, function(args, speaker)
 	local humanoid = speaker.Character:FindFirstChildWhichIsA("Humanoid")
 	for _, child in ipairs(workspace:GetChildren()) do
@@ -12308,14 +12343,17 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
 end)
 
 addcmd('stopBoneKill', {'stopbk'}, function(args, speaker)
-    local playerName = args[1]
-    if activeKills[playerName] then
-        activeKills[playerName] = nil
-        notify("Stopped", "Bone Kill has been stopped for " .. playerName)
+    if next(activeKills) ~= nil then
+        -- Очищаем список всех активных убийств
+        for playerName, _ in pairs(activeKills) do
+            activeKills[playerName] = nil
+        end
+        notify("Stopped", "Bone Kill has been stopped for all targets.")
     else
-        notify("Error", "No active kill found for " .. playerName)
+        notify("Error", "No active kills found.")
     end
 end)
+
 
 
 addcmd('handleTouch', {'htouch'}, function(args, speaker)
