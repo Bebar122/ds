@@ -11666,7 +11666,7 @@ addcmd('reach',{},function(args, speaker)
 				a.Parent = v.Handle
 				a.Adornee = v.Handle
 				v.Handle.Massless = true
-				v.Handle.Size = Vector3.new(0.5,0.5,args[1])
+				v.Handle.Size = Vector3.new(args[1],args[1],args[1])
 				v.GripPos = Vector3.new(0,0,0)
 				speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 			else
@@ -12247,9 +12247,7 @@ end)
 local activeKills = {}
 
 addcmd('boneKill', {'bkill'}, function(args, speaker)
-    if not firetouchinterest then
-        return notify('Incompatible Exploit', 'Your exploit does not support this command (missing firetouchinterest)')
-    end
+   
 
     local boneSword = game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("BoneSword")
     if not boneSword then
@@ -12278,7 +12276,7 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
                     local targetCharacter = targetPlayer.Character
                     if targetCharacter then
                         local humanoid = targetCharacter:FindFirstChildWhichIsA("Humanoid")
-                        if humanoid and humanoid.Health > 0 then
+                        if humanoid then
                             for _, part in ipairs(targetCharacter:GetChildren()) do
                                 if part:IsA("BasePart") then
                                     firetouchinterest(Handle, part, 1)
