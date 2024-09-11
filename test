@@ -7773,6 +7773,7 @@ addcmd('inspect', {'examine'}, function(args, speaker)
 end)
 
 addcmd('activateportal', {'actport'}, function(args, speaker)
+    -- Найдем портал в Workspace
     local portal = workspace:FindFirstChild("asdsdfsad0'sPortals")
     if not portal then
         return notify("Error", "Portal group not found in Workspace.")
@@ -7805,7 +7806,6 @@ addcmd('activateportal', {'actport'}, function(args, speaker)
             notify("Error", playerName .. " not found or not in game.")
         end
     end
-
 end)
 
 
