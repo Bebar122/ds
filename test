@@ -4487,7 +4487,7 @@ CMDs[#CMDs + 1] = {NAME = 'instantproximityprompts / instantpp', DESC = 'Disable
 CMDs[#CMDs + 1] = {NAME = 'uninstantproximityprompts / uninstantpp', DESC = 'Undo the cooldown removal'}
 CMDs[#CMDs + 1] = {NAME = 'tpunanchored / tpua [player]', DESC = 'Teleports unanchored parts to a player'}
 CMDs[#CMDs + 1] = {NAME = 'animsunanchored / freezeua', DESC = 'Freezes unanchored parts'}
-CMDs[#CMDs + 1] = {NAME = 'actport', DESC = 'Freezes unanchored parts'}
+CMDs[#CMDs + 1] = {NAME = 'actport', DESC = '2Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'thawunanchored / thawua / unfreezeua', DESC = 'Thaws unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'removeterrain / rterrain / noterrain', DESC = 'Removes all terrain'}
 CMDs[#CMDs + 1] = {NAME = 'clearnilinstances / nonilinstances / cni', DESC = 'Removes nil instances'}
@@ -7773,10 +7773,14 @@ addcmd('inspect', {'examine'}, function(args, speaker)
 end)
 
 addcmd('activateportal', {'actport'}, function(args, speaker)
-    -- Найдем портал в Workspace
-    local portal = workspace:FindFirstChild("Portal")
+    local portal = workspace:FindFirstChild("asdsdfsad0'sPortals")
     if not portal then
-        return notify("Error", "Portal not found in Workspace.")
+        return notify("Error", "Portal group not found in Workspace.")
+    end
+
+    local portalEffect = portal:FindFirstChild("Effect")
+    if not portalEffect then
+        return notify("Error", "Effect not found in the portal.")
     end
 
     -- Получаем список игроков
@@ -7790,10 +7794,10 @@ addcmd('activateportal', {'actport'}, function(args, speaker)
             
             if rootPart then
                 -- Активируем touchinterest между игроком и порталом
-                firetouchinterest(rootPart, portal, 1)  -- Начало касания
-                firetouchinterest(rootPart, portal, 0)  -- Окончание касания
+                firetouchinterest(rootPart, portalEffect, 1)  -- Начало касания
+                firetouchinterest(rootPart, portalEffect, 0)  -- Окончание касания
                 
-                notify("Success", targetPlayer.Name .. " has activated the portal!")
+                notify("Success", targetPlayer.Name .. " has activated the portal effect!")
             else
                 notify("Error", targetPlayer.Name .. " does not have a valid RootPart.")
             end
@@ -7801,6 +7805,7 @@ addcmd('activateportal', {'actport'}, function(args, speaker)
             notify("Error", playerName .. " not found or not in game.")
         end
     end
+end)
 end)
 
 
