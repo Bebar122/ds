@@ -7805,7 +7805,7 @@ addcmd('activateportal', {'actport'}, function(args, speaker)
             notify("Error", playerName .. " not found or not in game.")
         end
     end
-end)
+
 end)
 
 
