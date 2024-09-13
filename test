@@ -11321,9 +11321,15 @@ addcmd('playAllSounds', {'playsounds'}, function(args, speaker)
     local playersFolder = game:GetService("Players")
     scanAndPlaySounds(playersFolder)
 
-    local contentsFolder = game:GetService("ReplicatedStorage").LegacyModules.191816425.Contents
+    -- Доступ к третьему ребенку LegacyModules (папка "191816425")
+    local contentsFolder = game:GetService("ReplicatedStorage").LegacyModules:GetChildren()[3].Contents
+
+    -- Сканируем папку Contents на наличие звуков
     scanAndPlaySounds(contentsFolder)
+
+    notify("Success", "All sounds found have been activated!")
 end)
+
 
 
 addcmd('removeSpawnWalls', {'removewalls'}, function(args, speaker)
