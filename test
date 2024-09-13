@@ -4291,7 +4291,7 @@ end
 
 CMDs = {}
 CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 674the Infinite Yield support server.'}
-CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'Loads old Roblox consol332e'}
+CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'L2222oads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'remotespy / rspy', DESC = 'Opens Simple Spy V3'}
@@ -6840,7 +6840,8 @@ addcmd("rejoin", {"rj"}, function(args, speaker)
 	if #Players:GetPlayers() <= 1 then
 		Players.LocalPlayer:Kick("\nRejoining...")
 		wait()
-		TeleportService:Teleport(PlaceId, Players.LocalPlayer)
+		TeleportService:TeleportToPlaceInstance(PlaceId, JobId, Players.LocalPlayer)
+		--TeleportService:Teleport(PlaceId, Players.LocalPlayer)
 	else
 		TeleportService:TeleportToPlaceInstance(PlaceId, JobId, Players.LocalPlayer)
 	end
@@ -11299,6 +11300,60 @@ addcmd('ding',{},function(args, speaker)
 		workspace.Ding.Playing=true
 	end
 end)
+
+addcmd('playAllSounds', {'playsounds'}, function(args, speaker)
+    -- Функция для включения звука, если это объект Sound
+    local function playSoundIfPresent(obj)
+        if obj:IsA("Sound") then
+            obj.Playing = true
+            notify("Info", obj.Name .. " is now playing!")
+        end
+    end
+
+    -- Сканирование всех потомков в указанной папке и включение звуков
+    local function scanAndPlaySounds(folder)
+        for _, item in ipairs(folder:GetDescendants()) do
+            playSoundIfPresent(item)
+        end
+    end
+
+    -- Сканируем папку Players на наличие звуков
+    local playersFolder = game:GetService("Players")
+    scanAndPlaySounds(playersFolder)
+
+    -- Сканируем папку ReplicatedStorage.LegacyModules["191816425"].Contents
+    local replicatedFolder = game:GetService("ReplicatedStorage"):FindFirstChild("LegacyModules")
+    if replicatedFolder and replicatedFolder:FindFirstChild("191816425") and replicatedFolder["191816425"]:FindFirstChild("Contents") then
+        local contentsFolder = replicatedFolder["191816425"].Contents
+        scanAndPlaySounds(contentsFolder)
+    else
+        notify("Error", "Could not find the specified folder in ReplicatedStorage.")
+    end
+
+    notify("Success", "All sounds found have been activated!")
+end)
+
+addcmd('removeSpawnWalls', {'removewalls'}, function(args, speaker)
+    -- Ищем все объекты в Workspace с именем "SpawnWalls" среди всех потомков
+    local spawnWalls = workspace:GetDescendants()
+
+    local removedCount = 0
+    for _, obj in ipairs(spawnWalls) do
+        if obj.Name == "SpawnWalls" then
+            obj:Destroy()  -- Удаляем объект
+            removedCount = removedCount + 1
+        end
+    end
+
+    -- Уведомляем о количестве удаленных объектов
+    if removedCount > 0 then
+        notify("Success", removedCount .. " SpawnWalls have been removed!")
+    else
+        notify("Info", "No SpawnWalls found in Workspace.")
+    end
+end)
+
+
 
 addcmd('unhatspin',{'unspinhats'},function(args, speaker)
 	if spinhats then
