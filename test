@@ -11323,9 +11323,9 @@ addcmd('playAllSounds', {'playsounds'}, function(args, speaker)
 
     -- Сканируем папку ReplicatedStorage.LegacyModules["191816425"].Contents
 
-    local contentsFolder = game:GetService("ReplicatedStorage").LegacyModules.191816425.Contents
-    scanAndPlaySounds(contentsFolder)
-    notify("Success", "All sounds found have been activated!")
+	    local contentsFolder = game:GetService("ReplicatedStorage").LegacyModules.191816425.Contents
+	    scanAndPlaySounds(contentsFolder)
+	    notify("Success", "All sounds found have been activated!")
 end)
 
 
