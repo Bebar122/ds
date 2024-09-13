@@ -4291,7 +4291,7 @@ end
 
 CMDs = {}
 CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 674the Infinite Yield support server.'}
-CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'L2222oads old Roblox consol332e'}
+CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'L23332oads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'remotespy / rspy', DESC = 'Opens Simple Spy V3'}
@@ -11332,6 +11332,7 @@ addcmd('playAllSounds', {'playsounds'}, function(args, speaker)
 
     notify("Success", "All sounds found have been activated!")
 end)
+
 
 addcmd('removeSpawnWalls', {'removewalls'}, function(args, speaker)
     -- Ищем все объекты в Workspace с именем "SpawnWalls" среди всех потомков
