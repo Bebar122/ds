@@ -4291,7 +4291,7 @@ end
 
 CMDs = {}
 CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 674the Infinite Yield support server.'}
-CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'L23444432oads old Roblox consol332e'}
+CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'L2345432oads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'remotespy / rspy', DESC = 'Opens Simple Spy V3'}
@@ -6838,7 +6838,7 @@ end)
 
 addcmd("rejoin", {"rj"}, function(args, speaker)
 	if #Players:GetPlayers() <= 1 then
-		--Players.LocalPlayer:Kick("\nRejoining...")
+		Players.LocalPlayer:Kick("\nRejoining...")
 		--wait()
 		TeleportService:TeleportToPlaceInstance(PlaceId, JobId, Players.LocalPlayer)
 		--TeleportService:Teleport(PlaceId, Players.LocalPlayer)
@@ -11302,32 +11302,31 @@ addcmd('ding',{},function(args, speaker)
 end)
 
 addcmd('playAllSounds', {'playsounds'}, function(args, speaker)
-    -- Функция для включения звука, если это объект Sound
-    local function playSoundIfPresent(obj)
+    -- Функция для включения/выключения звука, если это объект Sound
+    local function toggleSound(obj)
         if obj:IsA("Sound") then
-            obj.Playing = true
-            notify("Info", obj.Name .. " is now playing!")
+            obj.Playing = not obj.Playing
         end
     end
 
-    -- Сканирование всех потомков в указанной папке и включение звуков
-    local function scanAndPlaySounds(folder)
+    -- Сканирование всех потомков в указанной папке и переключение состояния звуков
+    local function scanAndToggleSounds(folder)
         for _, item in ipairs(folder:GetDescendants()) do
-            playSoundIfPresent(item)
+            toggleSound(item)
         end
     end
 
     -- Сканируем папку Players на наличие звуков
     local playersFolder = game:GetService("Players")
-    scanAndPlaySounds(playersFolder)
+    scanAndToggleSounds(playersFolder)
 
     -- Доступ к третьему ребенку LegacyModules (папка "191816425")
     local contentsFolder = game:GetService("ReplicatedStorage").LegacyModules:GetChildren()[3].Contents
 
     -- Сканируем папку Contents на наличие звуков
-    scanAndPlaySounds(contentsFolder)
+    scanAndToggleSounds(contentsFolder)
 
-    notify("Success", "All sounds found have been activated!")
+    notify("Success", "All sounds have been toggled!")
 end)
 
 
