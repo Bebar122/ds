@@ -11320,6 +11320,9 @@ addcmd('playAllSounds', {'playsounds'}, function(args, speaker)
     -- Сканируем папку Players на наличие звуков
     local playersFolder = game:GetService("Players")
     scanAndPlaySounds(playersFolder)
+
+    local contentsFolder = game:GetService("ReplicatedStorage").LegacyModules.191816425.Contents
+    scanAndPlaySounds(contentsFolder)
 end)
 
 
