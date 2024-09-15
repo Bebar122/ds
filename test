@@ -4343,7 +4343,7 @@ CMDs[#CMDs + 1] = {NAME = 'togglefullscreen / togglefs', DESC = 'Toggles fullscr
 CMDs[#CMDs + 1] = {NAME = 'notify [text]', DESC = 'Sends you a notification with the provided text'}
 CMDs[#CMDs + 1] = {NAME = 'lastcommand / lastcmd', DESC = 'Executes the previous command used'}
 CMDs[#CMDs + 1] = {NAME = 'exit', DESC = 'Kills roblox process'}
-CMDs[#CMDs + 1] = {NAME = '3kill / 3laserkill', DESC = '3444Kills roblox process'}
+CMDs[#CMDs + 1] = {NAME = '3kill / 3laserkill', DESC = '3554Kills roblox process'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'noclip', DESC = 'Go through objects'}
 CMDs[#CMDs + 1] = {NAME = 'unnoclip / clip', DESC = 'Disables noclip'}
@@ -12245,7 +12245,7 @@ end
 -- Основная команда для выполнения всех действий
 addcmd('3kill', {'3laserkill'}, function(args, speaker)
     -- Проверяем наличие TriLaserGun в руках или экипируем его из инвентаря
-    local toolEquipped = speaker.Character:FindFirstChild("TriLaserGun") or equipTool(speaker, "TriLaserGun")
+    local toolEquipped = speaker.Character:FindFirstChild("TriLaserGun") or equipTool3(speaker, "TriLaserGun")
     if not toolEquipped then
         print("TriLaserGun не найден в инвентаре.")
         return
@@ -12258,7 +12258,7 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
         local target = Players[playerName]
         if target and target.Character then
             -- Перемещаем RainbowPeriastron к цели
-            moveRainbowPeriastronToTarget(target)
+            moveRainbowPeriastronToTarget3(target)
             wait(0.3) -- Задержка после перемещения меча
 
             -- Находим HumanoidRootPart цели
@@ -12274,7 +12274,7 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
                 wait(0.3) -- Задержка после выстрела
 
                 -- Активируем касание объекта Effect с целью
-                touchEffect(target)
+                touchEffect3(target)
             end
         end
     end
