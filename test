@@ -12178,6 +12178,9 @@ addcmd('kill',{'fekill'},function(args, speaker)
     end)
 end)
 
+addcmd("killstop", {}, function(args, speaker)
+    if killServ then killServ:Disconnect() end
+end)
 
 addcmd('1kill',{'1fekill'},function(args, speaker)
 	local players = getPlayer(args[1], speaker)
@@ -12206,10 +12209,46 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
     end
 end)
 
+local effectServ -- Переменная для хранения подключения RenderStepped
 
-addcmd("killstop", {}, function(args, speaker)
-    if killServ then killServ:Disconnect() end
+-- Функция для касания объектов Effect с целью
+local function touchEffect(target)
+    local targetHRP = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+    if not targetHRP then return end
+
+    -- Проходим по всем объектам в Workspace
+    for _, obj in pairs(workspace:GetChildren()) do
+        -- Проверяем, является ли объект Effect и является ли его прямым потомком
+        if obj:IsA("BasePart") and obj.Name == "Effect" then
+            -- Проверяем, есть ли у объекта TouchInterest
+            local touchInterest = obj:FindFirstChildOfClass("TouchTransmitter")
+            if touchInterest then
+                -- Имитируем касание цели
+                firetouchinterest(obj, targetHRP, 0) -- 0 = начало касания
+                wait(0.1) -- небольшая задержка
+                firetouchinterest(obj, targetHRP, 1) -- 1 = конец касания
+            end
+        end
+    end
+end
+
+-- Команда для активации постоянного касания объектов Effect
+addcmd('toucheffect', {'feffect'}, function(args, speaker)
+    if effectServ then effectServ:Disconnect() end -- Отключаем предыдущее подключение, если оно было
+
+    effectServ = RunService.RenderStepped:Connect(function()
+        local players = getPlayer(args[1], speaker)
+        for _, player in pairs(players) do
+            touchEffect(Players[player])
+        end
+    end)
 end)
+
+-- Команда для остановки касаний объектов Effect
+addcmd('stopeffect', {}, function(args, speaker)
+    if effectServ then effectServ:Disconnect() end -- Отключаем RenderStepped, чтобы остановить касания
+end)
+
 
 local rocketBarrierServ
 local isRunning = false
