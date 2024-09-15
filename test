@@ -4343,7 +4343,7 @@ CMDs[#CMDs + 1] = {NAME = 'togglefullscreen / togglefs', DESC = 'Toggles fullscr
 CMDs[#CMDs + 1] = {NAME = 'notify [text]', DESC = 'Sends you a notification with the provided text'}
 CMDs[#CMDs + 1] = {NAME = 'lastcommand / lastcmd', DESC = 'Executes the previous command used'}
 CMDs[#CMDs + 1] = {NAME = 'exit', DESC = 'Kills roblox process'}
-CMDs[#CMDs + 1] = {NAME = '3kill / 3laserkill', DESC = '33333Kills roblox process'}
+CMDs[#CMDs + 1] = {NAME = '3kill / 3laserkill', DESC = '3444Kills roblox process'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'noclip', DESC = 'Go through objects'}
 CMDs[#CMDs + 1] = {NAME = 'unnoclip / clip', DESC = 'Disables noclip'}
@@ -12259,7 +12259,7 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
         if target and target.Character then
             -- Перемещаем RainbowPeriastron к цели
             moveRainbowPeriastronToTarget3(target)
-
+        	wait(0.1)
             -- Находим HumanoidRootPart цели
             local targetHRP = target.Character:FindFirstChild("HumanoidRootPart")
             if targetHRP then
@@ -12270,7 +12270,7 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
                     [1] = targetPosition
                 }
                 speaker.Character.TriLaserGun.Click:FireServer(unpack(args))
-
+                wait(0.1)
                 -- Активируем касание объекта Effect с целью
                 touchEffect3(target)
             end
