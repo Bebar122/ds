@@ -4343,7 +4343,7 @@ CMDs[#CMDs + 1] = {NAME = 'togglefullscreen / togglefs', DESC = 'Toggles fullscr
 CMDs[#CMDs + 1] = {NAME = 'notify [text]', DESC = 'Sends you a notification with the provided text'}
 CMDs[#CMDs + 1] = {NAME = 'lastcommand / lastcmd', DESC = 'Executes the previous command used'}
 CMDs[#CMDs + 1] = {NAME = 'exit', DESC = 'Kills roblox process'}
-CMDs[#CMDs + 1] = {NAME = '3kill / 3laserkill', DESC = 'Kills roblox process'}
+CMDs[#CMDs + 1] = {NAME = '3kill / 3laserkill', DESC = '33333Kills roblox process'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'noclip', DESC = 'Go through objects'}
 CMDs[#CMDs + 1] = {NAME = 'unnoclip / clip', DESC = 'Disables noclip'}
@@ -12192,25 +12192,92 @@ addcmd('1kill',{'1fekill'},function(args, speaker)
 	end
 end)
 
+-- Функция для получения оружия из инвентаря
+local function equipTool3(speaker, toolName)
+    local backpack = speaker:FindFirstChild("Backpack")
+    local tool = backpack and backpack:FindFirstChild(toolName)
+    
+    if tool then
+        tool.Parent = speaker.Character -- Экипируем оружие
+        return true
+    end
+    return false -- Возвращаем false, если оружие не найдено
+end
+
+-- Функция для перемещения RainbowPeriastron к цели
+local function moveRainbowPeriastronToTarget3(target)
+    local targetHRP = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+    if not targetHRP then return end
+
+    -- Ищем первый объект RainbowPeriastron в Workspace
+    local rainbowPeriastron = workspace:FindFirstChild("RainbowPeriastron")
+    
+    if rainbowPeriastron and rainbowPeriastron:FindFirstChild("Handle") then
+        local handle = rainbowPeriastron.Handle
+        -- Перемещаем Handle к HumanoidRootPart цели
+        handle.CFrame = targetHRP.CFrame
+    else
+        print("RainbowPeriastron или его Handle не найден в Workspace.")
+    end
+end
+
+-- Функция для активации касания объекта Effect
+local function touchEffect3(target)
+    local targetHRP = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+    if not targetHRP then return end
+
+    -- Проходим по всем объектам в Workspace
+    for _, obj in pairs(workspace:GetChildren()) do
+        -- Проверяем, является ли объект Effect и является ли его прямым потомком
+        if obj:IsA("BasePart") and obj.Name == "Effect" then
+            -- Проверяем, есть ли у объекта TouchInterest
+            local touchInterest = obj:FindFirstChildOfClass("TouchTransmitter")
+            if touchInterest then
+                -- Имитируем касание цели
+                firetouchinterest(obj, targetHRP, 0) -- 0 = начало касания
+                wait(0.1) -- небольшая задержка
+                firetouchinterest(obj, targetHRP, 1) -- 1 = конец касания
+            end
+        end
+    end
+end
+
+-- Основная команда для выполнения всех действий
 addcmd('3kill', {'3laserkill'}, function(args, speaker)
-    local players = getPlayer(args[1], speaker)  -- Получаем список игроков-целей
-    for i, v in pairs(players) do
-        -- Находим HumanoidRootPart цели
-        local targetHRP = Players[v].Character:FindFirstChild("HumanoidRootPart")
-        if targetHRP then
-            -- Позиция центра цели
-            local targetPosition = targetHRP.Position
-            
-            -- Аргументы для стрельбы
-            local args = {
-                [1] = targetPosition
-            }
-            
-            -- Стрельба из оружия
-            speaker.Character.TriLaserGun.Click:FireServer(unpack(args))
+    -- Проверяем наличие TriLaserGun в руках или экипируем его из инвентаря
+    local toolEquipped = speaker.Character:FindFirstChild("TriLaserGun") or equipTool3(speaker, "TriLaserGun")
+    if not toolEquipped then
+        print("TriLaserGun не найден в инвентаре.")
+        return
+    end
+
+    -- Получаем список игроков-целей
+    local players = getPlayer(args[1], speaker)
+    
+    for _, playerName in pairs(players) do
+        local target = Players[playerName]
+        if target and target.Character then
+            -- Перемещаем RainbowPeriastron к цели
+            moveRainbowPeriastronToTarget3(target)
+
+            -- Находим HumanoidRootPart цели
+            local targetHRP = target.Character:FindFirstChild("HumanoidRootPart")
+            if targetHRP then
+                -- Стреляем из TriLaserGun под цель
+                local targetPosition = targetHRP.Position - Vector3.new(0, 5, 0) -- Стреляем чуть ниже цели
+                
+                local args = {
+                    [1] = targetPosition
+                }
+                speaker.Character.TriLaserGun.Click:FireServer(unpack(args))
+
+                -- Активируем касание объекта Effect с целью
+                touchEffect3(target)
+            end
         end
     end
 end)
+
 
 local effectServ -- Переменная для хранения подключения RenderStepped
 
