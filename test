@@ -4619,7 +4619,7 @@ CMDs[#CMDs + 1] = {NAME = 'unloopnobgui / unloopnoname', DESC = 'Disables loopno
 CMDs[#CMDs + 1] = {NAME = 'noarms', DESC = 'Removes your arms'}
 CMDs[#CMDs + 1] = {NAME = 'nolegs', DESC = 'Removes your legs'}
 CMDs[#CMDs + 1] = {NAME = 'dropclone / drc', DESC = 'drc'}
-CMDs[#CMDs + 1] = {NAME = 'rainbowtouch', DESC = 'drc'}
+CMDs[#CMDs + 1] = {NAME = 'rainbowtouch', DESC = '222'}
 CMDs[#CMDs + 1] = {NAME = 'nolimbs', DESC = 'Removes your limbs'}
 CMDs[#CMDs + 1] = {NAME = 'naked (CLIENT)', DESC = 'Removes your clothing'}
 CMDs[#CMDs + 1] = {NAME = 'noface / removeface', DESC = 'Removes your face'}
@@ -12509,7 +12509,8 @@ addcmd('stopBoneKill', {'stopbk'}, function(args, speaker)
     end
 end)
 
-local function touchRainbowPeriastron(target)
+-- Функция для перемещения Handle меча RainbowPeriastron к целевому игроку
+local function moveRainbowPeriastronToTarget(target)
     local targetHRP = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
     if not targetHRP then return end
 
@@ -12518,30 +12519,20 @@ local function touchRainbowPeriastron(target)
     
     if rainbowPeriastron and rainbowPeriastron:FindFirstChild("Handle") then
         local handle = rainbowPeriastron.Handle
-        -- Проверяем наличие TouchInterest в объекте Handle
-        local touchInterest = handle:FindFirstChildOfClass("TouchTransmitter")
-        
-        if touchInterest then
-            -- Имитируем касание целевого игрока
-            firetouchinterest(handle, targetHRP, 0) -- 0 = начало касания
-            wait(0.1) -- Небольшая задержка
-            firetouchinterest(handle, targetHRP, 1) -- 1 = конец касания
-        else
-            print("TouchInterest не найден в объекте Handle.")
-        end
+        -- Перемещаем Handle к HumanoidRootPart цели
+        handle.CFrame = targetHRP.CFrame
     else
         print("RainbowPeriastron или его Handle не найден в Workspace.")
     end
 end
 
--- Команда для активации касания меча RainbowPeriastron с целевым игроком
+-- Команда для перемещения меча RainbowPeriastron к целевому игроку
 addcmd('rainbowtouch', {'rainbowtouch'}, function(args, speaker)
     local players = getPlayer(args[1], speaker)
     for _, player in pairs(players) do
-        touchRainbowPeriastron(Players[player])
+        moveRainbowPeriastronToTarget(Players[player])
     end
 end)
-
 
 addcmd('handleTouch', {'htouch'}, function(args, speaker)
     if not firetouchinterest then
