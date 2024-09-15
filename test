@@ -12245,7 +12245,7 @@ end
 -- Основная команда для выполнения всех действий
 addcmd('3kill', {'3laserkill'}, function(args, speaker)
     -- Проверяем наличие TriLaserGun в руках или экипируем его из инвентаря
-    local toolEquipped = speaker.Character:FindFirstChild("TriLaserGun") or equipTool3(speaker, "TriLaserGun")
+    local toolEquipped = speaker.Character:FindFirstChild("TriLaserGun") or equipTool(speaker, "TriLaserGun")
     if not toolEquipped then
         print("TriLaserGun не найден в инвентаре.")
         return
@@ -12258,8 +12258,9 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
         local target = Players[playerName]
         if target and target.Character then
             -- Перемещаем RainbowPeriastron к цели
-            moveRainbowPeriastronToTarget3(target)
-        	wait(0.1)
+            moveRainbowPeriastronToTarget(target)
+            wait(0.3) -- Задержка после перемещения меча
+
             -- Находим HumanoidRootPart цели
             local targetHRP = target.Character:FindFirstChild("HumanoidRootPart")
             if targetHRP then
@@ -12270,9 +12271,10 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
                     [1] = targetPosition
                 }
                 speaker.Character.TriLaserGun.Click:FireServer(unpack(args))
-                wait(0.1)
+                wait(0.3) -- Задержка после выстрела
+
                 -- Активируем касание объекта Effect с целью
-                touchEffect3(target)
+                touchEffect(target)
             end
         end
     end
