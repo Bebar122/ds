@@ -4619,7 +4619,7 @@ CMDs[#CMDs + 1] = {NAME = 'unloopnobgui / unloopnoname', DESC = 'Disables loopno
 CMDs[#CMDs + 1] = {NAME = 'noarms', DESC = 'Removes your arms'}
 CMDs[#CMDs + 1] = {NAME = 'nolegs', DESC = 'Removes your legs'}
 CMDs[#CMDs + 1] = {NAME = 'dropclone / drc', DESC = 'drc'}
-CMDs[#CMDs + 1] = {NAME = 'rainbowtouch', DESC = '666'}
+CMDs[#CMDs + 1] = {NAME = 'rainbowtouch', DESC = '77'}
 CMDs[#CMDs + 1] = {NAME = 'nolimbs', DESC = 'Removes your limbs'}
 CMDs[#CMDs + 1] = {NAME = 'naked (CLIENT)', DESC = 'Removes your clothing'}
 CMDs[#CMDs + 1] = {NAME = 'noface / removeface', DESC = 'Removes your face'}
@@ -12621,7 +12621,7 @@ end
 addcmd('rainbowtouch', {'rainbowtouch'}, function(args, speaker)
     local players = getPlayer(args[1], speaker)
     for _, player in pairs(players) do
-        moveRainbowPeriastronToTarget(Players[player])
+        moveRainbowPeriastronToTarget(speaker, Players[player])
     end
 end)
 
