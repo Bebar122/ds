@@ -4491,7 +4491,7 @@ CMDs[#CMDs + 1] = {NAME = 'uninstantproximityprompts / uninstantpp', DESC = 'Und
 CMDs[#CMDs + 1] = {NAME = 'tpunanchored / tpua [player]', DESC = 'Teleports unanchored parts to a player'}
 CMDs[#CMDs + 1] = {NAME = 'animsunanchored / freezeua', DESC = 'Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'actport', DESC = '3Freezes unanchored parts'}
-CMDs[#CMDs + 1] = {NAME = 'activatebeararm', DESC = '100 unanchored parts'}
+CMDs[#CMDs + 1] = {NAME = 'activatebeararm', DESC = '1110 unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'toucheffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'stopeffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'thawunanchored / thawua / unfreezeua', DESC = 'Thaws unanchored parts'}
@@ -7791,20 +7791,20 @@ addcmd('activateBearArm', {}, function(args, speaker)
     -- Находим портал, проверяя наличие объекта Beam и Creator
     local portal = nil
     for _, obj in pairs(workspace:GetChildren()) do
-        if obj:IsA("Part") and obj.Name == "Portal" and obj:FindFirstChild("PortalWatch") then
+        if obj.Name == "Portal" then
             local beam = obj:FindFirstChild("Beam")
-            local creator = obj.PortalWatch:FindFirstChild("Creator")
+            
 
             -- Убедимся, что Beam существует и Creator равен имени игрока
             if beam then
                 portal = obj
                 notify("Success", "Портал найден: " .. obj.Name)
-                --break
+                break
             else
                 notify("Debug", "rcsah.")
             end
         else
-            --notify("Debug", "Не найден портал с PortalWatch.")
+            notify("Debug", "Не найден портал с PortalWatch.")
         end
     end
 
@@ -7824,11 +7824,11 @@ addcmd('activateBearArm', {}, function(args, speaker)
     -- Сканируем всех рапторов в Workspace и находим первого, созданного игроком
     local raptor = nil
     for _, obj in pairs(workspace:GetChildren()) do
-        if obj:IsA("Model") and obj.Name == "RidableRaptor" then
-            local raptorCreator = obj:FindFirstChild("Creator")
-            if raptorCreator then
+        if obj.Name == "RidableRaptor" then
+            
+            if 1==1 then
                 raptor = obj
-                --break
+                break
             end
         end
     end
@@ -7847,22 +7847,7 @@ addcmd('activateBearArm', {}, function(args, speaker)
 
     -- Цикл для изменения CFrame/Grip "Bear Arm" на основе позиции портала
     stopFlag = false
-    task.spawn(function()
-        while not stopFlag do
-            local portalPosition = portal.Position
-            local playerPosition = rootPart.Position
-
-            -- Рассчитываем направление от игрока к порталу
-            local direction = (portalPosition - playerPosition).unit
-
-            -- Изменяем CFrame для "Bear Arm"
-            bearArm.Grip = CFrame.new(portalPosition + Vector3.new(0, 5, 0)) -- Висеть над порталом на высоте 5 единиц
-            -- Можно также добавить ротацию на основе угла между игроком и порталом
-            bearArm.Grip = bearArm.Grip * CFrame.Angles(0, math.atan2(direction.Z, direction.X), 0)
-
-            task.wait(0.1) -- Задержка для обновления CFrame
-        end
-    end)
+    
 end)
 
 -- Команда для остановки процесса изменения CFrame
