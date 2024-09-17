@@ -4491,7 +4491,7 @@ CMDs[#CMDs + 1] = {NAME = 'uninstantproximityprompts / uninstantpp', DESC = 'Und
 CMDs[#CMDs + 1] = {NAME = 'tpunanchored / tpua [player]', DESC = 'Teleports unanchored parts to a player'}
 CMDs[#CMDs + 1] = {NAME = 'animsunanchored / freezeua', DESC = 'Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'actport', DESC = '3Freezes unanchored parts'}
-CMDs[#CMDs + 1] = {NAME = 'activatebeararm', DESC = '888 unanchored parts'}
+CMDs[#CMDs + 1] = {NAME = 'activatebeararm', DESC = '999 unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'toucheffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'stopeffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'thawunanchored / thawua / unfreezeua', DESC = 'Thaws unanchored parts'}
@@ -7808,31 +7808,18 @@ addcmd('activateBearArm', {}, function(args, speaker)
         end
     end
 
-    if not portal then
-        notify("Error", "Подходящий портал не найден.")
-        return
-    end
 
     -- Найдём "Bear Arm" в руках игрока
     local bearArm = speaker.Character:FindFirstChild("Bear Arm")
-    if not bearArm then
-        notify("Error", "Bear Arm не найдена в руках.")
-        return
-    end
+
 
     -- Найдём Handle и проверим на наличие TouchInterest
     local handle = bearArm:FindFirstChild("Handle")
-    if not handle or not handle:FindFirstChild("TouchInterest") then
-        notify("Error", "Handle или TouchInterest не найден в Bear Arm.")
-        return
-    end
+
 
     -- Находим HumanoidRootPart игрока
     local rootPart = speaker.Character:FindFirstChild("HumanoidRootPart")
-    if not rootPart then
-        notify("Error", "HumanoidRootPart не найден у игрока.")
-        return
-    end
+
 
     -- Сканируем всех рапторов в Workspace и находим первого, созданного игроком
     local raptor = nil
@@ -7846,17 +7833,11 @@ addcmd('activateBearArm', {}, function(args, speaker)
         end
     end
 
-    if not raptor then
-        notify("Error", "Подходящий RidableRaptor не найден.")
-        return
-    end
+
 
     -- Проверяем наличие Left Leg у раптора
     local leftLeg = raptor:FindFirstChild("Left Leg")
-    if not leftLeg then
-        notify("Error", "Left Leg не найден у раптора.")
-        return
-    end
+
 
     -- Выполняем касание до изменения Grip
     firetouchinterest(handle, leftLeg, 1)  -- Начало касания
