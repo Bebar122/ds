@@ -4491,7 +4491,7 @@ CMDs[#CMDs + 1] = {NAME = 'uninstantproximityprompts / uninstantpp', DESC = 'Und
 CMDs[#CMDs + 1] = {NAME = 'tpunanchored / tpua [player]', DESC = 'Teleports unanchored parts to a player'}
 CMDs[#CMDs + 1] = {NAME = 'animsunanchored / freezeua', DESC = 'Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'actport', DESC = '3Freezes unanchored parts'}
-CMDs[#CMDs + 1] = {NAME = 'activatebeararm', DESC = '666 unanchored parts'}
+CMDs[#CMDs + 1] = {NAME = 'activatebeararm', DESC = '777 unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'toucheffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'stopeffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'thawunanchored / thawua / unfreezeua', DESC = 'Thaws unanchored parts'}
@@ -7801,7 +7801,7 @@ addcmd('activateBearArm', {}, function(args, speaker)
                 notify("Success", "Портал найден: " .. obj.Name)
                 break
             else
-                notify("Debug", "Портал не подходит. Нет Beam или Creator не совпадает." .. creator.Value)
+                notify("Debug", creator)
             end
         else
             --notify("Debug", "Не найден портал с PortalWatch.")
