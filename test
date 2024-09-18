@@ -4621,7 +4621,7 @@ CMDs[#CMDs + 1] = {NAME = 'unloopnobgui / unloopnoname', DESC = 'Disables loopno
 CMDs[#CMDs + 1] = {NAME = 'noarms', DESC = 'Removes your arms'}
 CMDs[#CMDs + 1] = {NAME = 'nolegs', DESC = 'Removes your legs'}
 CMDs[#CMDs + 1] = {NAME = 'dropclone / drc', DESC = 'drc2'}
-CMDs[#CMDs + 1] = {NAME = 'cbkill', DESC = '344drc2'}
+CMDs[#CMDs + 1] = {NAME = 'cbkill', DESC = '5555drc2'}
 CMDs[#CMDs + 1] = {NAME = 'rainbowtouch', DESC = '777'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'nolimbs', DESC = 'Removes your limbs'}
@@ -12925,19 +12925,18 @@ end)
 
 
 addcmd('cbonekill', {'cbkill'}, function(args, speaker)
+    if not firetouchinterest then
+        return notify('Incompatible Exploit', 'Your exploit does not support this command (missing firetouchinterest)')
+    end
+    hkillstop = false
     local RS = game:GetService("RunService").RenderStepped
-    local targetPlayer = getPlayer(args[1], speaker)  -- Получаем целевого игрока
-    if not targetPlayer or not targetPlayer.Character then
+
+    -- Получаем целевого игрока
+    local targetPlayers = getPlayer(args[1], speaker)
+    if not targetPlayers or #targetPlayers == 0 then
         return notify("Bone Kill", "Целевой игрок не найден.")
     end
 
-    local targetHRP = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if not targetHRP then
-        return notify("Bone Kill", "HumanoidRootPart цели не найден.")
-    end
-
-    hkillstop = false
-    
     -- Поиск клона с BoneSword
     local clone = nil
     for _, obj in pairs(workspace:GetChildren()) do
@@ -12955,30 +12954,35 @@ addcmd('cbonekill', {'cbkill'}, function(args, speaker)
         return notify("Bone Kill", "Клон с BoneSword не найден в рабочем пространстве.")
     end
 
-    -- Проверка наличия BoneSword и Handle у клона
     local Tool = clone:FindFirstChild("BoneSword")
     local Handle = Tool and Tool:FindFirstChild("Handle")
     
     if not Tool or not Handle then
         return notify("Bone Kill", "Клон должен держать BoneSword с ручкой.")
     end
-    
-    -- Запуск цикла касания до остановки
-    task.spawn(function()
-        while Tool and clone and targetPlayer and Tool.Parent == clone and not hkillstop do
-            local Human = clone:FindFirstChildWhichIsA("Humanoid")
-            if not Human or Human.Health <= 0 then
-                break
-            end
 
-            -- Касаемся HumanoidRootPart целевого игрока
-            firetouchinterest(Handle, targetHRP, 1)
-            RS:Wait()
-            firetouchinterest(Handle, targetHRP, 0)
-        end
-        notify("Bone Kill Stopped!", speaker.Name .. " остановил команду или клон умер.")
-    end)
+    -- Цикл касания частей тела целей
+    for _, targetPlayer in ipairs(targetPlayers) do
+        task.spawn(function()
+            while Tool and clone and targetPlayer.Character and Tool.Parent == clone and not hkillstop do
+                local Human = targetPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+                if not Human or Human.Health <= 0 then
+                    break
+                end
+
+                for _, part in ipairs(targetPlayer.Character:GetChildren()) do
+                    if part:IsA("BasePart") then
+                        firetouchinterest(Handle, part, 1)
+                        RS:Wait()
+                        firetouchinterest(Handle, part, 0)
+                    end
+                end
+            end
+            notify("Bone Kill Stopped!", speaker.Name .. " остановил команду или клон умер.")
+        end)
+    end
 end)
+
 
 
 local hb = RunService.Heartbeat
