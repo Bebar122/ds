@@ -7920,7 +7920,7 @@ addcmd('checkBearArm', {}, function(args, speaker)
     task.spawn(function()
         while not stopFlag do
             if not weld.Active then
-                task.wait(1)  -- Ждем 1 секунду перед касанием
+                task.wait(0.5)  -- Ждем 1 секунду перед касанием
 
                 -- Касаемся портала левой рукой раптора
                 firetouchinterest(leftArm, portal, 1)  -- Начало касания
@@ -7930,7 +7930,7 @@ addcmd('checkBearArm', {}, function(args, speaker)
                 notify("Success", "Касание портала раптором завершено.")
                 stopFlag = true
             end
-            task.wait(0.5)  -- Проверяем каждые 0.5 секунды
+            task.wait(0.3)  -- Проверяем каждые 0.5 секунды
         end
     end)
 end)
