@@ -12673,9 +12673,9 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
             connections[playerName] = game:GetService("RunService").RenderStepped:Connect(function()
                 if activeKills[playerName] then
                     -- Проверяем, жив ли игрок
-                    if not speaker.Character or not speaker.Character:FindFirstChild("Humanoid") or speaker.Character:FindFirstChild("Humanoid").Health <= 0 then
-                        return
-                    end
+                    --if not speaker.Character or not speaker.Character:FindFirstChild("Humanoid") or speaker.Character:FindFirstChild("Humanoid").Health <= 0 then
+                        --return
+                    --end
 
                     -- Проверяем наличие меча в руках
                     Tool = speaker.Character:FindFirstChild("BoneSword") or equipBoneSword()
