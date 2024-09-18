@@ -4621,7 +4621,7 @@ CMDs[#CMDs + 1] = {NAME = 'unloopnobgui / unloopnoname', DESC = 'Disables loopno
 CMDs[#CMDs + 1] = {NAME = 'noarms', DESC = 'Removes your arms'}
 CMDs[#CMDs + 1] = {NAME = 'nolegs', DESC = 'Removes your legs'}
 CMDs[#CMDs + 1] = {NAME = 'dropclone / drc', DESC = 'drc2'}
-CMDs[#CMDs + 1] = {NAME = 'cbkill', DESC = '3333drc2'}
+CMDs[#CMDs + 1] = {NAME = 'cbkill', DESC = '344drc2'}
 CMDs[#CMDs + 1] = {NAME = 'rainbowtouch', DESC = '777'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'nolimbs', DESC = 'Removes your limbs'}
@@ -12926,7 +12926,7 @@ end)
 
 addcmd('cbonekill', {'cbkill'}, function(args, speaker)
     local RS = game:GetService("RunService").RenderStepped
-    local targetPlayer = getPlayer(args[1], speaker)[1]  -- Получаем целевого игрока
+    local targetPlayer = getPlayer(args[1], speaker)  -- Получаем целевого игрока
     if not targetPlayer or not targetPlayer.Character then
         return notify("Bone Kill", "Целевой игрок не найден.")
     end
