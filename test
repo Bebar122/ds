@@ -4491,7 +4491,7 @@ CMDs[#CMDs + 1] = {NAME = 'uninstantproximityprompts / uninstantpp', DESC = 'Und
 CMDs[#CMDs + 1] = {NAME = 'tpunanchored / tpua [player]', DESC = 'Teleports unanchored parts to a player'}
 CMDs[#CMDs + 1] = {NAME = 'animsunanchored / freezeua', DESC = 'Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'actport', DESC = '3Freezes unanchored parts'}
-CMDs[#CMDs + 1] = {NAME = 'activatebeararm', DESC = '1110 unanchored parts'}
+CMDs[#CMDs + 1] = {NAME = 'activatebeararm', DESC = '122 unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'toucheffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'stopeffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'thawunanchored / thawua / unfreezeua', DESC = 'Thaws unanchored parts'}
@@ -7789,7 +7789,7 @@ addcmd('activateBearArm', {}, function(args, speaker)
     local playerName = speaker.Name
 
     -- Находим портал, проверяя наличие объекта Beam и Creator
-    local portal = nil
+    local portal
     for _, obj in pairs(workspace:GetChildren()) do
         if obj.Name == "Portal" then
             local beam = obj:FindFirstChild("Beam")
@@ -7809,7 +7809,7 @@ addcmd('activateBearArm', {}, function(args, speaker)
     end
 
 
-    -- Найдём "Bear Arm" в руках игрока
+    notify("Debug", "bebra")
     local bearArm = speaker.Character:FindFirstChild("Bear Arm")
 
 
@@ -7822,7 +7822,7 @@ addcmd('activateBearArm', {}, function(args, speaker)
 
 
     -- Сканируем всех рапторов в Workspace и находим первого, созданного игроком
-    local raptor = nil
+    local raptor
     for _, obj in pairs(workspace:GetChildren()) do
         if obj.Name == "RidableRaptor" then
             
