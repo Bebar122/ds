@@ -4492,6 +4492,7 @@ CMDs[#CMDs + 1] = {NAME = 'tpunanchored / tpua [player]', DESC = 'Teleports unan
 CMDs[#CMDs + 1] = {NAME = 'animsunanchored / freezeua', DESC = 'Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'actport', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'activateBearArm', DESC = '210 unsdxcxced parts'}
+CMDs[#CMDs + 1] = {NAME = 'checkBearArm', DESC = '1 usad parts'}
 CMDs[#CMDs + 1] = {NAME = 'toucheffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'stopeffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'thawunanchored / thawua / unfreezeua', DESC = 'Thaws unanchored parts'}
@@ -7851,34 +7852,6 @@ addcmd('activateBearArm', {}, function(args, speaker)
     firetouchinterest(handle, leftLeg, 0)  -- Окончание касания
     notify("Success", "Коснулся раптора Bear Arm.")
 
-	stopFlag = false
-	task.spawn(function()
-	    while not stopFlag do
-	        local portalPosition = portal.Position
-	        local playerPosition = rootPart.Position
-	        local playerRotationY = rootPart.Orientation.Y  -- Ротация по оси Y
-	
-	        -- Смещение по оси Y, чтобы рука была выше портала
-	        local heightOffset = 5  -- Высота над порталом
-	
-	        -- Рука будет позиционироваться точно над порталом с учётом смещения по Y
-	        local targetPosition = portalPosition + Vector3.new(0, heightOffset, 0)
-	
-	        -- Применение ротации по оси Y (вокруг игрока)
-	        local angle = math.rad(playerRotationY)
-	        local rotatedOffset = Vector3.new(
-	            targetPosition.X * math.cos(angle) - targetPosition.Z * math.sin(angle),
-	            targetPosition.Y,
-	            targetPosition.X * math.sin(angle) + targetPosition.Z * math.cos(angle)
-	        )
-	
-	        -- Обновляем позицию руки (Grip.Position) над порталом с учетом ротации игрока
-	        bearArm.Grip = CFrame.new(rotatedOffset)
-	
-	        task.wait(0.1) -- Задержка для обновления позиции
-	    end
-	end)
-
 end)
 
 -- Команда для остановки процесса изменения CFrame
@@ -7888,6 +7861,84 @@ addcmd('stopBearArm', {}, function()
 end)
 
 
+addcmd('checkBearArm', {}, function(args, speaker)
+    local playerName = speaker.Name
+    local bearArm = speaker.Character:FindFirstChild("Bear Arm")
+    
+    if not bearArm or not bearArm:FindFirstChild("Handle") then
+        notify("Error", "Bear Arm не найдена.")
+        return
+    end
+    
+    -- Сканируем всех рапторов в Workspace и находим первого
+    local raptor = nil
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj.Name == "RidableRaptor" then
+            raptor = obj
+            --break
+        end
+    end
+
+    if not raptor then
+        notify("Error", "Подходящий RidableRaptor не найден.")
+        return
+    end
+
+    -- Проверяем наличие Left Arm у раптора
+    local leftArm = raptor:FindFirstChild("Left Arm")
+    if not leftArm then
+        notify("Error", "Left Arm не найден у раптора.")
+        return
+    end
+
+    -- Находим портал в Workspace
+    local portal = nil
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj.Name == "Portal" and obj:FindFirstChild("Beam") then
+            portal = obj
+            notify("Success", "Портал найден: " .. obj.Name)
+            --break
+        end
+    end
+
+    if not portal then
+        notify("Error", "Портал не найден.")
+        return
+    end
+
+    -- Проверяем Active у Bear Arm
+    local handle = bearArm:FindFirstChild("Handle")
+    if not handle or not handle:FindFirstChild("LeftArmWeld") then
+        notify("Error", "LeftArmWeld не найден в Bear Arm.")
+        return
+    end
+
+    -- Цикл для проверки LeftArmWeld.Active
+    local weld = handle.LeftArmWeld
+    stopFlag = false
+    task.spawn(function()
+        while not stopFlag do
+            if not weld.Active then
+                task.wait(1)  -- Ждем 1 секунду перед касанием
+
+                -- Касаемся портала левой рукой раптора
+                firetouchinterest(leftArm, portal, 1)  -- Начало касания
+                task.wait(0.1)  -- Задержка для имитации касания
+                firetouchinterest(leftArm, portal, 0)  -- Окончание касания
+
+                notify("Success", "Касание портала раптором завершено.")
+                stopFlag = true
+            end
+            task.wait(0.5)  -- Проверяем каждые 0.5 секунды
+        end
+    end)
+end)
+
+-- Команда для остановки цикла
+addcmd('stopBearArmCheck', {}, function()
+    stopFlag = true
+    notify("Success", "Проверка Bear Arm остановлена.")
+end)
 
 
 
