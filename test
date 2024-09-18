@@ -4526,7 +4526,7 @@ CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a play
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
-CMDs[#CMDs + 1] = {NAME = 'restoreJoints', DESC = 'uwu'}
+CMDs[#CMDs + 1] = {NAME = 'restoreJoints', DESC = '2'}
 CMDs[#CMDs + 1] = {NAME = 'carpet [player]', DESC = 'Be someones carpet'}
 CMDs[#CMDs + 1] = {NAME = 'uncarpet', DESC = 'Undoes carpet'}
 CMDs[#CMDs + 1] = {NAME = 'rcl', DESC = 'U222ndoes carpet'}
@@ -8146,19 +8146,30 @@ local RunService = game:GetService("RunService")
 addcmd('restoreJoints', {}, function(args, speaker)
     local character = speaker.Character or speaker.CharacterAdded:Wait() -- Получаем персонажа игрока
 
-    -- Восстанавливаем соединение между головой и торсом
+    -- Восстанавливаем соединение между частями тела
     local function restoreWelds()
         local head = character:FindFirstChild("Head")
         local torso = character:FindFirstChild("Torso") or character:FindFirstChild("UpperTorso")
+        local rightArm = character:FindFirstChild("Right Arm") or character:FindFirstChild("RightUpperArm")
 
+        -- Восстановление соединения между головой и торсом
         if head and torso then
-            -- Создаём новое соединение между головой и торсом, если его нет
             local neckWeld = Instance.new("Motor6D")
             neckWeld.Name = "Neck"
             neckWeld.Part0 = torso
             neckWeld.Part1 = head
             neckWeld.C0 = CFrame.new(0, 1.5, 0) -- Позиционирование соединения
             neckWeld.Parent = torso
+        end
+
+        -- Восстановление соединения между торсом и правой рукой
+        if rightArm and torso then
+            local shoulderWeld = Instance.new("Motor6D")
+            shoulderWeld.Name = "Right Shoulder"
+            shoulderWeld.Part0 = torso
+            shoulderWeld.Part1 = rightArm
+            shoulderWeld.C0 = CFrame.new(1, 0.5, 0) -- Позиционирование соединения
+            shoulderWeld.Parent = torso
         end
     end
 
