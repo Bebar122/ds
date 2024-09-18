@@ -4621,7 +4621,7 @@ CMDs[#CMDs + 1] = {NAME = 'unloopnobgui / unloopnoname', DESC = 'Disables loopno
 CMDs[#CMDs + 1] = {NAME = 'noarms', DESC = 'Removes your arms'}
 CMDs[#CMDs + 1] = {NAME = 'nolegs', DESC = 'Removes your legs'}
 CMDs[#CMDs + 1] = {NAME = 'dropclone / drc', DESC = 'drc2'}
-CMDs[#CMDs + 1] = {NAME = 'cbkill', DESC = '666drc2'}
+CMDs[#CMDs + 1] = {NAME = 'cbkill', DESC = '77777drc2'}
 CMDs[#CMDs + 1] = {NAME = 'rainbowtouch', DESC = '777'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'nolimbs', DESC = 'Removes your limbs'}
@@ -12967,7 +12967,8 @@ addcmd('cbonekill', {'cbkill'}, function(args, speaker)
             while not hkillstop do
                 local Human = targetPlayer.Character:FindFirstChildWhichIsA("Humanoid")
                 if not Human or Human.Health <= 0 then
-                    break
+		
+                    notify("Bone Kill Stopped!", speaker.Name .. " not human")
                 end
 
                 for _, part in ipairs(targetPlayer.Character:GetChildren()) do
