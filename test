@@ -4491,7 +4491,7 @@ CMDs[#CMDs + 1] = {NAME = 'uninstantproximityprompts / uninstantpp', DESC = 'Und
 CMDs[#CMDs + 1] = {NAME = 'tpunanchored / tpua [player]', DESC = 'Teleports unanchored parts to a player'}
 CMDs[#CMDs + 1] = {NAME = 'animsunanchored / freezeua', DESC = 'Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'actport', DESC = '3Freezes unanchored parts'}
-CMDs[#CMDs + 1] = {NAME = 'activatebeararm', DESC = '122 unanchored parts'}
+CMDs[#CMDs + 1] = {NAME = 'activatebeararm', DESC = '133 unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'toucheffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'stopeffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'thawunanchored / thawua / unfreezeua', DESC = 'Thaws unanchored parts'}
@@ -7789,7 +7789,7 @@ addcmd('activateBearArm', {}, function(args, speaker)
     local playerName = speaker.Name
 
     -- Находим портал, проверяя наличие объекта Beam и Creator
-    local portal
+    local portal = nil
     for _, obj in pairs(workspace:GetChildren()) do
         if obj.Name == "Portal" then
             local beam = obj:FindFirstChild("Beam")
@@ -7799,7 +7799,7 @@ addcmd('activateBearArm', {}, function(args, speaker)
             if beam then
                 portal = obj
                 notify("Success", "Портал найден: " .. obj.Name)
-                break
+                --break
             else
                 notify("Debug", "rcsah.")
             end
@@ -7822,13 +7822,13 @@ addcmd('activateBearArm', {}, function(args, speaker)
 
 
     -- Сканируем всех рапторов в Workspace и находим первого, созданного игроком
-    local raptor
+    local raptor = nil
     for _, obj in pairs(workspace:GetChildren()) do
         if obj.Name == "RidableRaptor" then
             
             if 1==1 then
                 raptor = obj
-                break
+                --break
             end
         end
     end
@@ -7836,7 +7836,7 @@ addcmd('activateBearArm', {}, function(args, speaker)
 
 
     -- Проверяем наличие Left Leg у раптора
-    local leftLeg = raptor:FindFirstChild("Left Leg")
+    local leftLeg = raptor:FindFirstChild("Left Arm")
 
 
     -- Выполняем касание до изменения Grip
