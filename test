@@ -4492,7 +4492,7 @@ CMDs[#CMDs + 1] = {NAME = 'tpunanchored / tpua [player]', DESC = 'Teleports unan
 CMDs[#CMDs + 1] = {NAME = 'animsunanchored / freezeua', DESC = 'Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'actport', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'activateBearArm', DESC = '210 unsdxcxced parts'}
-CMDs[#CMDs + 1] = {NAME = 'checkBearArm', DESC = '1 usad parts'}
+CMDs[#CMDs + 1] = {NAME = 'checkBearArm', DESC = '2 usad parts'}
 CMDs[#CMDs + 1] = {NAME = 'toucheffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'stopeffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'thawunanchored / thawua / unfreezeua', DESC = 'Thaws unanchored parts'}
@@ -7876,12 +7876,22 @@ addcmd('checkBearArm', {}, function(args, speaker)
     for _, obj in pairs(workspace:GetChildren()) do
         if obj.Name == "RidableRaptor" then
             raptor = obj
-            --break
+            break
         end
     end
 
     if not raptor then
         notify("Error", "Подходящий RidableRaptor не найден.")
+        return
+    end
+
+    -- Телепортируем персонажа на Seat у RidableRaptor
+    local seat = raptor:FindFirstChild("Seat")
+    if seat and speaker.Character and speaker.Character:FindFirstChild("HumanoidRootPart") then
+        speaker.Character.HumanoidRootPart.CFrame = seat.CFrame
+        notify("Success", "Ваш персонаж был телепортирован на Raptor Seat.")
+    else
+        notify("Error", "Seat не найден у Raptor или произошла ошибка при телепортации.")
         return
     end
 
@@ -7898,7 +7908,7 @@ addcmd('checkBearArm', {}, function(args, speaker)
         if obj.Name == "Portal" and obj:FindFirstChild("Beam") then
             portal = obj
             notify("Success", "Портал найден: " .. obj.Name)
-            --break
+            break
         end
     end
 
@@ -7920,7 +7930,7 @@ addcmd('checkBearArm', {}, function(args, speaker)
     task.spawn(function()
         while not stopFlag do
             if not weld.Active then
-                task.wait(0.5)  -- Ждем 1 секунду перед касанием
+                task.wait(0.5)  -- Ждем 0.5 секунды перед касанием
 
                 -- Касаемся портала левой рукой раптора
                 firetouchinterest(leftArm, portal, 1)  -- Начало касания
@@ -7930,10 +7940,11 @@ addcmd('checkBearArm', {}, function(args, speaker)
                 notify("Success", "Касание портала раптором завершено.")
                 stopFlag = true
             end
-            task.wait(0.3)  -- Проверяем каждые 0.5 секунды
+            task.wait(0.3)  -- Проверяем каждые 0.3 секунды
         end
     end)
 end)
+
 
 -- Команда для остановки цикла
 addcmd('stopBearArmCheck', {}, function()
