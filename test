@@ -4491,7 +4491,7 @@ CMDs[#CMDs + 1] = {NAME = 'uninstantproximityprompts / uninstantpp', DESC = 'Und
 CMDs[#CMDs + 1] = {NAME = 'tpunanchored / tpua [player]', DESC = 'Teleports unanchored parts to a player'}
 CMDs[#CMDs + 1] = {NAME = 'animsunanchored / freezeua', DESC = 'Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'actport', DESC = '3Freezes unanchored parts'}
-CMDs[#CMDs + 1] = {NAME = 'activateBearArm', DESC = '1777 unsdxcxced parts'}
+CMDs[#CMDs + 1] = {NAME = 'activateBearArm', DESC = '1888 unsdxcxced parts'}
 CMDs[#CMDs + 1] = {NAME = 'toucheffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'stopeffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'thawunanchored / thawua / unfreezeua', DESC = 'Thaws unanchored parts'}
@@ -7793,10 +7793,10 @@ addcmd('activateBearArm', {}, function(args, speaker)
     for _, obj in pairs(workspace:GetChildren()) do
         if obj.Name == "Portal" then
             local beam = obj:FindFirstChild("Beam")
-            local creator = obj.PortalWatch:FindFirstChild("Creator")
+
 
             -- Убедимся, что Beam существует и Creator равен имени игрока
-            if beam and creator == playerName then
+            if beam then
                 portal = obj
                 notify("Success", "Портал найден: " .. obj.Name)
                 --break
@@ -7815,31 +7815,21 @@ addcmd('activateBearArm', {}, function(args, speaker)
 
     -- Найдём "Bear Arm" в руках игрока
     local bearArm = speaker.Character:FindFirstChild("Bear Arm")
-    if not bearArm then
-        notify("Error", "Bear Arm не найдена в руках.")
-        return
-    end
+
 
     -- Найдём Handle и проверим на наличие TouchInterest
     local handle = bearArm:FindFirstChild("Handle")
-    if not handle or not handle:FindFirstChild("TouchInterest") then
-        notify("Error", "Handle или TouchInterest не найден в Bear Arm.")
-        return
-    end
+
 
     -- Находим HumanoidRootPart игрока
     local rootPart = speaker.Character:FindFirstChild("HumanoidRootPart")
-    if not rootPart then
-        notify("Error", "HumanoidRootPart не найден у игрока.")
-        return
-    end
+
 
     -- Сканируем всех рапторов в Workspace и находим первого, созданного игроком
     local raptor = nil
     for _, obj in pairs(workspace:GetChildren()) do
         if obj.Name == "RidableRaptor" then
-            local raptorCreator = obj:FindFirstChild("Creator")
-            if raptorCreator == playerName then
+            if 1 == 1 then
                 raptor = obj
                 --break
             end
@@ -7853,10 +7843,7 @@ addcmd('activateBearArm', {}, function(args, speaker)
 
     -- Проверяем наличие Left Leg у раптора
     local leftLeg = raptor:FindFirstChild("Left Arm")
-    if not leftLeg then
-        notify("Error", "Left Leg не найден у раптора.")
-        return
-    end
+
 
     -- Выполняем касание до изменения Grip
     firetouchinterest(handle, leftLeg, 1)  -- Начало касания
