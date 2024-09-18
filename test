@@ -4491,7 +4491,7 @@ CMDs[#CMDs + 1] = {NAME = 'uninstantproximityprompts / uninstantpp', DESC = 'Und
 CMDs[#CMDs + 1] = {NAME = 'tpunanchored / tpua [player]', DESC = 'Teleports unanchored parts to a player'}
 CMDs[#CMDs + 1] = {NAME = 'animsunanchored / freezeua', DESC = 'Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'actport', DESC = '3Freezes unanchored parts'}
-CMDs[#CMDs + 1] = {NAME = 'activateBearArm', DESC = '1555 unadsadasdasdanchored parts'}
+CMDs[#CMDs + 1] = {NAME = 'activateBearArm', DESC = '1666 unadsadasdasdanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'toucheffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'stopeffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'thawunanchored / thawua / unfreezeua', DESC = 'Thaws unanchored parts'}
@@ -7793,51 +7793,70 @@ addcmd('activateBearArm', {}, function(args, speaker)
     for _, obj in pairs(workspace:GetChildren()) do
         if obj.Name == "Portal" then
             local beam = obj:FindFirstChild("Beam")
-            
+            local creator = obj.PortalWatch:FindFirstChild("Creator")
 
             -- Убедимся, что Beam существует и Creator равен имени игрока
-            if beam then
+            if beam and creator.Value == playerName then
                 portal = obj
                 notify("Success", "Портал найден: " .. obj.Name)
                 --break
             else
-                notify("Debug", "rcsah.")
+                notify("Debug", "Портал не подходит. Нет Beam или Creator не совпадает.")
             end
         else
             notify("Debug", "Не найден портал с PortalWatch.")
         end
     end
 
+    if not portal then
+        notify("Error", "Подходящий портал не найден.")
+        return
+    end
 
-    notify("Debug", "bebra")
+    -- Найдём "Bear Arm" в руках игрока
     local bearArm = speaker.Character:FindFirstChild("Bear Arm")
-
+    if not bearArm then
+        notify("Error", "Bear Arm не найдена в руках.")
+        return
+    end
 
     -- Найдём Handle и проверим на наличие TouchInterest
     local handle = bearArm:FindFirstChild("Handle")
-
+    if not handle or not handle:FindFirstChild("TouchInterest") then
+        notify("Error", "Handle или TouchInterest не найден в Bear Arm.")
+        return
+    end
 
     -- Находим HumanoidRootPart игрока
     local rootPart = speaker.Character:FindFirstChild("HumanoidRootPart")
-
+    if not rootPart then
+        notify("Error", "HumanoidRootPart не найден у игрока.")
+        return
+    end
 
     -- Сканируем всех рапторов в Workspace и находим первого, созданного игроком
     local raptor = nil
     for _, obj in pairs(workspace:GetChildren()) do
         if obj.Name == "RidableRaptor" then
-            
-            if 1==1 then
+            local raptorCreator = obj:FindFirstChild("Creator")
+            if raptorCreator.Value == playerName then
                 raptor = obj
                 --break
             end
         end
     end
 
-
+    if not raptor then
+        notify("Error", "Подходящий RidableRaptor не найден.")
+        return
+    end
 
     -- Проверяем наличие Left Leg у раптора
     local leftLeg = raptor:FindFirstChild("Left Arm")
-
+    if not leftLeg then
+        notify("Error", "Left Leg не найден у раптора.")
+        return
+    end
 
     -- Выполняем касание до изменения Grip
     firetouchinterest(handle, leftLeg, 1)  -- Начало касания
@@ -7847,19 +7866,25 @@ addcmd('activateBearArm', {}, function(args, speaker)
 
     -- Цикл для изменения CFrame/Grip "Bear Arm" на основе позиции портала
     stopFlag = false
-
     task.spawn(function()
         while not stopFlag do
             local portalPosition = portal.Position
             local playerPosition = rootPart.Position
+            local playerRotationY = rootPart.Orientation.Y  -- Ротация по оси Y
 
-            -- Рассчитываем направление от игрока к порталу
-            local direction = (portalPosition - playerPosition).unit
+            -- Смещение руки относительно позиции игрока
+            local offset = Vector3.new(10, 5, 5)  -- Смещение по осям x, y, z (пример)
 
-            -- Изменяем CFrame для "Bear Arm"
-            bearArm.Grip = CFrame.new(portalPosition + Vector3.new(0, 5, 0)) -- Висеть над порталом на высоте 5 единиц
-            -- Можно также добавить ротацию на основе угла между игроком и порталом
-            bearArm.Grip = bearArm.Grip * CFrame.Angles(0, math.atan2(direction.Z, direction.X), 0)
+            -- Применение ротации по оси Y
+            local angle = math.rad(playerRotationY)
+            local rotatedOffset = Vector3.new(
+                offset.X * math.cos(angle) - offset.Z * math.sin(angle),
+                offset.Y,
+                offset.X * math.sin(angle) + offset.Z * math.cos(angle)
+            )
+
+            -- Обновляем позицию и вращение "Bear Arm" на основе позиции игрока и портала
+            bearArm.Grip = CFrame.new(playerPosition + rotatedOffset) * CFrame.Angles(0, angle, 0)
 
             task.wait(0.1) -- Задержка для обновления CFrame
         end
@@ -7871,6 +7896,7 @@ addcmd('stopBearArm', {}, function()
     stopFlag = true
     notify("Success", "Bear Arm больше не висит над порталом.")
 end)
+
 
 
 
