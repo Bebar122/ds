@@ -4620,7 +4620,7 @@ CMDs[#CMDs + 1] = {NAME = 'loopnobgui / loopnoname', DESC = 'Loop removes billbo
 CMDs[#CMDs + 1] = {NAME = 'unloopnobgui / unloopnoname', DESC = 'Disables loopnobgui'}
 CMDs[#CMDs + 1] = {NAME = 'noarms', DESC = 'Removes your arms'}
 CMDs[#CMDs + 1] = {NAME = 'nolegs', DESC = 'Removes your legs'}
-CMDs[#CMDs + 1] = {NAME = 'dropclone / drc', DESC = 'drc'}
+CMDs[#CMDs + 1] = {NAME = 'dropclone / drc', DESC = 'drc2'}
 CMDs[#CMDs + 1] = {NAME = 'rainbowtouch', DESC = '777'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'nolimbs', DESC = 'Removes your limbs'}
@@ -12874,17 +12874,31 @@ end)
 
 addcmd('dropclone', {'drc'}, function(args, speaker)
     local RS = game:GetService("RunService").RenderStepped
-    local clone = workspace:FindFirstChild("asdsdfsad0's Clone")
-    hkillstop=false
+    local hkillstop = false
+    
+    -- Поиск клона, у которого есть EnergySword
+    local clone = nil
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj:IsA("Model") and obj:FindFirstChild("EnergySword") then
+            local tool = obj:FindFirstChild("EnergySword")
+            local handle = tool:FindFirstChild("Handle")
+            if handle then
+                clone = obj
+                break
+            end
+        end
+    end
+
     if not clone then
-        return notify("Handle Kill", "Клон не найден в рабочем пространстве.")
+        return notify("Handle Kill", "Клон с EnergySword не найден в рабочем пространстве.")
     end
     
-    local Tool = clone:FindFirstChildWhichIsA("Tool")
+    -- Проверка наличия EnergySword и Handle у клона
+    local Tool = clone:FindFirstChild("EnergySword")
     local Handle = Tool and Tool:FindFirstChild("Handle")
     
     if not Tool or not Handle then
-        return notify("Handle Kill", "Необходимо держать \"Tool\", который наносит урон при касании. Например, стандартный \"Sword\".")
+        return notify("Handle Kill", "Необходимо, чтобы клон держал \"EnergySword\" с ручкой для касания.")
     end
     
     task.spawn(function()
@@ -12894,6 +12908,7 @@ addcmd('dropclone', {'drc'}, function(args, speaker)
                 break
             end
             
+            -- Перебираем все части тела игрока и касаемся их
             for _, v1 in ipairs(speaker.Character:GetChildren()) do
                 if v1:IsA("BasePart") then
                     firetouchinterest(Handle, v1, 1)
@@ -12905,6 +12920,7 @@ addcmd('dropclone', {'drc'}, function(args, speaker)
         notify("Handle Kill Stopped!", speaker.Name .. " умер/вышел или вы убрали инструмент!")
     end)
 end)
+
 
 
 local hb = RunService.Heartbeat
