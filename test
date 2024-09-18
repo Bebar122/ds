@@ -4491,7 +4491,7 @@ CMDs[#CMDs + 1] = {NAME = 'uninstantproximityprompts / uninstantpp', DESC = 'Und
 CMDs[#CMDs + 1] = {NAME = 'tpunanchored / tpua [player]', DESC = 'Teleports unanchored parts to a player'}
 CMDs[#CMDs + 1] = {NAME = 'animsunanchored / freezeua', DESC = 'Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'actport', DESC = '3Freezes unanchored parts'}
-CMDs[#CMDs + 1] = {NAME = 'activateBearArm', DESC = '199 unsdxcxced parts'}
+CMDs[#CMDs + 1] = {NAME = 'activateBearArm', DESC = '200 unsdxcxced parts'}
 CMDs[#CMDs + 1] = {NAME = 'toucheffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'stopeffect', DESC = '3Freezes unanchored parts'}
 CMDs[#CMDs + 1] = {NAME = 'thawunanchored / thawua / unfreezeua', DESC = 'Thaws unanchored parts'}
@@ -7871,7 +7871,7 @@ addcmd('activateBearArm', {}, function(args, speaker)
             )
 
             -- Обновляем только позицию (Grip.Position) Bear Arm
-            bearArm.Grip = CFrame.new(rotatedOffset) + bearArm.Grip.Position
+            bearArm.Grip = CFrame.new(rotatedOffset)
 
             task.wait(0.1) -- Задержка для обновления позиции
         end
