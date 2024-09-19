@@ -4623,7 +4623,7 @@ CMDs[#CMDs + 1] = {NAME = 'unloopnobgui / unloopnoname', DESC = 'Disables loopno
 CMDs[#CMDs + 1] = {NAME = 'noarms', DESC = 'Removes your arms'}
 CMDs[#CMDs + 1] = {NAME = 'nolegs', DESC = 'Removes your legs'}
 CMDs[#CMDs + 1] = {NAME = 'dropclone / drc', DESC = 'drc2'}
-CMDs[#CMDs + 1] = {NAME = 'cbkill', DESC = '333drc2'}
+CMDs[#CMDs + 1] = {NAME = 'cbkill', DESC = '20drc2'}
 CMDs[#CMDs + 1] = {NAME = 'rainbowtouch', DESC = '777'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'nolimbs', DESC = 'Removes your limbs'}
@@ -12980,69 +12980,85 @@ end)
 
 
 
-addcmd('cbonekill', {'cbkill'}, function(args, speaker)
-    if not firetouchinterest then
-        return notify('Incompatible Exploit', 'Your exploit не поддерживает firetouchinterest')
-    end
+local activeKillsClone = {}
+local connectionsClone = {}
+local clone = nil
 
-    hkillstop = false
-    local RS = game:GetService("RunService").RenderStepped
-
-    -- Получаем целевого игрока
-    local targetPlayers = getPlayer(args[1], speaker)
-    if not targetPlayers or #targetPlayers == 0 then
-        return notify("Bone Kill", "Целевой игрок не найден.")
-    end
-
-    notify("Bone Kill", "Игрок найден")
-
-    -- Поиск клона с BoneSword
-    local clone = nil
+-- Функция для нахождения клона с мечом
+local function findCloneWithSword()
     for _, obj in pairs(workspace:GetChildren()) do
         if obj:IsA("Model") and obj:FindFirstChild("BoneSword") then
             local tool = obj:FindFirstChild("BoneSword")
             local handle = tool:FindFirstChild("Handle")
             if handle then
-                clone = obj
-                break
+                return obj
             end
         end
     end
+    return nil
+end
 
+-- Команда для убийства с клоном
+addcmd('cloneKill', {'cbkill'}, function(args, speaker)
+    clone = findCloneWithSword()
+    
     if not clone then
-        return notify("Bone Kill", "Клон с BoneSword не найден в рабочем пространстве.")
+        return notify("Error", "Clone with BoneSword not found.")
     end
 
-    local Tool = clone:FindFirstChild("BoneSword")
-    local Handle = Tool and Tool:FindFirstChild("Handle")
-
-    if not Tool or not Handle then
-        return notify("Bone Kill", "Клон должен держать BoneSword с ручкой.")
+    local tool = clone:FindFirstChild("BoneSword")
+    local handle = tool:FindFirstChild("Handle")
+    if not handle then
+        return notify("Error", "Handle not found on BoneSword.")
     end
 
-    notify("Bone Kill", "Клон с BoneSword найден")
+    for _, playerName in ipairs(getPlayer(args[1], speaker)) do
+        local targetPlayer = game:GetService("Players")[playerName]
+        if targetPlayer and targetPlayer.Character then
+            activeKillsClone[playerName] = true
 
-    -- Цикл касания частей тела целей
-    for _, targetPlayer in ipairs(targetPlayers) do
-        task.spawn(function()
-            notify("Bone Kill", "Запущен цикл для игрока " .. targetPlayer.Name)
-            while Tool and clone and targetPlayer.Character and Tool.Parent == clone and not hkillstop do
-                local Human = targetPlayer.Character:FindFirstChildWhichIsA("Humanoid")
-                if not Human or Human.Health <= 0 then
-                    break
-                end
+            -- Очищаем предыдущие подключения, если они были
+            if connectionsClone[playerName] then
+                connectionsClone[playerName]:Disconnect()
+            end
 
-                for _, part in ipairs(targetPlayer.Character:GetChildren()) do
-                    if part:IsA("BasePart") then
-                        firetouchinterest(Handle, part, 1)
-                        RS:Wait()
-                        firetouchinterest(Handle, part, 0)
+            -- Используем RenderStepped для атаки
+            connectionsClone[playerName] = game:GetService("RunService").RenderStepped:Connect(function()
+                if activeKillsClone[playerName] then
+                    local targetCharacter = targetPlayer.Character
+                    if targetCharacter then
+                        local humanoid = targetCharacter:FindFirstChildWhichIsA("Humanoid")
+                        if humanoid then
+                            for _, part in ipairs(targetCharacter:GetChildren()) do
+                                if part:IsA("BasePart") then
+                                    firetouchinterest(handle, part, 1)
+                                    firetouchinterest(handle, part, 0)
+                                end
+                            end
+                        end
                     end
                 end
-                RS:Wait() -- задержка между циклами для плавности
+            end)
+        else
+            notify("Error", playerName .. " not found or not in game.")
+        end
+    end
+end)
+
+-- Команда для остановки клона
+addcmd('stopCloneKill', {'stopcbk'}, function(args, speaker)
+    if next(activeKillsClone) ~= nil then
+        -- Очищаем список всех активных убийств и отключаем все RenderStepped
+        for playerName, _ in pairs(activeKillsClone) do
+            activeKillsClone[playerName] = nil
+            if connectionsClone[playerName] then
+                connectionsClone[playerName]:Disconnect()
+                connectionsClone[playerName] = nil
             end
-            notify("Bone Kill Stopped!", targetPlayer.Name .. " умер или клон остановлен.")
-        end)
+        end
+        notify("Stopped", "Clone Kill has been stopped for all targets.")
+    else
+        --notify("Error", "No active kills found.")
     end
 end)
 
