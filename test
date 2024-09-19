@@ -8171,6 +8171,7 @@ addcmd('restoreJoints', {}, function(args, speaker)
             shoulderWeld.C0 = CFrame.new(1, 0.5, 0) -- Позиционирование соединения
             shoulderWeld.Parent = torso
         end
+	RunService:wait()
     end
 
     -- Запуск цикла для восстановления соединений
@@ -13028,10 +13029,11 @@ addcmd('cbonekill', {'cbkill'}, function(args, speaker)
                 for _, part in ipairs(targetPlayer.Character:GetChildren()) do
                     if part:IsA("BasePart") then
                         firetouchinterest(Handle, part, 1)
-                        RS:Wait()
+                        wait()
                         firetouchinterest(Handle, part, 0)
                     end
                 end
+		notify("Bone Kill Stopped!", "касаемся")
             end
             notify("Bone Kill Stopped!", speaker.Name .. " остановил команду или клон умер.")
         end)
