@@ -4437,6 +4437,7 @@ CMDs[#CMDs + 1] = {NAME = 'loopxray', DESC = 'Makes all parts in workspace trans
 CMDs[#CMDs + 1] = {NAME = 'unloopunxray', DESC = 'Unloops xray1'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'spectate / view [player]', DESC = 'View a player'}
+CMDs[#CMDs + 1] = {NAME = 'removeHRP', DESC = 'View a player'}
 CMDs[#CMDs + 1] = {NAME = 'viewpart / viewp [part name]', DESC = 'View a part'}
 CMDs[#CMDs + 1] = {NAME = 'unspectate / unview', DESC = 'Stops viewing player'}
 CMDs[#CMDs + 1] = {NAME = 'freecam / fc', DESC = 'Allows you to freely move camera around the game'}
@@ -13045,6 +13046,26 @@ addcmd('cbonekill', {'cbkill'}, function(args, speaker)
     end
 end)
 
+local function removeHumanoidRootPart(player)
+    -- Получаем персонажа игрока
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    -- Находим HumanoidRootPart
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+
+    -- Удаляем HumanoidRootPart, если он существует
+    if humanoidRootPart then
+        humanoidRootPart:Destroy()
+        notify("Success", "HumanoidRootPart был удалён.")
+    else
+        notify("Error", "HumanoidRootPart не найден.")
+    end
+end
+
+-- Пример вызова для текущего игрока (можно вызвать в любой момент)
+addcmd('removeHRP', {}, function(args, speaker)
+    removeHumanoidRootPart(speaker)
+end)
 
 
 
