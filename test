@@ -4343,7 +4343,7 @@ CMDs[#CMDs + 1] = {NAME = 'togglefullscreen / togglefs', DESC = 'Toggles fullscr
 CMDs[#CMDs + 1] = {NAME = 'notify [text]', DESC = 'Sends you a notification with the provided text'}
 CMDs[#CMDs + 1] = {NAME = 'lastcommand / lastcmd', DESC = 'Executes the previous command used'}
 CMDs[#CMDs + 1] = {NAME = 'exit', DESC = 'Kills roblox process'}
-CMDs[#CMDs + 1] = {NAME = '3kill / 3laserkill', DESC = '5555Kills roblox process'}
+CMDs[#CMDs + 1] = {NAME = '3kill / 3laserkill', DESC = '6665Kills roblox process'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'noclip', DESC = 'Go through objects'}
 CMDs[#CMDs + 1] = {NAME = 'unnoclip / clip', DESC = 'Disables noclip'}
@@ -12495,7 +12495,7 @@ end
 -- Основная команда для выполнения всех действий
 addcmd('3kill', {'3laserkill'}, function(args, speaker)
     -- Установите скорость полета пули (можете настроить это значение под себя)
-    local bulletSpeed = tonumber(args[1]) or 300 -- Скорость пули в студии (измените на свою)
+    local bulletSpeed = tonumber(args[1]) or 10 -- Скорость пули в студии (измените на свою)
 
     -- Проверяем наличие TriLaserGun в руках или экипируем его из инвентаря
     local toolEquipped = speaker.Character:FindFirstChild("TriLaserGun") or equipTool3(speaker, "TriLaserGun")
