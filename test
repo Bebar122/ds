@@ -4623,7 +4623,7 @@ CMDs[#CMDs + 1] = {NAME = 'unloopnobgui / unloopnoname', DESC = 'Disables loopno
 CMDs[#CMDs + 1] = {NAME = 'noarms', DESC = 'Removes your arms'}
 CMDs[#CMDs + 1] = {NAME = 'nolegs', DESC = 'Removes your legs'}
 CMDs[#CMDs + 1] = {NAME = 'dropclone / drc', DESC = 'drc2'}
-CMDs[#CMDs + 1] = {NAME = 'cbkill', DESC = '20drc2'}
+CMDs[#CMDs + 1] = {NAME = 'cbkill', DESC = '30drc2'}
 CMDs[#CMDs + 1] = {NAME = 'rainbowtouch', DESC = '777'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'nolimbs', DESC = 'Removes your limbs'}
@@ -13016,10 +13016,9 @@ local function findCloneWithSword()
     return nil
 end
 
--- Команда для убийства с клоном
 addcmd('cloneKill', {'cbkill'}, function(args, speaker)
     clone = findCloneWithSword()
-    
+
     if not clone then
         return notify("Error", "Clone with BoneSword not found.")
     end
@@ -13031,38 +13030,34 @@ addcmd('cloneKill', {'cbkill'}, function(args, speaker)
     end
 
     for _, playerName in ipairs(getPlayer(args[1], speaker)) do
-        local targetPlayer = game:GetService("Players")[playerName]
-        if targetPlayer and targetPlayer.Character then
-            activeKillsClone[playerName] = true
+        -- Сохраняем, что убийство для этого игрока активно
+        activeKillsClone[playerName] = true
 
-            -- Очищаем предыдущие подключения, если они были
-            if connectionsClone[playerName] then
-                connectionsClone[playerName]:Disconnect()
-            end
+        -- Очищаем предыдущие подключения, если они были
+        if connectionsClone[playerName] then
+            connectionsClone[playerName]:Disconnect()
+        end
 
-            -- Используем RenderStepped для атаки
-            connectionsClone[playerName] = game:GetService("RunService").RenderStepped:Connect(function()
-                if activeKillsClone[playerName] then
+        -- Используем RenderStepped для атаки
+        connectionsClone[playerName] = game:GetService("RunService").RenderStepped:Connect(function()
+            if activeKillsClone[playerName] then
+                local targetPlayer = game:GetService("Players"):FindFirstChild(playerName)
+                if targetPlayer and targetPlayer.Character then
                     local targetCharacter = targetPlayer.Character
-                    if targetCharacter then
-                        local humanoid = targetCharacter:FindFirstChildWhichIsA("Humanoid")
-                        if humanoid then
-                            for _, part in ipairs(targetCharacter:GetChildren()) do
-                                if part:IsA("BasePart") then
-                                    firetouchinterest(handle, part, 1)
-                                    firetouchinterest(handle, part, 0)
-                                end
+                    local humanoid = targetCharacter:FindFirstChildWhichIsA("Humanoid")
+                    if humanoid then
+                        for _, part in ipairs(targetCharacter:GetChildren()) do
+                            if part:IsA("BasePart") then
+                                firetouchinterest(handle, part, 1)
+                                firetouchinterest(handle, part, 0)
                             end
                         end
                     end
                 end
-            end)
-        else
-            notify("Error", playerName .. " not found or not in game.")
-        end
+            end
+        end)
     end
 end)
-
 -- Команда для остановки клона
 addcmd('stopCloneKill', {'stopcbk'}, function(args, speaker)
     if next(activeKillsClone) ~= nil then
