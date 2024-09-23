@@ -4688,7 +4688,7 @@ CMDs[#CMDs + 1] = {NAME = 'notools / removetools / deletetools', DESC = 'Removes
 CMDs[#CMDs + 1] = {NAME = 'deleteselectedtool / dst', DESC = 'Removes any currently selected tools111'}
 CMDs[#CMDs + 1] = {NAME = 'earthorb', DESC = '222'}
 CMDs[#CMDs + 1] = {NAME = 'earthorbchain', DESC = '222'}
-CMDs[#CMDs + 1] = {NAME = 'earthorbgrid', DESC = '222'}
+CMDs[#CMDs + 1] = {NAME = 'earthorbgrid', DESC = '332'}
 CMDs[#CMDs + 1] = {NAME = 'grabtools', DESC = 'Automatically get tools that are dropped'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = 'Automatically get tools that are dropped'}
 CMDs[#CMDs + 1] = {NAME = 'ungrabtools / nograbtools', DESC = 'Disables grabtools'}
@@ -10808,39 +10808,51 @@ addcmd('spawnEarthOrbGrid', {'earthorbgrid'}, function(args, speaker)
     -- Параметры: ширина, длина и плотность планет (вводимые через команду)
     local width = tonumber(args[1]) or 5  -- Ширина прямоугольника (по X)
     local length = tonumber(args[2]) or 5  -- Длина прямоугольника (по Z)
-    local density = tonumber(args[3]) or 2  -- Плотность планет (расстояние между ними)
+    local density = tonumber(args[3]) or 0  -- Плотность планет, чем выше, тем ближе они (0 = расстояние 5 между планетами)
 
-    -- Функция для спавна и активации EarthOrb
-    local function spawnAndEquipEarthOrb()
-        -- Поиск EarthOrb в инвентаре
-        local earthOrb = nil
-        for _, item in pairs(player.Backpack:GetChildren()) do
-            if item.Name == "EarthOrb" and item:IsA('Tool') then
-                earthOrb = item
-                break
+    -- Рассчитываем расстояние между планетами в зависимости от плотности
+    local baseSpacing = 5  -- Расстояние между планетами при нулевой плотности
+    local spacing = baseSpacing / (1 + density)  -- Чем выше плотность, тем меньше расстояние
+
+    -- Функция для спавна и активации EarthOrb с попытками
+    local function spawnAndEquipEarthOrbWithRetries(maxRetries)
+        local retries = 0
+        local success = false
+
+        while retries < maxRetries and not success do
+            -- Поиск EarthOrb в инвентаре
+            local earthOrb = nil
+            for _, item in pairs(player.Backpack:GetChildren()) do
+                if item.Name == "EarthOrb" and item:IsA('Tool') then
+                    earthOrb = item
+                    break
+                end
+            end
+
+            -- Проверка наличия EarthOrb
+            if not earthOrb then
+                retries = retries + 1
+                task.wait(0.2)  -- Небольшая задержка перед новой попыткой
+                notify("Info", "EarthOrb не найден, попытка " .. retries .. "...")
+            else
+                -- Экипировка EarthOrb
+                earthOrb.Parent = speaker.Character
+
+                -- Активируем EarthOrb
+                earthOrb:Activate()
+
+                -- Удаление EarthOrb после активации
+                for _, v in pairs(speaker.Character:GetDescendants()) do
+                    if v:IsA('Tool') or v:IsA('HopperBin') then
+                        v:Destroy()
+                    end
+                end
+
+                success = true
             end
         end
 
-        -- Проверка наличия EarthOrb
-        if not earthOrb then
-            notify("Info", "EarthOrb не найден в инвентаре.")
-            return false
-        end
-
-        -- Экипировка EarthOrb
-        earthOrb.Parent = speaker.Character
-
-        -- Активируем EarthOrb
-        earthOrb:Activate()
-
-        -- Удаление EarthOrb после активации
-        for _, v in pairs(speaker.Character:GetDescendants()) do
-            if v:IsA('Tool') or v:IsA('HopperBin') then
-                v:Destroy()
-            end
-        end
-
-        return true
+        return success
     end
 
     -- Начальная позиция для первого спавна (позиция игрока)
@@ -10850,11 +10862,11 @@ addcmd('spawnEarthOrbGrid', {'earthorbgrid'}, function(args, speaker)
     for x = 0, width - 1 do
         for z = 0, length - 1 do
             -- Рассчитываем смещение по X и Z в зависимости от плотности
-            local offsetX = x * density
-            local offsetZ = z * density
+            local offsetX = x * spacing
+            local offsetZ = z * spacing
 
-            -- Спавним планету на текущей позиции
-            local success = spawnAndEquipEarthOrb()
+            -- Спавним планету с попытками
+            local success = spawnAndEquipEarthOrbWithRetries(5)  -- До 5 попыток спавна
 
             -- Если планета заспавнена успешно, продолжаем
             if success then
@@ -10867,14 +10879,14 @@ addcmd('spawnEarthOrbGrid', {'earthorbgrid'}, function(args, speaker)
                 -- Телепортируем игрока на новую позицию
                 speaker.Character.HumanoidRootPart.CFrame = CFrame.new(newPosition)
             else
-                notify("Error", "Не удалось заспавнить планету на позиции (" .. x .. ", " .. z .. ")")
-                break
+                notify("Error", "Не удалось заспавнить планету после 5 попыток на позиции (" .. x .. ", " .. z .. ")")
             end
         end
     end
 
     notify("Success", "Прямоугольник из планет создан с размерами " .. width .. "x" .. length .. " и плотностью " .. density .. ".")
 end)
+
 
 
 addcmd('useEarthOrb', {'earthorb'}, function(args, speaker)
