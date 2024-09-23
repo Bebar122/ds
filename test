@@ -7986,13 +7986,27 @@ addcmd('touchPortal', {'findportal'}, function(args, speaker)
         return
     end
 
+    -- Воспроизведение анимации перед касанием
+    local pchar = speaker.Character
+    local AnimationId = "186766708"  -- ID анимации
+    local Anim = Instance.new("Animation")
+    Anim.AnimationId = "rbxassetid://" .. AnimationId
+    local humanoid = pchar:FindFirstChildOfClass('Humanoid')
+    
+    if humanoid then
+        local k = humanoid:LoadAnimation(Anim)
+        k:Play()
+        k:AdjustSpeed(6)  -- Устанавливаем скорость анимации
+    end
+
     -- Касаемся портала левой рукой
     firetouchinterest(leftArm, portal, 1)  -- Начало касания
     task.wait(0.1)  -- Задержка для имитации касания
     firetouchinterest(leftArm, portal, 0)  -- Окончание касания
 
-    notify("Success", "Касание портала левой рукой выполнено!")
+    notify("Success", "Анимация запущена и касание портала левой рукой выполнено!")
 end)
+
 
 
 
