@@ -13087,6 +13087,7 @@ addcmd('cloneKill', {'cbkill'}, function(args, speaker)
                         for _, part in ipairs(targetCharacter:GetChildren()) do
                             if part:IsA("BasePart") then
                                 firetouchinterest(handle, part, 1)
+				wait()
                                 firetouchinterest(handle, part, 0)
                             end
                         end
