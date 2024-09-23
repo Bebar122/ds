@@ -4686,7 +4686,7 @@ CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'tools', DESC = 'Copies tools from ReplicatedStorage and Lighting'}
 CMDs[#CMDs + 1] = {NAME = 'notools / removetools / deletetools', DESC = 'Removes tools from character and backpack'}
 CMDs[#CMDs + 1] = {NAME = 'deleteselectedtool / dst', DESC = 'Removes any currently selected tools111'}
-CMDs[#CMDs + 1] = {NAME = 'earthorb', DESC = 'Removes any currently selected tools111'}
+CMDs[#CMDs + 1] = {NAME = 'earthorb', DESC = '222'}
 CMDs[#CMDs + 1] = {NAME = 'grabtools', DESC = 'Automatically get tools that are dropped'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = 'Automatically get tools that are dropped'}
 CMDs[#CMDs + 1] = {NAME = 'ungrabtools / nograbtools', DESC = 'Disables grabtools'}
@@ -10799,10 +10799,6 @@ end)
 addcmd('useEarthOrb', {'earthorb'}, function(args, speaker)
     -- Поиск EarthOrb в инвентаре
     local player = game.Players:GetPlayerFromCharacter(speaker.Character)
-    if not player or not speaker.Backpack then
-        notify("Error", "Игрок или инвентарь не найден.")
-        return
-    end
 
     local earthOrb = nil
     for _, item in pairs(player.Backpack:GetChildren()) do
@@ -10812,12 +10808,6 @@ addcmd('useEarthOrb', {'earthorb'}, function(args, speaker)
         end
     end
 
-    -- Проверка, найден ли EarthOrb
-    if not earthOrb then
-        notify("Info", "EarthOrb не найден в инвентаре.")
-        return
-    end
-
     -- Экипировка EarthOrb
     earthOrb.Parent = speaker.Character
 
@@ -10825,7 +10815,7 @@ addcmd('useEarthOrb', {'earthorb'}, function(args, speaker)
     earthOrb:Activate()
 
     -- Небольшая задержка перед удалением из рук
-    task.wait()
+    --task.wait()
 
     -- Удаляем EarthOrb из рук (уничтожаем все инструменты)
     for _, v in pairs(speaker.Character:GetDescendants()) do
@@ -10834,7 +10824,6 @@ addcmd('useEarthOrb', {'earthorb'}, function(args, speaker)
         end
     end
 
-    notify("Success", "EarthOrb активирован и удалён из рук.")
 end)
 
 
