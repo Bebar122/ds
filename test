@@ -4688,7 +4688,7 @@ CMDs[#CMDs + 1] = {NAME = 'notools / removetools / deletetools', DESC = 'Removes
 CMDs[#CMDs + 1] = {NAME = 'deleteselectedtool / dst', DESC = 'Removes any currently selected tools111'}
 CMDs[#CMDs + 1] = {NAME = 'earthorb', DESC = '222'}
 CMDs[#CMDs + 1] = {NAME = 'earthorbchain', DESC = '222'}
-CMDs[#CMDs + 1] = {NAME = 'earthorbgrid', DESC = '44'}
+CMDs[#CMDs + 1] = {NAME = 'earthorbgrid', DESC = '55'}
 CMDs[#CMDs + 1] = {NAME = 'grabtools', DESC = 'Automatically get tools that are dropped'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = 'Automatically get tools that are dropped'}
 CMDs[#CMDs + 1] = {NAME = 'ungrabtools / nograbtools', DESC = 'Disables grabtools'}
@@ -10868,7 +10868,7 @@ addcmd('spawnEarthOrbGrid', {'earthorbgrid'}, function(args, speaker)
             -- Если планета заспавнена успешно, продолжаем
             if success then
                 -- Ждем появления новой планеты в инвентаре
-                task.wait(0.75)  -- Задержка для предотвращения проблем со спавном
+                task.wait(1.0)  -- Задержка для предотвращения проблем со спавном
 
                 -- Вычисляем новую позицию для следующей планеты
                 local newPosition = startPosition + Vector3.new(offsetX, 0, offsetZ)
