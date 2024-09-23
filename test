@@ -10856,8 +10856,8 @@ addcmd('spawnEarthOrbGrid', {'earthorbgrid'}, function(args, speaker)
     local startPosition = speaker.Character.HumanoidRootPart.Position
 
     -- Цикл для создания сетки планет
-    for x = 0, width - 1 do
-        for z = 0, length - 1 do
+    for x = 0, width do  -- Изменяем цикл, чтобы учесть все итерации
+        for z = 0, length do
             -- Рассчитываем смещение по X и Z в зависимости от плотности
             local offsetX = x * spacing
             local offsetZ = z * spacing
@@ -10868,7 +10868,7 @@ addcmd('spawnEarthOrbGrid', {'earthorbgrid'}, function(args, speaker)
             -- Если планета заспавнена успешно, продолжаем
             if success then
                 -- Ждем появления новой планеты в инвентаре
-                task.wait(0.75)  -- Увеличиваем задержку для предотвращения проблем с последними планетами
+                task.wait(0.75)  -- Задержка для предотвращения проблем со спавном
 
                 -- Вычисляем новую позицию для следующей планеты
                 local newPosition = startPosition + Vector3.new(offsetX, 0, offsetZ)
@@ -10881,8 +10881,10 @@ addcmd('spawnEarthOrbGrid', {'earthorbgrid'}, function(args, speaker)
         end
     end
 
+    -- Завершающее сообщение
     notify("Success", "Прямоугольник из планет создан с размерами " .. width .. "x" .. length .. " и плотностью " .. density .. ".")
 end)
+
 
 
 
