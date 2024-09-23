@@ -4687,6 +4687,7 @@ CMDs[#CMDs + 1] = {NAME = 'tools', DESC = 'Copies tools from ReplicatedStorage a
 CMDs[#CMDs + 1] = {NAME = 'notools / removetools / deletetools', DESC = 'Removes tools from character and backpack'}
 CMDs[#CMDs + 1] = {NAME = 'deleteselectedtool / dst', DESC = 'Removes any currently selected tools111'}
 CMDs[#CMDs + 1] = {NAME = 'earthorb', DESC = '222'}
+CMDs[#CMDs + 1] = {NAME = 'earthorbchain', DESC = '222'}
 CMDs[#CMDs + 1] = {NAME = 'grabtools', DESC = 'Automatically get tools that are dropped'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = 'Automatically get tools that are dropped'}
 CMDs[#CMDs + 1] = {NAME = 'ungrabtools / nograbtools', DESC = 'Disables grabtools'}
@@ -10824,6 +10825,72 @@ addcmd('useEarthOrb', {'earthorb'}, function(args, speaker)
         end
     end
 
+end)
+
+addcmd('spawnEarthOrbChain', {'earthorbchain'}, function(args, speaker)
+    local player = game.Players:GetPlayerFromCharacter(speaker.Character)
+    if not player or not speaker.Character then
+        notify("Error", "Игрок не найден.")
+        return
+    end
+
+    -- Количество планет, которые нужно заспавнить
+    local planetCount = 5  -- Можно изменить на любое количество
+    local offset = Vector3.new(10, 0, 0)  -- Смещение для каждой следующей планеты
+
+    -- Функция для спавна одной планеты
+    local function spawnAndEquipEarthOrb()
+        -- Поиск EarthOrb в инвентаре
+        local earthOrb = nil
+        for _, item in pairs(player.Backpack:GetChildren()) do
+            if item.Name == "EarthOrb" and item:IsA('Tool') then
+                earthOrb = item
+                break
+            end
+        end
+
+        -- Проверка наличия EarthOrb
+        if not earthOrb then
+            notify("Info", "EarthOrb не найден в инвентаре.")
+            return false
+        end
+
+        -- Экипировка EarthOrb
+        earthOrb.Parent = speaker.Character
+
+        -- Активируем EarthOrb
+        earthOrb:Activate()
+
+        -- Удаление EarthOrb после активации
+        for _, v in pairs(speaker.Character:GetDescendants()) do
+            if v:IsA('Tool') or v:IsA('HopperBin') then
+                v:Destroy()
+            end
+        end
+
+        return true
+    end
+
+    -- Цикл для спавна нескольких планет
+    for i = 1, planetCount do
+        -- Спавним планету текущей командой
+        local success = spawnAndEquipEarthOrb()
+        
+        -- Если планета заспавнена успешно, продолжаем
+        if success then
+            -- Ждем появления новой планеты в инвентаре
+            task.wait(0.5)  -- Задержка для появления новой планеты
+
+            -- Телепортируем игрока на немного смещенную позицию
+            local newPosition = speaker.Character.HumanoidRootPart.Position + offset
+            speaker.Character.HumanoidRootPart.CFrame = CFrame.new(newPosition)
+        else
+            notify("Error", "Не удалось заспавнить планету на шаге " .. i)
+            break
+        end
+    end
+
+    notify("Success", planetCount .. " планет были заспавнены с перемещением.")
 end)
 
 
