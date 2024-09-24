@@ -4422,6 +4422,7 @@ CMDs[#CMDs + 1] = {NAME = 'safechat', DESC = 'Enables safe chat'}
 CMDs[#CMDs + 1] = {NAME = 'nosafechat / disablesafechat', DESC = 'Disables safechat'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'esp', DESC = 'View all players and their status'}
+CMDs[#CMDs + 1] = {NAME = 'movetools', DESC = 'View all players and their status'}
 CMDs[#CMDs + 1] = {NAME = 'noesp / unesp', DESC = 'Removes esp'}
 CMDs[#CMDs + 1] = {NAME = 'esptransparency [number]', DESC = 'Changes the transparency of esp related commands'}
 CMDs[#CMDs + 1] = {NAME = 'partesp [part name]', DESC = 'Highlights a part'}
@@ -4687,6 +4688,7 @@ CMDs[#CMDs + 1] = {NAME = 'tools', DESC = 'Copies tools from ReplicatedStorage a
 CMDs[#CMDs + 1] = {NAME = 'notools / removetools / deletetools', DESC = 'Removes tools from character and backpack'}
 CMDs[#CMDs + 1] = {NAME = 'deleteselectedtool / dst', DESC = 'Removes any currently selected tools111'}
 CMDs[#CMDs + 1] = {NAME = 'earthorb', DESC = '222'}
+CMDs[#CMDs + 1] = {NAME = 'wall', DESC = '222'}
 CMDs[#CMDs + 1] = {NAME = 'hollowcube', DESC = '44'}
 CMDs[#CMDs + 1] = {NAME = 'earthorbchain', DESC = '222'}
 CMDs[#CMDs + 1] = {NAME = 'earthorbgrid', DESC = '55'}
@@ -10799,6 +10801,102 @@ addcmd('deleteselectedtool',{'dst'},function(args, speaker)
 	end
 end)
 
+addcmd('spawnWall', {'wall'}, function(args, speaker)
+    local player = game.Players:GetPlayerFromCharacter(speaker.Character)
+    if not player or not speaker.Character then
+        notify("Error", "Игрок не найден.")
+        return
+    end
+
+    -- Параметры: ширина, высота, плотность и ось стены
+    local width = tonumber(args[1]) or 5  -- Ширина стены (по оси X или Z)
+    local height = tonumber(args[2]) or 5  -- Высота стены (по оси Y)
+    local density = tonumber(args[3]) or 1  -- Плотность планет
+    local axis = tostring(args[4]) or "X"  -- Ось, по которой строится стена (X или Z)
+
+    -- Рассчитываем расстояние между планетами в зависимости от плотности (линейное изменение)
+    local minSpacing = 0.5  -- Минимальное расстояние
+    local maxSpacing = 5  -- Максимальное расстояние
+    local spacing = maxSpacing - (0.45 * (density - 1))
+
+    -- Проверяем, чтобы расстояние было не меньше минимального
+    if spacing < minSpacing then
+        spacing = minSpacing
+    end
+
+    -- Функция для спавна и активации EarthOrb с неограниченным количеством попыток
+    local function spawnAndEquipEarthOrb()
+        local success = false
+
+        while not success do
+            -- Поиск EarthOrb в инвентаре
+            local earthOrb = nil
+            for _, item in pairs(player.Backpack:GetChildren()) do
+                if item.Name == "EarthOrb" and item:IsA('Tool') then
+                    earthOrb = item
+                    break
+                end
+            end
+
+            -- Проверка наличия EarthOrb
+            if not earthOrb then
+                task.wait(0.2)  -- Небольшая задержка перед новой попыткой
+            else
+                -- Экипировка EarthOrb
+                earthOrb.Parent = speaker.Character
+
+                -- Активируем EarthOrb
+                earthOrb:Activate()
+
+                -- Удаление EarthOrb после активации
+                for _, v in pairs(speaker.Character:GetDescendants()) do
+                    if v:IsA('Tool') or v:IsA('HopperBin') then
+                        v:Destroy()
+                    end
+                end
+
+                success = true
+            end
+        end
+
+        return success
+    end
+
+    -- Начальная позиция для первого спавна (позиция игрока)
+    local startPosition = speaker.Character.HumanoidRootPart.Position
+
+    -- Цикл для создания стены
+    for w = 0, width - 1 do
+        for h = 0, height - 1 do
+            -- Рассчитываем смещение по X, Y, Z в зависимости от оси
+            local offsetX = (axis == "X") and (w * spacing) or 0
+            local offsetY = h * spacing
+            local offsetZ = (axis == "Z") and (w * spacing) or 0
+
+            -- Спавним планету с неограниченными попытками
+            local success = spawnAndEquipEarthOrb()
+
+            -- Если планета заспавнена успешно, продолжаем
+            if success then
+                -- Ждем появления новой планеты в инвентаре
+                task.wait(0.75)
+
+                -- Вычисляем новую позицию для следующей планеты
+                local newPosition = startPosition + Vector3.new(offsetX, offsetY, offsetZ)
+
+                -- Телепортируем игрока на новую позицию
+                speaker.Character.HumanoidRootPart.CFrame = CFrame.new(newPosition)
+            else
+                notify("Error", "Не удалось заспавнить планету на позиции (" .. w .. ", " .. h .. ")")
+            end
+        end
+    end
+
+    -- Завершающее сообщение
+    notify("Success", "Стена шириной " .. width .. " и высотой " .. height .. " создана по оси " .. axis .. ".")
+end)
+
+
 addcmd('spawnHollowCube', {'hollowcube'}, function(args, speaker)
     local player = game.Players:GetPlayerFromCharacter(speaker.Character)
     if not player or not speaker.Character then
@@ -13235,6 +13333,39 @@ addcmd('rainbowtouch', {'rainbowtouch'}, function(args, speaker)
         moveRainbowPeriastronToTarget(speaker, Players[player])
     end
 end)
+
+-- Функция для поиска всех Tools в радиусе 500 и перемещения их к цели
+local function moveAllToolsToTarget(speaker, target)
+    local targetHRP = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+    if not targetHRP then 
+        print("Цель не найдена.")
+        return 
+    end
+
+    -- Перебираем все объекты в Workspace
+    for _, obj in pairs(workspace:GetDescendants()) do
+        -- Проверяем, является ли объект Tool и находится ли он в радиусе 500
+        if obj:IsA('Tool') and obj:FindFirstChild("Handle") then
+            local toolHandle = obj.Handle
+            local distance = (toolHandle.Position - speaker.Character.HumanoidRootPart.Position).magnitude
+
+            if distance <= 500 then
+                -- Перемещаем Tool к HumanoidRootPart цели
+                toolHandle.CFrame = targetHRP.CFrame
+                print("Инструмент " .. obj.Name .. " перемещен к цели.")
+            end
+        end
+    end
+end
+
+-- Команда для поиска инструментов и их перемещения к целевому игроку
+addcmd('moveTools', {'movetools'}, function(args, speaker)
+    local players = getPlayer(args[1], speaker) -- Получаем целевого игрока
+    for _, player in pairs(players) do
+        moveAllToolsToTarget(speaker, Players[player]) -- Перемещаем все инструменты к цели
+    end
+end)
+
 
 addcmd('handleTouch', {'htouch'}, function(args, speaker)
     if not firetouchinterest then
