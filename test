@@ -13430,6 +13430,64 @@ addcmd('stopTouching', {'stopblocktouch'}, function(args, speaker)
     print("Касание блоков остановлено.")
 end)
 
+-- Функция для поиска спавна игрока по значению StringValue.Owner и телепортации к SpawnLocation
+local function teleportToPlayerSpawn(speaker)
+    local playerName = speaker.Name
+
+    -- Ищем спавн игрока в workspace
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj:IsA("Model") and obj:FindFirstChild("Owner") and obj.Owner:IsA("StringValue") then
+            if obj.Owner.Value == playerName then
+                -- Нашли спавн игрока
+                local spawnLocation = obj:FindFirstChild("SpawnLocation")
+                
+                if spawnLocation then
+                    -- Телепортируем игрока к SpawnLocation
+                    local hrp = speaker.Character and speaker.Character:FindFirstChild("HumanoidRootPart")
+                    if hrp then
+                        hrp.CFrame = CFrame.new(spawnLocation.Position)
+                        print("Игрок телепортирован к спавну: " .. spawnLocation.Name)
+                    else
+                        print("HumanoidRootPart не найден у персонажа.")
+                    end
+                else
+                    print("SpawnLocation не найден в спавне.")
+                end
+                return -- Прерываем цикл после нахождения нужного спавна
+            end
+        end
+    end
+    print("Спавн игрока не найден.")
+end
+
+-- Команда для телепортации к спавну игрока
+addcmd('teleportToMySpawn', {'tomyspawn'}, function(args, speaker)
+    teleportToPlayerSpawn(speaker)
+end)
+
+-- Функция для изменения AutoJumpEnabled у Humanoid
+local function setAutoJump(speaker, state)
+    -- Проверяем наличие Humanoid у персонажа
+    local humanoid = speaker.Character and speaker.Character:FindFirstChildOfClass("Humanoid")
+    
+    if humanoid then
+        -- Устанавливаем значение AutoJumpEnabled
+        humanoid.AutoJumpEnabled = state
+        print("AutoJumpEnabled установлено в " .. tostring(state))
+    else
+        print("Humanoid не найден.")
+    end
+end
+
+-- Команда для изменения AutoJumpEnabled
+addcmd('setAutoJump', {'autojump2'}, function(args, speaker)
+    -- Проверяем, передан ли параметр (true/false)
+    local state = args[1] and (args[1]:lower() == "true" or args[1] == "1")
+    
+    -- Устанавливаем значение AutoJumpEnabled
+    setAutoJump(speaker, state)
+end)
+
 
 addcmd('handleTouch', {'htouch'}, function(args, speaker)
     if not firetouchinterest then
