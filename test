@@ -13343,7 +13343,7 @@ local function moveAllToolsToTarget(speaker, target)
     end
 
     -- Перебираем все объекты в Workspace
-    for _, obj in pairs(workspace:GetDescendants()) do
+    for _, obj in pairs(workspace:GetChildren()) do
         -- Проверяем, является ли объект Tool и находится ли он в радиусе 500
         if obj:IsA('Tool') and obj:FindFirstChild("Handle") then
             local toolHandle = obj.Handle
@@ -13364,6 +13364,70 @@ addcmd('moveTools', {'movetools'}, function(args, speaker)
     for _, player in pairs(players) do
         moveAllToolsToTarget(speaker, Players[player]) -- Перемещаем все инструменты к цели
     end
+end)
+
+-- Глобальная переменная для отслеживания состояния
+local isTouching = false
+
+-- Функция для поиска спавна игрока по значению StringValue Owner
+local function findPlayerSpawn(playerName)
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj:IsA("Model") and obj:FindFirstChild("Owner") and obj.Owner:IsA("StringValue") then
+            if obj.Owner.Value == playerName then
+                return obj -- Возвращаем спавн, если нашли
+            end
+        end
+    end
+    return nil -- Если спавн не найден
+end
+
+-- Функция для касания блоков
+local function startTouchingBlocks(spawn)
+    -- Получаем блоки для касания
+    local block1 = spawn.Givers.BlockGiverVoid1.ColoredParts.TouchMe
+    local block2 = spawn.Givers.BlockGiverVoid2.ColoredParts.TouchMe
+
+    local player = game.Players.LocalPlayer
+    local leftArm = player.Character:FindFirstChild("Left Arm") or player.Character:FindFirstChild("LeftHand")
+    if not leftArm then
+        print("Left Arm не найден.")
+        return
+    end
+
+    -- Начинаем цикл касания
+    isTouching = true
+    while isTouching do
+        -- Касаемся блоков
+        firetouchinterest(leftArm, block1, 1)
+        --task.wait(0.1) -- Небольшая задержка для имитации касания
+        firetouchinterest(leftArm, block1, 0)
+        
+        firetouchinterest(leftArm, block2, 1)
+        --task.wait(0.1) -- Небольшая задержка для имитации касания
+        firetouchinterest(leftArm, block2, 0)
+
+        -- Делаем небольшую паузу между циклами
+        task.wait(0.1)
+    end
+end
+
+-- Команда для старта касания блоков
+addcmd('startTouching', {'blocktouch'}, function(args, speaker)
+    local playerName = speaker.Name -- Получаем имя игрока
+    local spawn = findPlayerSpawn(playerName) -- Находим спавн игрока
+    
+    if spawn then
+        print("Спавн найден: " .. spawn.Name)
+        startTouchingBlocks(spawn) -- Запускаем процесс касания
+    else
+        print("Спавн для игрока " .. playerName .. " не найден.")
+    end
+end)
+
+-- Команда для остановки касания блоков
+addcmd('stopTouching', {'stopblocktouch'}, function(args, speaker)
+    isTouching = false -- Останавливаем процесс касания
+    print("Касание блоков остановлено.")
 end)
 
 
