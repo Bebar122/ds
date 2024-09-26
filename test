@@ -4528,6 +4528,7 @@ CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a play
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
+CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'restoreJoints', DESC = '2'}
 CMDs[#CMDs + 1] = {NAME = 'carpet [player]', DESC = 'Be someones carpet'}
 CMDs[#CMDs + 1] = {NAME = 'uncarpet', DESC = 'Undoes carpet'}
@@ -9969,6 +9970,41 @@ addcmd("godm2", {"god2"}, function(args, speaker)
 
 	toolb.Parent = game:GetService("Players").LocalPlayer.Character
 
+end)
+
+-- Функция для вызова события и последующего удаления всех топоров из рук
+local function throwAxesAndUnequip(speaker)
+    local character = speaker.Character
+    if not character then return end
+
+    local args = {
+        [1] = Enum.KeyCode.Q -- Аргументы для InvokeServer
+    }
+
+    -- Перебираем все предметы в руках игрока
+    for _, tool in pairs(character:GetChildren()) do
+        if tool:IsA("Tool") and tool:FindFirstChild("ThrowAxe") then
+            -- Вызов события ThrowAxe для каждого топора
+            tool.ThrowAxe:InvokeServer(unpack(args))
+        end
+    end
+
+    -- Задержка 0.9 секунды перед убиранием топоров из рук
+    task.wait(0.9)
+
+    -- Убираем все топоры из рук, вызывая UnequipTools()
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid:UnequipTools()
+        print("Все топоры убраны из рук.")
+    else
+        print("Humanoid не найден.")
+    end
+end
+
+-- Команда для вызова события и убирания топоров
+addcmd('throwAxes', {'throwaxes'}, function(args, speaker)
+    throwAxesAndUnequip(speaker)
 end)
 
 
