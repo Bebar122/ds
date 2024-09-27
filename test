@@ -4605,6 +4605,7 @@ CMDs[#CMDs + 1] = {NAME = 'lay / laydown', DESC = 'Makes your character lay down
 CMDs[#CMDs + 1] = {NAME = 'sitwalk', DESC = 'Makes your character sit while still being able to walk'}
 CMDs[#CMDs + 1] = {NAME = 'nosit', DESC = 'Prevents your character from sitting'}
 CMDs[#CMDs + 1] = {NAME = 'unnosit', DESC = 'Disables nosit'}
+CMDs[#CMDs + 1] = {NAME = 'moveblock', DESC = 'Disables nosit'}
 CMDs[#CMDs + 1] = {NAME = 'jump', DESC = 'Makes your character jump'}
 CMDs[#CMDs + 1] = {NAME = 'infinitejump / infjump', DESC = 'Allows you to jump before hitting the ground'}
 CMDs[#CMDs + 1] = {NAME = 'uninfinitejump / uninfjump', DESC = 'Disables infjump'}
@@ -9569,6 +9570,143 @@ addcmd('freeze',{'fr'},function(args, speaker)
 		end
 	end
 end)
+
+
+
+
+
+
+
+local function moveBlockToTarget(speaker, target, blockType)
+    local targetHRP = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+    if not targetHRP then 
+        print("HumanoidRootPart цели не найден.")
+        return 
+    end
+
+    -- Перебираем все объекты в workspace и ищем блок с указанным именем (Void, Super, Diamond)
+    local blockToMove
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj.Name:lower() == blockType:lower() then
+            blockToMove = obj -- Нашли блок с нужным именем
+            break
+        end
+    end
+
+    if blockToMove and blockToMove:FindFirstChild("Handle") then
+        local handle = blockToMove.Handle
+        -- Перемещаем Handle блока к HumanoidRootPart цели
+        handle.CFrame = targetHRP.CFrame
+        print(blockType .. " перемещен к цели.")
+    else
+        print(blockType .. " или его Handle не найден в Workspace.")
+    end
+end
+
+local function countBlocksInWorkspace(blockType)
+    local count = 0
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj.Name:lower() == blockType:lower() then
+            count = count + 1
+        end
+    end
+    return count
+end
+
+local function touchGivers(speaker, blockType, numTouches)
+    local spawn = findPlayerSpawn(speaker.Name)
+    if not spawn then
+        print("Спавн для игрока не найден.")
+        return
+    end
+
+    -- Определение гиверов в зависимости от типа блока (Void, Super, Diamond)
+    local giver1 = spawn.Givers["BlockGiver" .. blockType .. "1"].ColoredParts.TouchMe
+    local giver2 = spawn.Givers["BlockGiver" .. blockType .. "2"].ColoredParts.TouchMe
+
+    local player = game.Players.LocalPlayer
+    local leftArm = player.Character:FindFirstChild("Left Arm") or player.Character:FindFirstChild("LeftHand")
+    if not leftArm then
+        print("Left Arm не найден.")
+        return
+    end
+
+    if numTouches == 2 then
+        -- Касаемся двух гиверов
+        firetouchinterest(leftArm, giver1, 1)
+        firetouchinterest(leftArm, giver1, 0)
+        firetouchinterest(leftArm, giver2, 1)
+        firetouchinterest(leftArm, giver2, 0)
+    elseif numTouches == 1 then
+        -- Касаемся одного случайного гивера
+        local randomGiver = math.random(1, 2)
+        if randomGiver == 1 then
+            firetouchinterest(leftArm, giver1, 1)
+            firetouchinterest(leftArm, giver1, 0)
+        else
+            firetouchinterest(leftArm, giver2, 1)
+            firetouchinterest(leftArm, giver2, 0)
+        end
+    end
+end
+
+local function equipBlocks(speaker, blockType, numBlocks)
+    local player = game.Players.LocalPlayer
+
+    for i = 1, numBlocks do
+        local block = nil
+        for _, item in pairs(player.Backpack:GetChildren()) do
+            if item.Name == blockType and item:IsA('Tool') then
+                block = item
+                break
+            end
+        end
+
+        if block then
+            block.Parent = speaker.Character
+            print("Взял в руки блок " .. blockType .. " (" .. i .. ")")
+        else
+            print(blockType .. " блок не найден в инвентаре.")
+        end
+    end
+end
+
+-- Команда для перемещения блока и взаимодействия с гиверами
+addcmd('moveblock', {'moveblock'}, function(args, speaker)
+    local blockType = args[1] -- Тип блока (Void, Super, Diamond)
+    local targetPlayer = getPlayer(args[2], speaker)[1] -- Цель, к которой нужно переместить блок
+
+    -- Перемещаем блок к целевому игроку
+    moveBlockToTarget(speaker, targetPlayer, blockType)
+
+    -- Считаем количество блоков в workspace
+    local blockCount = countBlocksInWorkspace(blockType)
+
+    -- В зависимости от количества блоков в workspace, выполняем действия
+    if blockCount < 10 then
+        -- Меньше 10 блоков — касаемся двух гиверов и берем 2 блока
+        touchGivers(speaker, blockType, 2)
+        equipBlocks(speaker, blockType, 2)
+    elseif blockCount >= 10 and blockCount <= 15 then
+        -- От 10 до 15 блоков — касаемся одного случайного гивера и берем 1 блок
+        touchGivers(speaker, blockType, 1)
+        equipBlocks(speaker, blockType, 1)
+    else
+        -- Больше 15 блоков — ничего не делаем
+        print("Количество блоков больше 15, не касаемся гиверов и не берем блоки.")
+    end
+end)
+
+
+
+
+
+
+
+
+
+
+
 
 
 addcmd('thaw',{'unfreeze','unfr'},function(args, speaker)
