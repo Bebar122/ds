@@ -9613,6 +9613,18 @@ local function countBlocksInWorkspace(blockType)
     return count
 end
 
+-- Функция для поиска спавна игрока по значению StringValue Owner
+local function findPlayerSpawn(playerName)
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj:IsA("Model") and obj:FindFirstChild("Owner") and obj.Owner:IsA("StringValue") then
+            if obj.Owner.Value == playerName then
+                return obj -- Возвращаем спавн, если нашли
+            end
+        end
+    end
+    return nil -- Если спавн не найден
+end
+
 local function touchGivers(speaker, blockType, numTouches)
     local spawn = findPlayerSpawn(speaker.Name)
     if not spawn then
@@ -13591,17 +13603,7 @@ end)
 -- Глобальная переменная для отслеживания состояния
 local isTouching = false
 
--- Функция для поиска спавна игрока по значению StringValue Owner
-local function findPlayerSpawn(playerName)
-    for _, obj in pairs(workspace:GetChildren()) do
-        if obj:IsA("Model") and obj:FindFirstChild("Owner") and obj.Owner:IsA("StringValue") then
-            if obj.Owner.Value == playerName then
-                return obj -- Возвращаем спавн, если нашли
-            end
-        end
-    end
-    return nil -- Если спавн не найден
-end
+
 
 local function startTouchingBlocks(spawn, blockType)
     -- Получаем нужные блоки для касания в зависимости от аргумента
