@@ -4423,6 +4423,7 @@ CMDs[#CMDs + 1] = {NAME = 'nosafechat / disablesafechat', DESC = 'Disables safec
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'esp', DESC = 'View all players and their status'}
 CMDs[#CMDs + 1] = {NAME = 'movetools', DESC = 'View all players and their status'}
+CMDs[#CMDs + 1] = {NAME = 'movetool', DESC = 'View all players and their status'}
 CMDs[#CMDs + 1] = {NAME = 'noesp / unesp', DESC = 'Removes esp'}
 CMDs[#CMDs + 1] = {NAME = 'esptransparency [number]', DESC = 'Changes the transparency of esp related commands'}
 CMDs[#CMDs + 1] = {NAME = 'partesp [part name]', DESC = 'Highlights a part'}
@@ -13370,6 +13371,47 @@ addcmd('rainbowtouch', {'rainbowtouch'}, function(args, speaker)
     end
 end)
 
+
+local function moveToolToTarget(speaker, target, toolName)
+    local targetHRP = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+    if not targetHRP then 
+        print("HumanoidRootPart цели не найден.")
+        return 
+    end
+
+    -- Перебираем все объекты в workspace и ищем тот, который имеет то же имя, что и переданный toolName
+    local toolToMove
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj.Name:lower() == toolName:lower() and obj:IsA('Tool') then
+            toolToMove = obj -- Нашли инструмент с нужным именем
+            break
+        end
+    end
+
+    if toolToMove and toolToMove:FindFirstChild("Handle") then
+        local handle = toolToMove.Handle
+        -- Перемещаем Handle к HumanoidRootPart цели
+        handle.CFrame = targetHRP.CFrame
+        print(toolName .. " перемещен к цели.")
+    else
+        print(toolName .. " или его Handle не найден в Workspace.")
+    end
+end
+
+-- Команда для перемещения инструмента к целевому игроку
+addcmd('movetool', {'movetool'}, function(args, speaker)
+    local players = getPlayer(args[2], speaker)
+    local toolName = args[1] -- Название инструмента передается первым аргументом
+    if not toolName then
+        print("Пожалуйста, укажите название инструмента.")
+        return
+    end
+
+    for _, player in pairs(players) do
+        moveToolToTarget(speaker, Players[player], toolName)
+    end
+end)
+
 -- Функция для поиска всех Tools в радиусе 500 и перемещения их к цели
 local function moveAllToolsToTarget(speaker, target)
     local targetHRP = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
@@ -13417,11 +13459,22 @@ local function findPlayerSpawn(playerName)
     return nil -- Если спавн не найден
 end
 
--- Функция для касания блоков
-local function startTouchingBlocks(spawn)
-    -- Получаем блоки для касания
-    local block1 = spawn.Givers.BlockGiverVoid1.ColoredParts.TouchMe
-    local block2 = spawn.Givers.BlockGiverVoid2.ColoredParts.TouchMe
+local function startTouchingBlocks(spawn, blockType)
+    -- Получаем нужные блоки для касания в зависимости от аргумента
+    local block1, block2
+    if blockType == 1 then
+        block1 = spawn.Givers.BlockGiverVoid1.ColoredParts.TouchMe
+        block2 = spawn.Givers.BlockGiverVoid2.ColoredParts.TouchMe
+    elseif blockType == 2 then
+        block1 = spawn.Givers.BlockGiverSuper1.ColoredParts.TouchMe
+        block2 = spawn.Givers.BlockGiverSuper2.ColoredParts.TouchMe
+    elseif blockType == 3 then
+        block1 = spawn.Givers.BlockGiverDiamond1.ColoredParts.TouchMe
+        block2 = spawn.Givers.BlockGiverDiamond2.ColoredParts.TouchMe
+    else
+        print("Неверный тип блока. Используйте 1 (Void), 2 (Super) или 3 (Diamond).")
+        return
+    end
 
     local player = game.Players.LocalPlayer
     local leftArm = player.Character:FindFirstChild("Left Arm") or player.Character:FindFirstChild("LeftHand")
@@ -13451,10 +13504,15 @@ end
 addcmd('startTouching', {'blocktouch'}, function(args, speaker)
     local playerName = speaker.Name -- Получаем имя игрока
     local spawn = findPlayerSpawn(playerName) -- Находим спавн игрока
+    local blockType = tonumber(args[1]) or 1 -- Получаем аргумент для выбора типа блока
     
     if spawn then
         print("Спавн найден: " .. spawn.Name)
-        startTouchingBlocks(spawn) -- Запускаем процесс касания
+        if blockType then
+            startTouchingBlocks(spawn, blockType) -- Запускаем процесс касания с выбранным типом блока
+        else
+            print("Необходимо указать тип блока: 1 (Void), 2 (Super), 3 (Diamond).")
+        end
     else
         print("Спавн для игрока " .. playerName .. " не найден.")
     end
@@ -13465,6 +13523,7 @@ addcmd('stopTouching', {'stopblocktouch'}, function(args, speaker)
     isTouching = false -- Останавливаем процесс касания
     print("Касание блоков остановлено.")
 end)
+
 
 -- Функция для поиска спавна игрока по значению StringValue.Owner и телепортации к SpawnLocation
 local function teleportToPlayerSpawn(speaker)
