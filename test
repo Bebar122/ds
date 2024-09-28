@@ -4531,7 +4531,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a p
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
 CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '15uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
-CMDs[#CMDs + 1] = {NAME = 'setrotation', DESC = 'uwu'}
+CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'restoreJoints', DESC = '2'}
 CMDs[#CMDs + 1] = {NAME = 'carpet [player]', DESC = 'Be someones carpet'}
@@ -7627,7 +7627,7 @@ addcmd('deletewaypoint',{'dwp','dpos','deleteposition','deletepos'},function(arg
 	updatesaves()
 end)
 
-addcmd('setRotation', {'setrotation'}, function(args, speaker)
+addcmd('setRotationLoop', {'setrot'}, function(args, speaker)
     local player = game.Players.LocalPlayer
     local character = player.Character
     local hrp = character and character:FindFirstChild("HumanoidRootPart")
@@ -7641,17 +7641,24 @@ addcmd('setRotation', {'setrotation'}, function(args, speaker)
     local x = tonumber(args[1])
     local y = tonumber(args[2])
     local z = tonumber(args[3])
+    local iterations = 5
+    local delayTime = 0.05 -- Задержка между изменениями ротации
 
     if not x or not y or not z then
         print("Пожалуйста, введите корректные значения для X, Y и Z.")
         return
     end
 
-    -- Устанавливаем новую ротацию персонажа по осям X, Y и Z
-    hrp.CFrame = CFrame.new(hrp.Position) * CFrame.Angles(math.rad(x), math.rad(y), math.rad(z))
+    -- Цикл установки ротации с задержкой
+    for i = 1, iterations do
+        hrp.CFrame = CFrame.new(hrp.Position) * CFrame.Angles(math.rad(x), math.rad(y), math.rad(z))
+        print(string.format("Ротация персонажа установлена: X = %d, Y = %d, Z = %d (итерация %d)", x, y, z, i))
+        task.wait(delayTime)
+    end
 
-    print(string.format("Ротация персонажа изменена на: X = %d, Y = %d, Z = %d", x, y, z))
+    print("Цикл установки ротации завершен.")
 end)
+
 
 
 addcmd('clearwaypoints',{'cwp','clearpositions','cpos','clearpos'},function(args, speaker)
