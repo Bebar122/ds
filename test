@@ -4663,7 +4663,7 @@ CMDs[#CMDs + 1] = {NAME = 'attach [player] (TOOL)', DESC = 'Attaches you to a pl
 CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = '1kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'killstop', DESC = 'Disables orbit'}
-CMDs[#CMDs + 1] = {NAME = 'rotoff', DESC = 'Disables orbit'}
+CMDs[#CMDs + 1] = {NAME = 'rotoff', DESC = '11Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'rocketBarrier / ', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'stop / stop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'giveblocks', DESC = 'Disables orbit'}
@@ -10654,15 +10654,30 @@ addcmd('tpclone', {'executeTP'}, function()
 end)
 
 
--- Команда для задания смещения ротации
-addcmd('setrotationoffset', {'rotoff'}, function(x, y, z)
-    -- Преобразуем входные параметры в углы и создаём смещение
-    local radX = math.rad(x or 0)
-    local radY = math.rad(y or 0)
-    local radZ = math.rad(z or 0)
-    
-    rotationOffset = CFrame.Angles(radX, radY, radZ)
-    print("Смещение ротации установлено:", rotationOffset)
+addcmd('setRotation', {'rotoff'}, function(args, speaker)
+    local player = game.Players.LocalPlayer
+    local character = player.Character
+    local hrp = character and character:FindFirstChild("HumanoidRootPart")
+
+    if not hrp then
+        print("HumanoidRootPart не найден.")
+        return
+    end
+
+    -- Проверяем наличие аргументов
+    local x = tonumber(args[1])
+    local y = tonumber(args[2])
+    local z = tonumber(args[3])
+
+    if not x or not y or not z then
+        print("Пожалуйста, введите корректные значения для X, Y и Z.")
+        return
+    end
+
+    -- Устанавливаем новую ротацию персонажа по осям X, Y и Z
+    rotationOffset = CFrame.Angles(math.rad(x), math.rad(y), math.rad(z))
+
+    print(string.format("Смещение ротации установлено: X = %d, Y = %d, Z = %d", x, y, z))
 end)
 
 
