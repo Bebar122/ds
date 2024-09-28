@@ -4528,7 +4528,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '9uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '10uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'restoreJoints', DESC = '2'}
@@ -10387,19 +10387,19 @@ addcmd('tpclone', {'executeTP'}, function()
     local player = game.Players.LocalPlayer
     local character = player.Character
     local humanoid = character:FindFirstChild("Humanoid")
-    local head = character:FindFirstChild("Head")  -- Используем голову вместо HRP
+    local hrp = character:FindFirstChild("HumanoidRootPart")
 
-    if not head or not humanoid then
-        print("Humanoid или Head не найдены.")
+    if not hrp or not humanoid then
+        print("Humanoid или HumanoidRootPart не найдены.")
         return
     end
 
     -- Сохраняем текущую ротацию
-    savedRotation = head.Orientation
+    savedRotation = hrp.Orientation
     print("Ротация сохранена:", savedRotation)
 
-    -- Устанавливаем Anchored в true, чтобы зафиксировать голову
-    head.Anchored = true
+    -- Устанавливаем Anchored в true, чтобы зафиксировать HRP
+    hrp.Anchored = true
 
     -- Убираем все вещи из рук
     humanoid:UnequipTools()
@@ -10429,14 +10429,16 @@ addcmd('tpclone', {'executeTP'}, function()
     print("Второй IvoryPeriastron экипирован.")
 
     -- Телепортируем игрока на сохраненную позицию (без сохранения позиции в примере, можно добавить)
-    head.CFrame = CFrame.new(savedPosition)
+    hrp.CFrame = CFrame.new(savedPosition)
 
     -- Устанавливаем сохранённую ротацию
-    head.CFrame = CFrame.new(head.Position) * CFrame.Angles(math.rad(savedRotation.X), math.rad(savedRotation.Y), math.rad(savedRotation.Z))
+    hrp.CFrame = CFrame.new(hrp.Position) * CFrame.Angles(math.rad(savedRotation.X), math.rad(savedRotation.Y), math.rad(savedRotation.Z))
 	wait()
-    head.Anchored = true
+    hrp.Anchored = false
+	wait()
+    hrp.Anchored = true
     -- Задержка перед выполнением события и снятием Anchored
-    wait(0.5)
+    wait(0.3)
 
     -- Выполняем событие Remote с клавишей E
     local args = {
@@ -10451,9 +10453,9 @@ addcmd('tpclone', {'executeTP'}, function()
         print("Remote не найден у IvoryPeriastron.")
     end
 
-    -- Снимаем фиксацию головы (Anchored = false)
+    -- Снимаем фиксацию HRP (Anchored = false)
     wait(0.3) -- Задержка перед отключением фиксации
-    head.Anchored = false
+    hrp.Anchored = false
 end)
 
 
