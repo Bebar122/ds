@@ -3977,13 +3977,27 @@ selected.Parent = PARENT
 local ActivateHighlight = nil
 local ClickSelect = nil
 
-local function createCentralLines(part)
-    -- Удаляем предыдущие линии, если они есть
-    for _, child in ipairs(part:GetChildren()) do
-        if child:IsA("Beam") or child:IsA("Attachment") then
-            child:Destroy()
+local activePart = nil -- Переменная для отслеживания активного блока с линиями
+
+local function removeCentralLines(part)
+    -- Удаляем все линии и аттачи, связанные с центральными линиями
+    if part then
+        for _, child in ipairs(part:GetChildren()) do
+            if child:IsA("Beam") or child:IsA("Attachment") then
+                child:Destroy()
+            end
         end
     end
+end
+
+local function createCentralLines(part)
+    -- Сначала удаляем центральные линии, если они были ранее на другом блоке
+    if activePart and activePart ~= part then
+        removeCentralLines(activePart)
+    end
+
+    -- Теперь обновляем активный блок
+    activePart = part
 
     -- Функция для создания линии (Beam) между двумя точками
     local function createBeam(attachment0, attachment1)
@@ -3991,8 +4005,8 @@ local function createCentralLines(part)
         beam.Attachment0 = attachment0
         beam.Attachment1 = attachment1
         beam.Color = ColorSequence.new(Color3.new(1, 0, 0)) -- Ярко-красный цвет
-        beam.Width0 = 0.1 -- Увеличиваем толщину линии
-        beam.Width1 = 0.1
+        beam.Width0 = 0.3 -- Увеличиваем толщину линии
+        beam.Width1 = 0.3
         beam.FaceCamera = true -- Чтобы линии всегда были видимы
         beam.Parent = part
     end
@@ -4058,7 +4072,7 @@ local function createCentralLines(part)
     )
 end
 
--- Модифицируем функцию HighlightPart для добавления центральных линий
+-- Модифицируем функцию HighlightPart для добавления центральных линий и их удаления с предыдущего блока
 local function HighlightPart()
     if IYMouse.Target and IYMouse.Target:IsA("BasePart") then
         if selected.Adornee ~= IYMouse.Target then
@@ -4087,6 +4101,7 @@ end
 Part.MouseButton1Click:Connect(function()
     selectPart()
 end)
+
 
 
 
@@ -4620,7 +4635,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '16uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '17uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
