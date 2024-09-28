@@ -3976,28 +3976,77 @@ selected.Parent = PARENT
 
 local ActivateHighlight = nil
 local ClickSelect = nil
+
+local function createCentralLines(part)
+    -- Удаляем предыдущие линии, если они есть
+    for _, child in ipairs(part:GetChildren()) do
+        if child:IsA("Beam") or child:IsA("Attachment") then
+            child:Destroy()
+        end
+    end
+
+    -- Создаем аттачи для каждой поверхности
+    local attachment1 = Instance.new("Attachment", part)
+    local attachment2 = Instance.new("Attachment", part)
+    local attachment3 = Instance.new("Attachment", part)
+    local attachment4 = Instance.new("Attachment", part)
+    local attachment5 = Instance.new("Attachment", part)
+    local attachment6 = Instance.new("Attachment", part)
+
+    -- Устанавливаем позицию аттачей в центре каждой стороны
+    attachment1.Position = Vector3.new(0, part.Size.Y / 2, 0) -- Верхняя сторона
+    attachment2.Position = Vector3.new(0, -part.Size.Y / 2, 0) -- Нижняя сторона
+    attachment3.Position = Vector3.new(0, 0, part.Size.Z / 2) -- Передняя сторона
+    attachment4.Position = Vector3.new(0, 0, -part.Size.Z / 2) -- Задняя сторона
+    attachment5.Position = Vector3.new(part.Size.X / 2, 0, 0) -- Правая сторона
+    attachment6.Position = Vector3.new(-part.Size.X / 2, 0, 0) -- Левая сторона
+
+    -- Создаем лучи (Beams) для каждой пары противоположных сторон
+    local function createBeam(attachment0, attachment1)
+        local beam = Instance.new("Beam")
+        beam.Attachment0 = attachment0
+        beam.Attachment1 = attachment1
+        beam.Color = ColorSequence.new(Color3.new(1, 0, 0)) -- Цвет линий (красный)
+        beam.Width0 = 0.05
+        beam.Width1 = 0.05
+        beam.Parent = part
+    end
+
+    createBeam(attachment1, attachment2) -- Верх-Низ
+    createBeam(attachment3, attachment4) -- Перед-Зад
+    createBeam(attachment5, attachment6) -- Лево-Право
+end
+
+-- Модифицируем функцию HighlightPart для добавления центральных линий
+local function HighlightPart()
+    if IYMouse.Target and IYMouse.Target:IsA("BasePart") then
+        if selected.Adornee ~= IYMouse.Target then
+            selectionBox.Adornee = IYMouse.Target
+            createCentralLines(IYMouse.Target) -- Добавляем центральные линии к части
+        else
+            selectionBox.Adornee = nil
+        end
+    end
+end
+
+-- Остальная часть кода не изменяется
 function selectPart()
-	ToPartFrame:TweenPosition(UDim2.new(0.5, -180, 0, 335), "InOut", "Quart", 0.5, true, nil)
-	local function HighlightPart()
-		if selected.Adornee ~= IYMouse.Target then
-			selectionBox.Adornee = IYMouse.Target
-		else
-			selectionBox.Adornee = nil
-		end
-	end
-	ActivateHighlight = IYMouse.Move:Connect(HighlightPart)
-	local function SelectPart()
-		if IYMouse.Target ~= nil then
-			selected.Adornee = IYMouse.Target
-			Path.Text = getHierarchy(IYMouse.Target)
-		end
-	end
-	ClickSelect = IYMouse.Button1Down:Connect(SelectPart)
+    ToPartFrame:TweenPosition(UDim2.new(0.5, -180, 0, 335), "InOut", "Quart", 0.5, true, nil)
+    ActivateHighlight = IYMouse.Move:Connect(HighlightPart)
+    
+    local function SelectPart()
+        if IYMouse.Target ~= nil then
+            selected.Adornee = IYMouse.Target
+            Path.Text = getHierarchy(IYMouse.Target)
+        end
+    end
+    ClickSelect = IYMouse.Button1Down:Connect(SelectPart)
 end
 
 Part.MouseButton1Click:Connect(function()
-	selectPart()
+    selectPart()
 end)
+
 
 Exit_4.MouseButton1Click:Connect(function()
 	ToPartFrame:TweenPosition(UDim2.new(0.5, -180, 0, -500), "InOut", "Quart", 0.5, true, nil)
@@ -4529,7 +4578,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '15uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '16uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10489,9 +10538,6 @@ addcmd('tpclone', {'executeTP'}, function()
     savedRotation = hrp.CFrame.Rotation
     print("Ротация сохранена:", savedRotation)
 
-    -- Устанавливаем Anchored в true, чтобы зафиксировать HRP
-    --hrp.Anchored = true
-
     -- Убираем все вещи из рук
     humanoid:UnequipTools()
 
@@ -10519,19 +10565,18 @@ addcmd('tpclone', {'executeTP'}, function()
     secondIvoryPeriastron.Parent = character
     print("Второй IvoryPeriastron экипирован.")
 
-    -- Телепортируем игрока на сохраненную позицию (без сохранения позиции в примере, можно добавить)
+    -- Телепортируем игрока на сохранённую позицию (без сохранения позиции в примере, можно добавить)
     hrp.CFrame = CFrame.new(savedPosition)
-	wait(0.3)
-    -- Устанавливаем сохранённую ротацию
-    --hrp.CFrame = CFrame.new(hrp.Position) * CFrame.Angles(math.rad(savedRotation.X), math.rad(savedRotation.Y), math.rad(savedRotation.Z))
-	--local position = hrp.Position
-	hrp.CFrame = CFrame.new(savedPosition) * savedRotation
-	--humanoid.PlatformStand=true
-	--wait()
-    --hrp.Anchored = true
-    -- Задержка перед выполнением события и снятием Anchored
-    wait(0.3)
 
+    -- Цикл для установки ротации с задержкой
+    local iterations = 7
+    local delayTime = 0.1 -- Задержка между изменениями ротации
+    for i = 1, iterations do
+        hrp.CFrame = CFrame.new(hrp.Position) * savedRotation
+        print(string.format("Ротация установлена: итерация %d", i))
+        task.wait(delayTime)
+    end
+	wait(0.3)
     -- Выполняем событие Remote с клавишей E
     local args = {
         [1] = Enum.KeyCode.E
@@ -10545,11 +10590,8 @@ addcmd('tpclone', {'executeTP'}, function()
         print("Remote не найден у IvoryPeriastron.")
     end
 
-    -- Снимаем фиксацию HRP (Anchored = false)
-    --wait(0.3) -- Задержка перед отключением фиксации
-    --hrp.Anchored = false
-	--humanoid.PlatformStand=false
 end)
+
 
 
 
