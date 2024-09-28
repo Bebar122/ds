@@ -4347,7 +4347,7 @@ CMDs[#CMDs + 1] = {NAME = '3kill / 3laserkill', DESC = '88Kills roblox process'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'noclip', DESC = 'Go through objects'}
 CMDs[#CMDs + 1] = {NAME = 'unnoclip / clip', DESC = 'Disables noclip'}
-CMDs[#CMDs + 1] = {NAME = 'fly [speed]', DESC = '1Makes you fly'}
+CMDs[#CMDs + 1] = {NAME = 'fly [speed]', DESC = 'Makes you fly'}
 CMDs[#CMDs + 1] = {NAME = 'unfly', DESC = 'Disables fly'}
 CMDs[#CMDs + 1] = {NAME = 'flyspeed [num]', DESC = 'Set fly speed (default is 20)'}
 CMDs[#CMDs + 1] = {NAME = 'vehiclefly / vfly [speed]', DESC = 'Makes you fly in a vehicle'}
@@ -4568,7 +4568,6 @@ CMDs[#CMDs + 1] = {NAME = 'fastteleport / fasttp [player] [player] (TOOL)', DESC
 CMDs[#CMDs + 1] = {NAME = 'fling', DESC = 'Flings anyone you touch'}
 CMDs[#CMDs + 1] = {NAME = 'findportal', DESC = 'Flings anyone you touch'}
 CMDs[#CMDs + 1] = {NAME = 'unfling', DESC = 'Disables the fling command'}
-CMDs[#CMDs + 1] = {NAME = 'fly2', DESC = 'Basically the invisfling command but not invisible'}
 CMDs[#CMDs + 1] = {NAME = 'flyfling', DESC = 'Basically the invisfling command but not invisible'}
 CMDs[#CMDs + 1] = {NAME = 'unflyfling', DESC = 'Disables the flyfling command'}
 CMDs[#CMDs + 1] = {NAME = 'walkfling', DESC = 'Basically fling but no spinning'}
@@ -7004,7 +7003,6 @@ FLYING = false
 QEfly = true
 iyflyspeed = 1
 vehicleflyspeed = 1
-
 function sFLY(vfly)
 	repeat wait() until Players.LocalPlayer and Players.LocalPlayer.Character and getRoot(Players.LocalPlayer.Character) and Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 	repeat wait() until IYMouse
@@ -7023,7 +7021,7 @@ function sFLY(vfly)
 		BG.Parent = T
 		BV.Parent = T
 		BG.maxTorque = Vector3.new(9e9, 9e9, 9e9)
-		BG.cframe = T.CFrame -- Здесь сохраняем Rotation игрока
+		BG.cframe = T.CFrame
 		BV.velocity = Vector3.new(0, 0, 0)
 		BV.maxForce = Vector3.new(9e9, 9e9, 9e9)
 		task.spawn(function()
@@ -7036,16 +7034,15 @@ function sFLY(vfly)
 				elseif not (CONTROL.L + CONTROL.R ~= 0 or CONTROL.F + CONTROL.B ~= 0 or CONTROL.Q + CONTROL.E ~= 0) and SPEED ~= 0 then
 					SPEED = 0
 				end
-				if (CONTROL.L + CONTROL.R) ~= 0 or (CONTROL.F + CONTROL.B) ~= 0 or (CONTROL.Q + CONTROL.E ~= 0) then
+				if (CONTROL.L + CONTROL.R) ~= 0 or (CONTROL.F + CONTROL.B) ~= 0 or (CONTROL.Q + CONTROL.E) ~= 0 then
 					BV.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * (CONTROL.F + CONTROL.B)) + ((workspace.CurrentCamera.CoordinateFrame * CFrame.new(CONTROL.L + CONTROL.R, (CONTROL.F + CONTROL.B + CONTROL.Q + CONTROL.E) * 0.2, 0).p) - workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
 					lCONTROL = {F = CONTROL.F, B = CONTROL.B, L = CONTROL.L, R = CONTROL.R}
-				elseif (CONTROL.L + CONTROL.R) == 0 and (CONTROL.F + CONTROL.B) == 0 and (CONTROL.Q + CONTROL.E == 0) and SPEED ~= 0 then
+				elseif (CONTROL.L + CONTROL.R) == 0 and (CONTROL.F + CONTROL.B) == 0 and (CONTROL.Q + CONTROL.E) == 0 and SPEED ~= 0 then
 					BV.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * (lCONTROL.F + lCONTROL.B)) + ((workspace.CurrentCamera.CoordinateFrame * CFrame.new(lCONTROL.L + lCONTROL.R, (lCONTROL.F + lCONTROL.B + CONTROL.Q + CONTROL.E) * 0.2, 0).p) - workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
 				else
 					BV.velocity = Vector3.new(0, 0, 0)
 				end
-				-- Удаляем изменение Rotation
-				-- BG.cframe = workspace.CurrentCamera.CoordinateFrame
+				BG.cframe = workspace.CurrentCamera.CoordinateFrame
 			until not FLYING
 			CONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
 			lCONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
@@ -7090,7 +7087,6 @@ function sFLY(vfly)
 	end)
 	FLY()
 end
-
 
 function NOFLY()
 	FLYING = false
@@ -8497,112 +8493,6 @@ addcmd('viewpart',{'viewp'},function(args, speaker)
 		end
 	end
 end)
-
-
-
-
-
-local flying = false
-local flySpeed = 50
-local flyUpSpeed = 50
-local flyDirection = Vector3.new(0, 0, 0)
-
-function startFlying()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    local humanoid = character:WaitForChild("Humanoid")
-
-    humanoid.PlatformStand = true  -- Отключаем физику персонажа для полета
-
-    -- Создаем BodyPosition для контроля перемещения
-    local bodyPosition = Instance.new("BodyPosition", humanoidRootPart)
-    bodyPosition.MaxForce = Vector3.new(1e9, 1e9, 1e9)
-    bodyPosition.D = 10
-    bodyPosition.P = 10000
-
-    -- Включаем полет
-    flying = true
-    local flyConnection
-    flyConnection = game:GetService("RunService").RenderStepped:Connect(function()
-        if flying then
-            -- Управление направлением полета по осям XZ (WASD)
-            local camera = workspace.CurrentCamera
-            local moveDirection = flyDirection
-            local lookVector = camera.CFrame.LookVector
-            local rightVector = camera.CFrame.RightVector
-
-            local moveX = rightVector * moveDirection.X
-            local moveZ = lookVector * moveDirection.Z
-
-            local totalMove = (moveX + moveZ).unit * flySpeed
-
-            -- Обновляем BodyPosition для перемещения
-            bodyPosition.Position = humanoidRootPart.Position + Vector3.new(totalMove.X, flyDirection.Y * flyUpSpeed, totalMove.Z)
-        else
-            flyConnection:Disconnect()
-            bodyPosition:Destroy()
-            humanoid.PlatformStand = false  -- Включаем стандартную физику при отключении полета
-        end
-    end)
-end
-
-function stopFlying()
-    flying = false
-end
-
--- Управление полетом через клавиши
-local function onKeyPress(input)
-    if input.UserInputType == Enum.UserInputType.Keyboard then
-        local key = input.KeyCode
-
-        if key == Enum.KeyCode.W then
-            flyDirection = Vector3.new(0, 0, -1)
-        elseif key == Enum.KeyCode.S then
-            flyDirection = Vector3.new(0, 0, 1)
-        elseif key == Enum.KeyCode.A then
-            flyDirection = Vector3.new(-1, 0, 0)
-        elseif key == Enum.KeyCode.D then
-            flyDirection = Vector3.new(1, 0, 0)
-        elseif key == Enum.KeyCode.LeftShift then
-            flyDirection = Vector3.new(0, 1, 0) -- Вверх
-        elseif key == Enum.KeyCode.LeftControl then
-            flyDirection = Vector3.new(0, -1, 0) -- Вниз
-        end
-    end
-end
-
-local function onKeyRelease(input)
-    if input.UserInputType == Enum.UserInputType.Keyboard then
-        local key = input.KeyCode
-
-        -- Останавливаем движение при отпускании клавиши
-        if key == Enum.KeyCode.W or key == Enum.KeyCode.S then
-            flyDirection = Vector3.new(0, 0, 0)
-        elseif key == Enum.KeyCode.A or key == Enum.KeyCode.D then
-            flyDirection = Vector3.new(0, 0, 0)
-        elseif key == Enum.KeyCode.LeftShift or key == Enum.KeyCode.LeftControl then
-            flyDirection = Vector3.new(0, 0, 0)
-        end
-    end
-end
-
--- Подключение событий клавиатуры
-game:GetService("UserInputService").InputBegan:Connect(onKeyPress)
-game:GetService("UserInputService").InputEnded:Connect(onKeyRelease)
-
--- Команды для включения и выключения полета
-addcmd('fly2', {'flystart'}, function()
-    startFlying()
-end)
-
-addcmd('stopfly2', {'flystop'}, function()
-    stopFlying()
-end)
-
-
-
-
 
 addcmd('unview',{'unspectate'},function(args, speaker)
 	StopFreecam()
