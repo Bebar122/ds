@@ -10937,6 +10937,50 @@ addcmd('loopjumppower',{'loopjp','loopjpower'},function(args, speaker)
 	end
 end)
 
+local function useSecondIvoryPeriastron()
+    local player = game:GetService("Players").LocalPlayer
+    local backpack = player.Backpack
+    local character = player.Character
+
+    -- Находим все инструменты с именем IvoryPeriastron в инвентаре
+    local periastrons = {}
+    for _, item in pairs(backpack:GetChildren()) do
+        if item.Name == "IvoryPeriastron" and item:IsA('Tool') then
+            table.insert(periastrons, item)
+        end
+    end
+
+    -- Проверяем, что у игрока есть хотя бы два IvoryPeriastron
+    if #periastrons < 2 then
+        print("Не хватает второго IvoryPeriastron в инвентаре.")
+        return
+    end
+
+    -- Берем второй IvoryPeriastron в руки
+    local secondIvoryPeriastron = periastrons[2]
+    secondIvoryPeriastron.Parent = character
+
+    -- Выполняем событие
+    local args = {
+        [1] = Enum.KeyCode.E
+    }
+
+    -- Убедимся, что инструмент правильно экипирован в character и имеет Remote
+    local remote = secondIvoryPeriastron:FindFirstChild("Remote")
+    if remote then
+        remote:FireServer(unpack(args))
+        print("Второй IvoryPeriastron использован.")
+    else
+        print("Remote для второго IvoryPeriastron не найден.")
+    end
+end
+
+-- Команда для использования второго IvoryPeriastron
+addcmd('useSecondIvoryPeriastron', {'ivoryuse'}, function(args, speaker)
+    useSecondIvoryPeriastron()
+end)
+
+
 addcmd('unloopjumppower',{'unloopjp','unloopjpower'},function(args, speaker)
 	local Char = speaker.Character or workspace:FindFirstChild(speaker.Name)
 	local Human = Char and Char:FindFirstChildWhichIsA("Humanoid")
