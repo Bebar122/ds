@@ -10366,6 +10366,40 @@ addcmd("sit", {}, function(args, speaker)
 	speaker.Character:FindFirstChildWhichIsA("Humanoid").Sit = true
 end)
 
+local savedRotation = nil  -- Переменная для хранения Rotation
+
+-- Команда для копирования Rotation
+addcmd('saveRotation', {'saverot'}, function(args, speaker)
+    local hrp = speaker.Character and speaker.Character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        savedRotation = hrp.CFrame.Rotation -- Сохраняем только Rotation
+        print("Rotation сохранен.")
+    else
+        print("HumanoidRootPart не найден.")
+    end
+end)
+
+-- Команда для восстановления Rotation
+addcmd('loadRotation', {'loadrot'}, function(args, speaker)
+    local hrp = speaker.Character and speaker.Character:FindFirstChild("HumanoidRootPart")
+    if hrp and savedRotation then
+        -- Устанавливаем сохраненный Rotation, оставляя позицию прежней
+        local position = hrp.Position
+        hrp.CFrame = CFrame.new(position) * savedRotation
+        print("Rotation установлен.")
+    else
+        if not hrp then
+            print("HumanoidRootPart не найден.")
+        end
+        if not savedRotation then
+            print("Rotation не был сохранен.")
+        end
+    end
+end)
+
+
+
+
 addcmd("lay", {"laydown"}, function(args, speaker)
 	local humanoid = speaker.Character:FindFirstChildWhichIsA("Humanoid")
 	humanoid.Sit = true
