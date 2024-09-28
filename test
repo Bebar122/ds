@@ -4347,7 +4347,7 @@ CMDs[#CMDs + 1] = {NAME = '3kill / 3laserkill', DESC = '88Kills roblox process'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'noclip', DESC = 'Go through objects'}
 CMDs[#CMDs + 1] = {NAME = 'unnoclip / clip', DESC = 'Disables noclip'}
-CMDs[#CMDs + 1] = {NAME = 'fly [speed]', DESC = 'Makes you fly'}
+CMDs[#CMDs + 1] = {NAME = 'fly [speed]', DESC = '22Makes you fly'}
 CMDs[#CMDs + 1] = {NAME = 'unfly', DESC = 'Disables fly'}
 CMDs[#CMDs + 1] = {NAME = 'flyspeed [num]', DESC = 'Set fly speed (default is 20)'}
 CMDs[#CMDs + 1] = {NAME = 'vehiclefly / vfly [speed]', DESC = 'Makes you fly in a vehicle'}
@@ -4528,7 +4528,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '13uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '14uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'restoreJoints', DESC = '2'}
@@ -7165,7 +7165,10 @@ local mobilefly = function(speaker, vfly)
 			VelocityHandler.MaxForce = v3inf
 			GyroHandler.MaxTorque = v3inf
 			if not vfly then humanoid.PlatformStand = true end
-			GyroHandler.CFrame = camera.CoordinateFrame
+			
+			-- Keep the character's current orientation
+			GyroHandler.CFrame = root.CFrame -- Maintain character's orientation, not camera's
+
 			VelocityHandler.Velocity = v3none
 
 			local direction = controlModule:GetMoveVector()
@@ -7184,6 +7187,7 @@ local mobilefly = function(speaker, vfly)
 		end
 	end)
 end
+
 
 addcmd('fly',{},function(args, speaker)
 	if not IsOnMobile then
@@ -10438,7 +10442,7 @@ addcmd('tpclone', {'executeTP'}, function()
     hrp.Anchored = true
 	wait()
     hrp.Anchored = false
-	--wait()
+	wait()
     hrp.Anchored = true
     -- Задержка перед выполнением события и снятием Anchored
     wait(1.3)
