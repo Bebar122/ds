@@ -4568,6 +4568,7 @@ CMDs[#CMDs + 1] = {NAME = 'fastteleport / fasttp [player] [player] (TOOL)', DESC
 CMDs[#CMDs + 1] = {NAME = 'fling', DESC = 'Flings anyone you touch'}
 CMDs[#CMDs + 1] = {NAME = 'findportal', DESC = 'Flings anyone you touch'}
 CMDs[#CMDs + 1] = {NAME = 'unfling', DESC = 'Disables the fling command'}
+CMDs[#CMDs + 1] = {NAME = 'fly2', DESC = 'Basically the invisfling command but not invisible'}
 CMDs[#CMDs + 1] = {NAME = 'flyfling', DESC = 'Basically the invisfling command but not invisible'}
 CMDs[#CMDs + 1] = {NAME = 'unflyfling', DESC = 'Disables the flyfling command'}
 CMDs[#CMDs + 1] = {NAME = 'walkfling', DESC = 'Basically fling but no spinning'}
@@ -8496,6 +8497,112 @@ addcmd('viewpart',{'viewp'},function(args, speaker)
 		end
 	end
 end)
+
+
+
+
+
+local flying = false
+local flySpeed = 50
+local flyUpSpeed = 50
+local flyDirection = Vector3.new(0, 0, 0)
+
+function startFlying()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    local humanoid = character:WaitForChild("Humanoid")
+
+    humanoid.PlatformStand = true  -- Отключаем физику персонажа для полета
+
+    -- Создаем BodyPosition для контроля перемещения
+    local bodyPosition = Instance.new("BodyPosition", humanoidRootPart)
+    bodyPosition.MaxForce = Vector3.new(1e9, 1e9, 1e9)
+    bodyPosition.D = 10
+    bodyPosition.P = 10000
+
+    -- Включаем полет
+    flying = true
+    local flyConnection
+    flyConnection = game:GetService("RunService").RenderStepped:Connect(function()
+        if flying then
+            -- Управление направлением полета по осям XZ (WASD)
+            local camera = workspace.CurrentCamera
+            local moveDirection = flyDirection
+            local lookVector = camera.CFrame.LookVector
+            local rightVector = camera.CFrame.RightVector
+
+            local moveX = rightVector * moveDirection.X
+            local moveZ = lookVector * moveDirection.Z
+
+            local totalMove = (moveX + moveZ).unit * flySpeed
+
+            -- Обновляем BodyPosition для перемещения
+            bodyPosition.Position = humanoidRootPart.Position + Vector3.new(totalMove.X, flyDirection.Y * flyUpSpeed, totalMove.Z)
+        else
+            flyConnection:Disconnect()
+            bodyPosition:Destroy()
+            humanoid.PlatformStand = false  -- Включаем стандартную физику при отключении полета
+        end
+    end)
+end
+
+function stopFlying()
+    flying = false
+end
+
+-- Управление полетом через клавиши
+local function onKeyPress(input)
+    if input.UserInputType == Enum.UserInputType.Keyboard then
+        local key = input.KeyCode
+
+        if key == Enum.KeyCode.W then
+            flyDirection = Vector3.new(0, 0, -1)
+        elseif key == Enum.KeyCode.S then
+            flyDirection = Vector3.new(0, 0, 1)
+        elseif key == Enum.KeyCode.A then
+            flyDirection = Vector3.new(-1, 0, 0)
+        elseif key == Enum.KeyCode.D then
+            flyDirection = Vector3.new(1, 0, 0)
+        elseif key == Enum.KeyCode.LeftShift then
+            flyDirection = Vector3.new(0, 1, 0) -- Вверх
+        elseif key == Enum.KeyCode.LeftControl then
+            flyDirection = Vector3.new(0, -1, 0) -- Вниз
+        end
+    end
+end
+
+local function onKeyRelease(input)
+    if input.UserInputType == Enum.UserInputType.Keyboard then
+        local key = input.KeyCode
+
+        -- Останавливаем движение при отпускании клавиши
+        if key == Enum.KeyCode.W or key == Enum.KeyCode.S then
+            flyDirection = Vector3.new(0, 0, 0)
+        elseif key == Enum.KeyCode.A or key == Enum.KeyCode.D then
+            flyDirection = Vector3.new(0, 0, 0)
+        elseif key == Enum.KeyCode.LeftShift or key == Enum.KeyCode.LeftControl then
+            flyDirection = Vector3.new(0, 0, 0)
+        end
+    end
+end
+
+-- Подключение событий клавиатуры
+game:GetService("UserInputService").InputBegan:Connect(onKeyPress)
+game:GetService("UserInputService").InputEnded:Connect(onKeyRelease)
+
+-- Команды для включения и выключения полета
+addcmd('fly2', {'flystart'}, function()
+    startFlying()
+end)
+
+addcmd('stopfly2', {'flystop'}, function()
+    stopFlying()
+end)
+
+
+
+
 
 addcmd('unview',{'unspectate'},function(args, speaker)
 	StopFreecam()
