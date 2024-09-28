@@ -3985,36 +3985,77 @@ local function createCentralLines(part)
         end
     end
 
-    -- Создаем аттачи для каждой поверхности
-    local attachment1 = Instance.new("Attachment", part)
-    local attachment2 = Instance.new("Attachment", part)
-    local attachment3 = Instance.new("Attachment", part)
-    local attachment4 = Instance.new("Attachment", part)
-    local attachment5 = Instance.new("Attachment", part)
-    local attachment6 = Instance.new("Attachment", part)
-
-    -- Устанавливаем позицию аттачей в центре каждой стороны
-    attachment1.Position = Vector3.new(0, part.Size.Y / 2, 0) -- Верхняя сторона
-    attachment2.Position = Vector3.new(0, -part.Size.Y / 2, 0) -- Нижняя сторона
-    attachment3.Position = Vector3.new(0, 0, part.Size.Z / 2) -- Передняя сторона
-    attachment4.Position = Vector3.new(0, 0, -part.Size.Z / 2) -- Задняя сторона
-    attachment5.Position = Vector3.new(part.Size.X / 2, 0, 0) -- Правая сторона
-    attachment6.Position = Vector3.new(-part.Size.X / 2, 0, 0) -- Левая сторона
-
-    -- Создаем лучи (Beams) для каждой пары противоположных сторон
+    -- Функция для создания линии (Beam) между двумя точками
     local function createBeam(attachment0, attachment1)
         local beam = Instance.new("Beam")
         beam.Attachment0 = attachment0
         beam.Attachment1 = attachment1
-        beam.Color = ColorSequence.new(Color3.new(1, 0, 0)) -- Цвет линий (красный)
-        beam.Width0 = 0.05
-        beam.Width1 = 0.05
+        beam.Color = ColorSequence.new(Color3.new(1, 0, 0)) -- Ярко-красный цвет
+        beam.Width0 = 0.1 -- Увеличиваем толщину линии
+        beam.Width1 = 0.1
+        beam.FaceCamera = true -- Чтобы линии всегда были видимы
         beam.Parent = part
     end
 
-    createBeam(attachment1, attachment2) -- Верх-Низ
-    createBeam(attachment3, attachment4) -- Перед-Зад
-    createBeam(attachment5, attachment6) -- Лево-Право
+    -- Функция для создания осей симметрии на одной грани
+    local function createFaceLines(position1, position2, position3, position4)
+        -- Создаем аттачи на каждой грани
+        local attachment1 = Instance.new("Attachment", part)
+        local attachment2 = Instance.new("Attachment", part)
+        local attachment3 = Instance.new("Attachment", part)
+        local attachment4 = Instance.new("Attachment", part)
+
+        attachment1.Position = position1
+        attachment2.Position = position2
+        attachment3.Position = position3
+        attachment4.Position = position4
+
+        -- Линии для осей на каждой грани
+        createBeam(attachment1, attachment2) -- Одна ось
+        createBeam(attachment3, attachment4) -- Перпендикулярная ось
+    end
+
+    -- Верхняя и нижняя грань
+    createFaceLines(
+        Vector3.new(-part.Size.X / 2, part.Size.Y / 2, 0), -- Верхняя грань: левая
+        Vector3.new(part.Size.X / 2, part.Size.Y / 2, 0),  -- Верхняя грань: правая
+        Vector3.new(0, part.Size.Y / 2, -part.Size.Z / 2), -- Верхняя грань: передняя
+        Vector3.new(0, part.Size.Y / 2, part.Size.Z / 2)   -- Верхняя грань: задняя
+    )
+    createFaceLines(
+        Vector3.new(-part.Size.X / 2, -part.Size.Y / 2, 0), -- Нижняя грань: левая
+        Vector3.new(part.Size.X / 2, -part.Size.Y / 2, 0),  -- Нижняя грань: правая
+        Vector3.new(0, -part.Size.Y / 2, -part.Size.Z / 2), -- Нижняя грань: передняя
+        Vector3.new(0, -part.Size.Y / 2, part.Size.Z / 2)   -- Нижняя грань: задняя
+    )
+
+    -- Передняя и задняя грань
+    createFaceLines(
+        Vector3.new(-part.Size.X / 2, 0, part.Size.Z / 2),  -- Передняя грань: левая
+        Vector3.new(part.Size.X / 2, 0, part.Size.Z / 2),   -- Передняя грань: правая
+        Vector3.new(0, part.Size.Y / 2, part.Size.Z / 2),   -- Передняя грань: верхняя
+        Vector3.new(0, -part.Size.Y / 2, part.Size.Z / 2)   -- Передняя грань: нижняя
+    )
+    createFaceLines(
+        Vector3.new(-part.Size.X / 2, 0, -part.Size.Z / 2), -- Задняя грань: левая
+        Vector3.new(part.Size.X / 2, 0, -part.Size.Z / 2),  -- Задняя грань: правая
+        Vector3.new(0, part.Size.Y / 2, -part.Size.Z / 2),  -- Задняя грань: верхняя
+        Vector3.new(0, -part.Size.Y / 2, -part.Size.Z / 2)  -- Задняя грань: нижняя
+    )
+
+    -- Левая и правая грань
+    createFaceLines(
+        Vector3.new(part.Size.X / 2, part.Size.Y / 2, 0),   -- Правая грань: верхняя
+        Vector3.new(part.Size.X / 2, -part.Size.Y / 2, 0),  -- Правая грань: нижняя
+        Vector3.new(part.Size.X / 2, 0, -part.Size.Z / 2),  -- Правая грань: передняя
+        Vector3.new(part.Size.X / 2, 0, part.Size.Z / 2)    -- Правая грань: задняя
+    )
+    createFaceLines(
+        Vector3.new(-part.Size.X / 2, part.Size.Y / 2, 0),  -- Левая грань: верхняя
+        Vector3.new(-part.Size.X / 2, -part.Size.Y / 2, 0), -- Левая грань: нижняя
+        Vector3.new(-part.Size.X / 2, 0, -part.Size.Z / 2), -- Левая грань: передняя
+        Vector3.new(-part.Size.X / 2, 0, part.Size.Z / 2)   -- Левая грань: задняя
+    )
 end
 
 -- Модифицируем функцию HighlightPart для добавления центральных линий
@@ -4046,6 +4087,7 @@ end
 Part.MouseButton1Click:Connect(function()
     selectPart()
 end)
+
 
 
 Exit_4.MouseButton1Click:Connect(function()
@@ -4339,7 +4381,7 @@ function autoComplete(str,curText)
 end
 
 CMDs = {}
-CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = 'Invite to 674the Infinite Yield support server.'}
+CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = '111Invite to 674the Infinite Yield support server.'}
 CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'L3333444oads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
