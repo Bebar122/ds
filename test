@@ -4635,7 +4635,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '18uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '19uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10595,8 +10595,11 @@ addcmd('tpclone', {'executeTP'}, function()
         return
     end
 
-    -- Сохраняем текущую ротацию
-    savedRotation = hrp.CFrame.Rotation * rotationOffset -- Применяем смещение к ротации
+    -- Сохраняем текущую ротацию и позицию
+    local currentRotation = hrp.CFrame.Rotation
+    savedRotation = currentRotation * rotationOffset -- Применяем смещение к ротации
+    --savedPosition = hrp.Position -- Сохраняем позицию
+    
     print("Ротация с учётом смещения сохранена:", savedRotation)
 
     -- Убираем все вещи из рук
@@ -10626,14 +10629,25 @@ addcmd('tpclone', {'executeTP'}, function()
     secondIvoryPeriastron.Parent = character
     print("Второй IvoryPeriastron экипирован.")
 
-    -- Телепортируем игрока на сохранённую позицию (без сохранения позиции в примере, можно добавить)
+    -- Телепортируем игрока на сохранённую позицию
     hrp.CFrame = CFrame.new(savedPosition)
 
     -- Цикл для установки ротации с задержкой
     local iterations = 7
     local delayTime = 0.1 -- Задержка между изменениями ротации
+    local interpolationFactor = 0.6 -- Коэффициент интерполяции
+    
+    -- Функция для расчёта компенсации ротации
+    local function calculateAdjustedRotation(currentRotation, desiredRotation, interpolationFactor)
+        local compensationRotation = currentRotation:Lerp(desiredRotation, 1 - interpolationFactor)
+        return compensationRotation
+    end
+
+    -- Вычисляем компенсацию ротации для каждого шага
+    local adjustedRotation = calculateAdjustedRotation(hrp.CFrame.Rotation, savedRotation, interpolationFactor)
+
     for i = 1, iterations do
-        hrp.CFrame = CFrame.new(hrp.Position) * savedRotation
+        hrp.CFrame = CFrame.new(hrp.Position) * adjustedRotation
         print(string.format("Ротация установлена: итерация %d", i))
         task.wait(delayTime)
     end
