@@ -10637,7 +10637,7 @@ addcmd('tpclone', {'executeTP'}, function()
         print(string.format("Ротация установлена: итерация %d", i))
         task.wait(delayTime)
     end
-	wait(0.3)
+	wait(0.9)
     -- Выполняем событие Remote с клавишей E
     local args = {
         [1] = Enum.KeyCode.E
