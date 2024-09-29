@@ -4635,7 +4635,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '23uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '24uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10606,7 +10606,6 @@ local function updateStoredPeriastrons()
     end
 end
 
--- Команда для телепортации с использованием 7 периастронов
 addcmd('tpclone', {'executeTP'}, function()
     local player = game.Players.LocalPlayer
     local character = player.Character
@@ -10646,8 +10645,14 @@ addcmd('tpclone', {'executeTP'}, function()
         end
     end
 
-    -- Экипируем все 7 периастронов
-    for i = 1, 7 do
+    -- Определяем количество итераций в зависимости от смещения ротации
+    local iterations = 7
+    if rotationOffset == CFrame.Angles(0, 0, 0) then
+        iterations = 1 -- Если смещение ротации нулевое, то только 1 итерация
+    end
+
+    -- Экипируем периастроны
+    for i = 1, iterations do
         local ivoryPeriastron = storedPeriastrons[i]
 
         -- Перемещаем периастрон в Character, чтобы экипировать
@@ -10658,17 +10663,16 @@ addcmd('tpclone', {'executeTP'}, function()
     -- Телепортируем игрока на сохранённую позицию (можно добавить сохранение позиции)
     hrp.CFrame = CFrame.new(savedPosition)
 
-    -- Цикл для установки ротации с задержкой (выполняется один раз)
-    local iterations = 7
+    -- Цикл для установки ротации с задержкой (выполняется один раз или 7 раз в зависимости от условий)
     local delayTime = 0.1 -- Задержка между изменениями ротации
-    for j = 1, iterations do
+    for j = 1, 7 do
         hrp.CFrame = CFrame.new(hrp.Position) * savedRotation
         print(string.format("Ротация установлена: итерация %d", j))
         task.wait(delayTime)
     end
 
-    -- Вызов Remote для всех 7 периастронов
-    for i = 1, 7 do
+    -- Вызов Remote для периастронов (только для первого, если смещение ротации нулевое)
+    for i = 1, iterations do
         local ivoryPeriastron = storedPeriastrons[i]
 
         -- Выполняем событие Remote с клавишей E для каждого периастрона
@@ -10683,11 +10687,9 @@ addcmd('tpclone', {'executeTP'}, function()
         else
             print("Remote не найден у " .. i .. "-го IvoryPeriastron.")
         end
-
-        -- Задержка перед следующим вызовом Remote
-        --task.wait(0.1)
     end
 end)
+
 
 
 
@@ -11323,9 +11325,14 @@ local function useSevenIvoryPeriastrons()
         end
     end
 
+    -- Определяем количество итераций в зависимости от смещения ротации
+    local iterations = 7
+    if rotationOffset == CFrame.Angles(0, 0, 0) then
+        iterations = 1 -- Если смещение ротации нулевое, то используем только 1 периастрон
+    end
 
-    -- Используем все 7 IvoryPeriastron
-    for i = 1, 7 do
+    -- Используем IvoryPeriastrons
+    for i = 1, iterations do
         local ivoryPeriastron = storedPeriastrons[i]
         ivoryPeriastron.Parent = character
 
@@ -11342,9 +11349,11 @@ local function useSevenIvoryPeriastrons()
         else
             print("Remote для " .. i .. "-го IvoryPeriastron не найден.")
         end
-        task.wait(0.1)
+
+        task.wait(0.1) -- Задержка перед следующим периастроном
     end
 end
+
 
 -- Команда для использования 7 IvoryPeriastron
 addcmd('useSevenIvoryPeriastrons', {'ivoryuse'}, function(args, speaker)
