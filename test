@@ -4132,6 +4132,7 @@ Exit_4.MouseButton1Click:Connect(function()
 	if clonedPart then
             clonedPart:Destroy()
         end
+	canSelectNewPart = true
     -- Очищаем выделение и путь
     selectionBox.Adornee = nil
     selected.Adornee = nil
@@ -10768,6 +10769,7 @@ end)
 
 
 local running = false
+local startTime = 0
 
 function stopAll()
     running = false
@@ -10776,8 +10778,11 @@ end
 addcmd('moveX', {}, function(args, speaker)
     local moveAmount = tonumber(args[1]) or 1
     running = true
+    startTime = tick()
     while running do
-        clonedPart.Position = clonedPart.Position + Vector3.new(moveAmount, 0, 0)
+        local elapsed = tick() - startTime
+        local currentMove = moveAmount * (1 + math.floor(elapsed / 2))
+        clonedPart.Position = clonedPart.Position + Vector3.new(currentMove * 0.1, 0, 0)
         wait(0.1)
     end
 end)
@@ -10785,8 +10790,11 @@ end)
 addcmd('moveY', {}, function(args, speaker)
     local moveAmount = tonumber(args[1]) or 1
     running = true
+    startTime = tick()
     while running do
-        clonedPart.Position = clonedPart.Position + Vector3.new(0, moveAmount, 0)
+        local elapsed = tick() - startTime
+        local currentMove = moveAmount * (1 + math.floor(elapsed / 2))
+        clonedPart.Position = clonedPart.Position + Vector3.new(0, currentMove * 0.1, 0)
         wait(0.1)
     end
 end)
@@ -10794,8 +10802,11 @@ end)
 addcmd('moveZ', {}, function(args, speaker)
     local moveAmount = tonumber(args[1]) or 1
     running = true
+    startTime = tick()
     while running do
-        clonedPart.Position = clonedPart.Position + Vector3.new(0, 0, moveAmount)
+        local elapsed = tick() - startTime
+        local currentMove = moveAmount * (1 + math.floor(elapsed / 2))
+        clonedPart.Position = clonedPart.Position + Vector3.new(0, 0, currentMove * 0.1)
         wait(0.1)
     end
 end)
@@ -10803,8 +10814,11 @@ end)
 addcmd('rotateX', {}, function(args, speaker)
     local rotateAmount = tonumber(args[1]) or 5
     running = true
+    startTime = tick()
     while running do
-        clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(math.rad(rotateAmount), 0, 0)
+        local elapsed = tick() - startTime
+        local currentRotate = rotateAmount * (1 + math.floor(elapsed / 2))
+        clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(math.rad(currentRotate * 0.1), 0, 0)
         wait(0.1)
     end
 end)
@@ -10812,8 +10826,11 @@ end)
 addcmd('rotateY', {}, function(args, speaker)
     local rotateAmount = tonumber(args[1]) or 5
     running = true
+    startTime = tick()
     while running do
-        clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(0, math.rad(rotateAmount), 0)
+        local elapsed = tick() - startTime
+        local currentRotate = rotateAmount * (1 + math.floor(elapsed / 2))
+        clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(0, math.rad(currentRotate * 0.1), 0)
         wait(0.1)
     end
 end)
@@ -10821,8 +10838,11 @@ end)
 addcmd('rotateZ', {}, function(args, speaker)
     local rotateAmount = tonumber(args[1]) or 5
     running = true
+    startTime = tick()
     while running do
-        clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(0, 0, math.rad(rotateAmount))
+        local elapsed = tick() - startTime
+        local currentRotate = rotateAmount * (1 + math.floor(elapsed / 2))
+        clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(0, 0, math.rad(currentRotate * 0.1))
         wait(0.1)
     end
 end)
