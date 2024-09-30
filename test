@@ -4670,7 +4670,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '33uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '34uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10670,24 +10670,28 @@ local function calculatePositionAndRotationOffset(selectedPart, clonedPart)
     local relativePosition = playerPosition - selectedPart.Position
     notify("Информация", "Относительное положение: " .. tostring(relativePosition))
 
+    -- Рассчитываем разницу в позиции между clonedPart и selectedPart
+    notify("Информация", "Рассчитываем разницу в позиции...")
+    local positionDifference = clonedPart.Position - selectedPart.Position
+    notify("Информация", "Разница в позиции: " .. tostring(positionDifference))
+
+    -- Получаем углы ротации каждой части в формате Эйлера
+    notify("Информация", "Рассчитываем разницу в ротации...")
+    local selectedPartRotationX, selectedPartRotationY, selectedPartRotationZ = selectedPart.CFrame:ToEulerAnglesXYZ()
+    local clonedPartRotationX, clonedPartRotationY, clonedPartRotationZ = clonedPart.CFrame:ToEulerAnglesXYZ()
+
     -- Рассчитываем разницу в ротации между clonedPart и selectedPart
-    notify("Информация", "Рассчитываем разницу в ротации между clonedPart и selectedPart...")
-    local success, rotationDifference = pcall(function()
-        return clonedPart.CFrame:ToObjectSpace(selectedPart.CFrame)
-    end)
+    local rotationOffsetX = clonedPartRotationX - selectedPartRotationX
+    local rotationOffsetY = clonedPartRotationY - selectedPartRotationY
+    local rotationOffsetZ = clonedPartRotationZ - selectedPartRotationZ
 
-    if not success then
-        notify("Ошибка", "Не удалось вычислить rotationDifference.")
-        return
-    end
-
-    -- Обновляем rotationOffset (в данном случае только углы)
-    local rotationOffset = rotationDifference - CFrame.Angles(0, 0, 0)
+    -- Обновляем rotationOffset
+    local rotationOffset = CFrame.Angles(rotationOffsetX, rotationOffsetY, rotationOffsetZ)
     notify("Информация", "rotationOffset: " .. tostring(rotationOffset))
 
     -- Поворачиваем относительный вектор на разницу в ротации
     notify("Информация", "Поворачиваем относительный вектор на разницу в ротации...")
-    local rotatedRelativePosition = rotationDifference:VectorToWorldSpace(relativePosition)
+    local rotatedRelativePosition = rotationOffset:VectorToWorldSpace(relativePosition)
     notify("Информация", "Повернутый относительный вектор: " .. tostring(rotatedRelativePosition))
 
     -- Помещаем начало этого вектора в центр clonedPart
