@@ -4670,7 +4670,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '37uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '38uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10730,18 +10730,28 @@ addcmd('tpclone', {'executeTP'}, function()
         return
     end
 
-	if clonedPart and selectedPart then
-    -- Вызов функции для расчёта savedPosition и rotationOffset
-		savedPosition, rotationOffset = calculatePositionAndRotationOffset(selectedPart, clonedPart)
-	end
+    local initialPlayerRotation = hrp.CFrame:ToEulerAnglesXYZ() -- Начальная ротация игрока
+
+    local selectedPartRotation, clonedPartRotation
+
+    -- Получаем ротацию selectedPart и clonedPart
+    if selectedPart and clonedPart then
+        selectedPartRotation = selectedPart.CFrame:ToEulerAnglesXYZ() -- Ротация selectedPart
+        clonedPartRotation = clonedPart.CFrame:ToEulerAnglesXYZ() -- Ротация clonedPart
+
+        -- Вызов функции для расчёта savedPosition и rotationOffset
+        savedPosition, rotationOffset = calculatePositionAndRotationOffset(selectedPart, clonedPart)
+    end
+
     -- Получаем текущие углы ротации из HumanoidRootPart (возвращает три значения)
     local hrpX, hrpY, hrpZ = hrp.CFrame:ToEulerAnglesXYZ()
 
-    -- Получаем значения смещения из rotationOffset (возвращает три значения)
-    local offsetX, offsetY, offsetZ = rotationOffset:ToEulerAnglesXYZ()
-
     -- Преобразуем радианы в градусы
     hrpX, hrpY, hrpZ = math.deg(hrpX), math.deg(hrpY), math.deg(hrpZ)
+    local initialPlayerRotationDeg = {math.deg(initialPlayerRotation)} -- Начальная ротация игрока в градусах
+
+    -- Преобразуем rotationOffset в градусы
+    local offsetX, offsetY, offsetZ = rotationOffset:ToEulerAnglesXYZ()
     offsetX, offsetY, offsetZ = math.deg(offsetX), math.deg(offsetY), math.deg(offsetZ)
 
     -- Добавляем значения смещения к текущей ротации
@@ -10751,7 +10761,6 @@ addcmd('tpclone', {'executeTP'}, function()
 
     -- Сохраняем ротацию как CFrame
     savedRotation = CFrame.Angles(math.rad(savedX), math.rad(savedY), math.rad(savedZ))
-    print("Ротация с учётом смещения сохранена:", savedRotation)
 
     -- Убираем все вещи из рук
     humanoid:UnequipTools()
@@ -10764,7 +10773,6 @@ addcmd('tpclone', {'executeTP'}, function()
     if #storedPeriastrons < MaxPeri then
         updateStoredPeriastrons()
 
-        -- Проверяем, что удалось найти 7 периастронов
         if #storedPeriastrons < MaxPeri then
             print("Не хватает 7 IvoryPeriastron в инвентаре.")
             return
@@ -10774,57 +10782,48 @@ addcmd('tpclone', {'executeTP'}, function()
     -- Проверяем валидность всех периастронов
     for i, periastron in pairs(storedPeriastrons) do
         if not periastron or not periastron.Parent then
-            print("Обнаружен невалидный периастрон: " .. tostring(i))
-            -- Очищаем список периастронов и останавливаем выполнение
             storedPeriastrons = {}
             return
         end
     end
 
-    -- Определяем количество итераций в зависимости от смещения ротации
-    local iterations = MaxPeri
-    if rotationOffset == CFrame.Angles(0, 0, 0) then
-        MaxPeri = 1 -- Если смещение ротации нулевое, то только 1 итерация
-    end
-
-    -- Экипируем периастроны
-    for i = 1, iterations do
-        local ivoryPeriastron = storedPeriastrons[i]
-
-        -- Перемещаем периастрон в Character, чтобы экипировать
-        ivoryPeriastron.Parent = character
-        print(i .. "-й IvoryPeriastron экипирован.")
-    end
-
     -- Телепортируем игрока на сохранённую позицию
     hrp.CFrame = CFrame.new(savedPosition)
 
-    -- Цикл для установки ротации с задержкой (выполняется один раз или 7 раз в зависимости от условий)
-    local delayTime = 0.1 -- Задержка между изменениями ротации
+    -- Устанавливаем ротацию с задержкой
+    local delayTime = 0.1
     for j = 1, 7 do
         hrp.CFrame = CFrame.new(hrp.Position) * savedRotation
-        print(string.format("Ротация установлена: итерация %d", j))
         task.wait(delayTime)
     end
 
-    -- Вызов Remote для периастронов (только для первого, если смещение ротации нулевое)
-    for i = 1, iterations do
-        local ivoryPeriastron = storedPeriastrons[i]
+    -- Конечная ротация игрока
+    local finalPlayerRotation = hrp.CFrame:ToEulerAnglesXYZ()
+    local finalPlayerRotationDeg = {math.deg(finalPlayerRotation)}
 
-        -- Выполняем событие Remote с клавишей E для каждого периастрона
-        local args = {
-            [1] = Enum.KeyCode.E
-        }
+    -- Конечная ротация selectedPart
+    local finalSelectedPartRotation = selectedPart.CFrame:ToEulerAnglesXYZ()
+    local finalSelectedPartRotationDeg = {math.deg(finalSelectedPartRotation)}
 
-        local remote = ivoryPeriastron:FindFirstChild("Remote")
-        if remote then
-            remote:FireServer(unpack(args))
-            print(i .. "-й периастрон использован.")
-        else
-            print("Remote не найден у " .. i .. "-го IvoryPeriastron.")
-        end
-    end
+    -- Сбор данных в строку
+    local infoString = string.format(
+        "SelectedPart Initial Rotation: X: %.2f, Y: %.2f, Z: %.2f\n" ..
+        "ClonedPart Initial Rotation: X: %.2f, Y: %.2f, Z: %.2f\n" ..
+        "Rotation Offset: X: %.2f, Y: %.2f, Z: %.2f\n" ..
+        "Player Initial Rotation: X: %.2f, Y: %.2f, Z: %.2f\n" ..
+        "Player Final Rotation: X: %.2f, Y: %.2f, Z: %.2f\n" ..
+        "SelectedPart Final Rotation: X: %.2f, Y: %.2f, Z: %.2f",
+        math.deg(selectedPartRotation), math.deg(clonedPartRotation),
+        offsetX, offsetY, offsetZ,
+        table.unpack(initialPlayerRotationDeg),
+        table.unpack(finalPlayerRotationDeg),
+        table.unpack(finalSelectedPartRotationDeg)
+    )
+
+    -- Копируем информацию в буфер обмена
+    toClipboard(infoString)
 end)
+
 
 
 
