@@ -10608,7 +10608,7 @@ end
 
 
 
-addcmd('tpclone', {'executeTP'}, function()
+addcmd('tpclone', {'executeTP'}, function(args, speaker)
     local player = game.Players.LocalPlayer
     local character = player.Character
     local humanoid = character:FindFirstChild("Humanoid")
@@ -10704,7 +10704,6 @@ addcmd('tpclone', {'executeTP'}, function()
         end
     end
 end)
-
 
 
 
