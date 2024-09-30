@@ -4429,7 +4429,7 @@ function autoComplete(str,curText)
 end
 
 CMDs = {}
-CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = '22nvite to 674the Infinite Yield support server.'}
+CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = '333nvite to 674the Infinite Yield support server.'}
 CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'L3333444oads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
@@ -10641,6 +10641,42 @@ local function updateStoredPeriastrons()
     end
 end
 
+
+local function calculateSavedPositionAndRotation(selectedPart, clonedPart, player)
+    -- Получаем позицию игрока
+    local playerPosition = player.Character.HumanoidRootPart.Position
+    
+    -- Получаем позицию selectedPart
+    local selectedPartPosition = selectedPart.Position
+    
+    -- Вычисляем относительное положение игрока от selectedPart
+    local relativeVector = playerPosition - selectedPartPosition
+    
+    -- Получаем ротацию clonedPart и selectedPart
+    local selectedPartCFrame = selectedPart.CFrame
+    local clonedPartCFrame = clonedPart.CFrame
+    
+    -- Вычисляем разницу ротации
+    local rotationOffset2 = (clonedPartCFrame - clonedPart.Position) - (selectedPartCFrame - selectedPart.Position)
+    
+    -- Поворачиваем вектор на эту разницу
+    relativeVector = rotationOffset2:pointToWorldSpace(relativeVector)
+    
+    -- Устанавливаем начало вектора в центр clonedPart
+    local clonedPartPosition = clonedPart.Position
+    local newStartPoint = clonedPartPosition
+    
+    -- Вычисляем конечную точку вектора
+    local savedPosition2 = newStartPoint + relativeVector
+
+	savedPosition = savedPosition2
+	rotationOffset = rotationOffset2
+
+    return savedPosition2, rotationOffset2
+end
+
+
+
 addcmd('tpclone', {'executeTP'}, function()
     local player = game.Players.LocalPlayer
     local character = player.Character
@@ -10651,6 +10687,8 @@ addcmd('tpclone', {'executeTP'}, function()
         print("Humanoid или HumanoidRootPart не найдены.")
         return
     end
+
+	calculateSavedPositionAndRotation(selectedPart, clonedPart, player)
 
     -- Получаем текущие углы ротации из HumanoidRootPart (возвращает три значения)
     local hrpX, hrpY, hrpZ = hrp.CFrame:ToEulerAnglesXYZ()
