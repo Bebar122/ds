@@ -10767,37 +10767,69 @@ addcmd('setRotation', {'rotoff'}, function(args, speaker)
 end)
 
 
+local running = false
+
+function stopAll()
+    running = false
+end
 
 addcmd('moveX', {}, function(args, speaker)
     local moveAmount = tonumber(args[1]) or 1
-    clonedPart.Position = clonedPart.Position + Vector3.new(moveAmount, 0, 0)
+    running = true
+    while running do
+        clonedPart.Position = clonedPart.Position + Vector3.new(moveAmount, 0, 0)
+        wait(0.1)
+    end
 end)
 
 addcmd('moveY', {}, function(args, speaker)
     local moveAmount = tonumber(args[1]) or 1
-    clonedPart.Position = clonedPart.Position + Vector3.new(0, moveAmount, 0)
+    running = true
+    while running do
+        clonedPart.Position = clonedPart.Position + Vector3.new(0, moveAmount, 0)
+        wait(0.1)
+    end
 end)
 
 addcmd('moveZ', {}, function(args, speaker)
     local moveAmount = tonumber(args[1]) or 1
-    clonedPart.Position = clonedPart.Position + Vector3.new(0, 0, moveAmount)
+    running = true
+    while running do
+        clonedPart.Position = clonedPart.Position + Vector3.new(0, 0, moveAmount)
+        wait(0.1)
+    end
 end)
 
 addcmd('rotateX', {}, function(args, speaker)
     local rotateAmount = tonumber(args[1]) or 5
-    clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(math.rad(rotateAmount), 0, 0)
+    running = true
+    while running do
+        clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(math.rad(rotateAmount), 0, 0)
+        wait(0.1)
+    end
 end)
 
 addcmd('rotateY', {}, function(args, speaker)
     local rotateAmount = tonumber(args[1]) or 5
-    clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(0, math.rad(rotateAmount), 0)
+    running = true
+    while running do
+        clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(0, math.rad(rotateAmount), 0)
+        wait(0.1)
+    end
 end)
 
 addcmd('rotateZ', {}, function(args, speaker)
     local rotateAmount = tonumber(args[1]) or 5
-    clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(0, 0, math.rad(rotateAmount))
+    running = true
+    while running do
+        clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(0, 0, math.rad(rotateAmount))
+        wait(0.1)
+    end
 end)
 
+addcmd('stopAll', {}, function(args, speaker)
+    stopAll()
+end)
 
 
 addcmd("lay", {"laydown"}, function(args, speaker)
