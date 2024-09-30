@@ -4670,7 +4670,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '28uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '29uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10711,7 +10711,7 @@ addcmd('tpclone', {'executeTP'}, function()
     print("Ротация с учётом смещения сохранена:", savedRotation)
 
     -- Уведомление с координатами векторов
-    notify('Shiftlock', string.format("Saved Position: (%.2f, %.2f, %.2f)\nRotation Offset: (%.2f, %.2f, %.2f)", 
+    --notify('Shiftlock', string.format("Saved Position: (%.2f, %.2f, %.2f)\nRotation Offset: (%.2f, %.2f, %.2f)", 
         savedPosition.X, savedPosition.Y, savedPosition.Z, 
         offsetX, offsetY, offsetZ))
 
