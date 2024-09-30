@@ -4094,7 +4094,7 @@ local canSelectNewPart = true
 
 -- Функция выбора блока
 function selectPart()
-    if canSelectNewPart then
+    if true then
         -- Анимация появления окна выбора
         ToPartFrame:TweenPosition(UDim2.new(0.5, -180, 0, 335), "InOut", "Quart", 0.5, true, nil)
 
@@ -4103,7 +4103,7 @@ function selectPart()
 
         -- Вложенная функция для выбора блока по клику
         local function SelectPart()
-            if IYMouse.Target ~= nil then
+            if IYMouse.Target ~= nil and canSelectNewPart then
                 selected.Adornee = IYMouse.Target
                 selectedPart = IYMouse.Target -- Сохраняем выбранный блок в переменную
                 Path.Text = getHierarchy(IYMouse.Target) -- Отображаем путь выбранного блока
@@ -4158,6 +4158,10 @@ end)
 -- Функция для создания клона блока
 ChoosePart.MouseButton1Click:Connect(function()
     if Path.Text ~= "" and selectedPart ~= nil then
+
+        if clonedPart then
+            clonedPart:Destroy()
+        end
         -- Клонируем выбранный блок
         clonedPart = selectedPart:Clone()
         
