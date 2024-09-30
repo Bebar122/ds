@@ -4459,6 +4459,8 @@ CMDs[#CMDs + 1] = {NAME = 'enable [inventory/playerlist/chat/reset/emotes/all]',
 CMDs[#CMDs + 1] = {NAME = 'disable [inventory/playerlist/chat/reset/emotes/all]', DESC = 'Toggles visibility of coregui items'}
 CMDs[#CMDs + 1] = {NAME = 'showguis', DESC = 'Shows any invisible GUIs'}
 CMDs[#CMDs + 1] = {NAME = 'unshowguis', DESC = 'Undoes showguis'}
+CMDs[#CMDs + 1] = {NAME = 'setbrot', DESC = 'Undoes showguis'}
+CMDs[#CMDs + 1] = {NAME = 'setbpos', DESC = 'Undoes showguis'}
 CMDs[#CMDs + 1] = {NAME = 'hideguis', DESC = 'Hides any GUIs in PlayerGui'}
 CMDs[#CMDs + 1] = {NAME = 'unhideguis', DESC = 'Undoes hideguis'}
 CMDs[#CMDs + 1] = {NAME = 'guidelete', DESC = 'Enables backspace to delete GUI'}
@@ -10849,6 +10851,21 @@ end)
 
 addcmd('stopAll', {}, function(args, speaker)
     stopAll()
+end)
+
+
+addcmd('setbpos', {}, function(args, speaker)
+    local x = tonumber(args[1]) or 0
+    local y = tonumber(args[2]) or 0
+    local z = tonumber(args[3]) or 0
+    clonedPart.Position = Vector3.new(x, y, z)
+end)
+
+addcmd('setbrot', {}, function(args, speaker)
+    local x = tonumber(args[1]) or 0
+    local y = tonumber(args[2]) or 0
+    local z = tonumber(args[3]) or 0
+    clonedPart.CFrame = CFrame.Angles(math.rad(x), math.rad(y), math.rad(z))
 end)
 
 
