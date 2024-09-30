@@ -4078,7 +4078,7 @@ local function HighlightPart()
     if IYMouse.Target and IYMouse.Target:IsA("BasePart") then
         if selected.Adornee ~= IYMouse.Target then
             selectionBox.Adornee = IYMouse.Target
-            createCentralLines(IYMouse.Target) -- Добавляем центральные линии к части
+            --createCentralLines(IYMouse.Target) -- Добавляем центральные линии к части
         else
             selectionBox.Adornee = nil
         end
@@ -4129,7 +4129,9 @@ Exit_4.MouseButton1Click:Connect(function()
     if ClickSelect then
         ClickSelect:Disconnect()
     end
-
+	if clonedPart then
+            clonedPart:Destroy()
+        end
     -- Очищаем выделение и путь
     selectionBox.Adornee = nil
     selected.Adornee = nil
