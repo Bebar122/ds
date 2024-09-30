@@ -4635,7 +4635,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '24uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '25uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10585,7 +10585,7 @@ end)
 -- Глобальная переменная для хранения 7 периастронов
 local storedPeriastrons = {}
 rotationOffset = CFrame.Angles(0, 0, 0) -- Изначально без смещения
-local MaxPeri = 3
+local MaxPeri = 6
 
 
 local function updateStoredPeriastrons()
@@ -11350,7 +11350,7 @@ local function useSevenIvoryPeriastrons()
             print("Remote для " .. i .. "-го IvoryPeriastron не найден.")
         end
 
-        task.wait(0.1) -- Задержка перед следующим периастроном
+        task.wait(0.4) -- Задержка перед следующим периастроном
     end
 end
 
