@@ -10585,7 +10585,7 @@ end)
 -- Глобальная переменная для хранения 7 периастронов
 local storedPeriastrons = {}
 rotationOffset = CFrame.Angles(0, 0, 0) -- Изначально без смещения
-
+local MaxPeri = 3
 
 
 local function updateStoredPeriastrons()
@@ -10599,7 +10599,7 @@ local function updateStoredPeriastrons()
     for _, item in pairs(backpack:GetChildren()) do
         if item.Name == "IvoryPeriastron" and item:IsA('Tool') then
             table.insert(storedPeriastrons, item)
-            if #storedPeriastrons == 7 then
+            if #storedPeriastrons == MaxPeri then
                 break -- Берем только 7 периастронов
             end
         end
@@ -10625,11 +10625,11 @@ addcmd('tpclone', {'executeTP'}, function()
     humanoid:UnequipTools()
 
     -- Если переменная с периастронами пуста, заполняем её
-    if #storedPeriastrons < 7 then
+    if #storedPeriastrons < MaxPeri then
         updateStoredPeriastrons()
 
         -- Проверяем, что удалось найти 7 периастронов
-        if #storedPeriastrons < 7 then
+        if #storedPeriastrons < MaxPeri then
             print("Не хватает 7 IvoryPeriastron в инвентаре.")
             return
         end
@@ -10646,7 +10646,7 @@ addcmd('tpclone', {'executeTP'}, function()
     end
 
     -- Определяем количество итераций в зависимости от смещения ротации
-    local iterations = 7
+    local iterations = MaxPeri
     if rotationOffset == CFrame.Angles(0, 0, 0) then
         iterations = 1 -- Если смещение ротации нулевое, то только 1 итерация
     end
@@ -11305,11 +11305,11 @@ local function useSevenIvoryPeriastrons()
     local player = game:GetService("Players").LocalPlayer
     local character = player.Character
 
-    if #storedPeriastrons < 7 then
+    if #storedPeriastrons < MaxPeri then
         updateStoredPeriastrons()
 
         -- Проверяем, что удалось найти 7 периастронов
-        if #storedPeriastrons < 7 then
+        if #storedPeriastrons < MaxPeri then
             print("Не хватает 7 IvoryPeriastron в инвентаре.")
             return
         end
@@ -11326,7 +11326,7 @@ local function useSevenIvoryPeriastrons()
     end
 
     -- Определяем количество итераций в зависимости от смещения ротации
-    local iterations = 7
+    local iterations = MaxPeri
     if rotationOffset == CFrame.Angles(0, 0, 0) then
         iterations = 1 -- Если смещение ротации нулевое, то используем только 1 периастрон
     end
@@ -13780,6 +13780,9 @@ addcmd("giveblocks", {}, function(args, speaker)
 	end
 	for _ = 1,200 do
 		ReplicatedStorage.SpawnSuperBlock:FireServer()
+	end
+	for _ = 1,200 do
+		ReplicatedStorage.SpawnLuckyBlock:FireServer()
 	end
 	for _ = 1,200 do
 		ReplicatedStorage.SpawnLuckyBlock:FireServer()
