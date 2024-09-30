@@ -10585,7 +10585,7 @@ end)
 -- Глобальная переменная для хранения 7 периастронов
 local storedPeriastrons = {}
 rotationOffset = CFrame.Angles(0, 0, 0) -- Изначально без смещения
-local MaxPeri = 6
+local MaxPeri = 7
 
 
 local function updateStoredPeriastrons()
@@ -10606,6 +10606,8 @@ local function updateStoredPeriastrons()
     end
 end
 
+
+
 addcmd('tpclone', {'executeTP'}, function()
     local player = game.Players.LocalPlayer
     local character = player.Character
@@ -10617,69 +10619,61 @@ addcmd('tpclone', {'executeTP'}, function()
         return
     end
 
-    -- Сохраняем текущую ротацию
-    savedRotation = hrp.CFrame.Rotation * rotationOffset -- Применяем смещение к ротации
-    print("Ротация с учётом смещения сохранена:", savedRotation)
+    -- Извлекаем текущие углы ротации
+    local currentRotationX, currentRotationY, currentRotationZ = hrp.CFrame:ToEulerAnglesXYZ() -- Получаем углы в радианах по X, Y, Z
+
+    -- Преобразуем смещение в радианы
+    local offsetRotationX = math.rad(rotationOffset.X)
+    local offsetRotationY = math.rad(rotationOffset.Y)
+    local offsetRotationZ = math.rad(rotationOffset.Z)
+
+    -- Меняем только те оси, где указано смещение, иначе оставляем старое значение
+    local newRotationX = (rotationOffset.X ~= 0) and offsetRotationX or currentRotationX
+    local newRotationY = (rotationOffset.Y ~= 0) and offsetRotationY or currentRotationY
+    local newRotationZ = (rotationOffset.Z ~= 0) and offsetRotationZ or currentRotationZ
+
+    -- Применяем новую ротацию к HumanoidRootPart
+    local newRotationCFrame = CFrame.Angles(newRotationX, newRotationY, newRotationZ)
+    hrp.CFrame = CFrame.new(hrp.Position) * newRotationCFrame
+
+    print(string.format("Новая ротация: X: %d, Y: %d, Z: %d", math.deg(newRotationX), math.deg(newRotationY), math.deg(newRotationZ)))
 
     -- Убираем все вещи из рук
     humanoid:UnequipTools()
 
-    -- Если переменная с периастронами пуста, заполняем её
+    -- Проверка периастронов и экипировка
     if #storedPeriastrons < MaxPeri then
         updateStoredPeriastrons()
-
-        -- Проверяем, что удалось найти 7 периастронов
         if #storedPeriastrons < MaxPeri then
             print("Не хватает 7 IvoryPeriastron в инвентаре.")
             return
         end
     end
 
-    -- Проверяем валидность всех периастронов
     for i, periastron in pairs(storedPeriastrons) do
         if not periastron or not periastron.Parent then
             print("Обнаружен невалидный периастрон: " .. tostring(i))
-            -- Очищаем список периастронов и останавливаем выполнение
             storedPeriastrons = {}
             return
         end
     end
 
-    -- Определяем количество итераций в зависимости от смещения ротации
+    -- Экипировка периастронов
     local iterations = MaxPeri
-    if rotationOffset == CFrame.Angles(0, 0, 0) then
+    if rotationOffset == Vector3.new(0, 0, 0) then
         iterations = 1 -- Если смещение ротации нулевое, то только 1 итерация
     end
 
-    -- Экипируем периастроны
     for i = 1, iterations do
         local ivoryPeriastron = storedPeriastrons[i]
-
-        -- Перемещаем периастрон в Character, чтобы экипировать
         ivoryPeriastron.Parent = character
         print(i .. "-й IvoryPeriastron экипирован.")
     end
 
-    -- Телепортируем игрока на сохранённую позицию (можно добавить сохранение позиции)
-    hrp.CFrame = CFrame.new(savedPosition)
-
-    -- Цикл для установки ротации с задержкой (выполняется один раз или 7 раз в зависимости от условий)
-    local delayTime = 0.1 -- Задержка между изменениями ротации
-    for j = 1, 7 do
-        hrp.CFrame = CFrame.new(hrp.Position) * savedRotation
-        print(string.format("Ротация установлена: итерация %d", j))
-        task.wait(delayTime)
-    end
-
-    -- Вызов Remote для периастронов (только для первого, если смещение ротации нулевое)
+    -- Вызов Remote для периастронов
     for i = 1, iterations do
         local ivoryPeriastron = storedPeriastrons[i]
-
-        -- Выполняем событие Remote с клавишей E для каждого периастрона
-        local args = {
-            [1] = Enum.KeyCode.E
-        }
-
+        local args = {[1] = Enum.KeyCode.E}
         local remote = ivoryPeriastron:FindFirstChild("Remote")
         if remote then
             remote:FireServer(unpack(args))
@@ -10689,6 +10683,7 @@ addcmd('tpclone', {'executeTP'}, function()
         end
     end
 end)
+
 
 
 
