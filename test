@@ -10608,7 +10608,7 @@ end
 
 
 
-ddcmd('tpclone', {'executeTP'}, function()
+addcmd('tpclone', {'executeTP'}, function()
     local player = game.Players.LocalPlayer
     local character = player.Character
     local humanoid = character:FindFirstChild("Humanoid")
