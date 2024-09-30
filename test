@@ -4670,7 +4670,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '34uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '35uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10702,7 +10702,14 @@ local function calculatePositionAndRotationOffset(selectedPart, clonedPart)
     savedPosition = finalPosition
 
     -- Добавляем уведомление с результатами
-    notify("Результаты", string.format("savedPosition: %s\nrotationOffset: %s", tostring(savedPosition), tostring(rotationOffset)))
+    -- Преобразуем ротационный офсет в градусы
+	local rotationOffsetDegreesX = math.deg(rotationOffsetX)
+	local rotationOffsetDegreesY = math.deg(rotationOffsetY)
+	local rotationOffsetDegreesZ = math.deg(rotationOffsetZ)
+	
+	-- Выводим rotationOffset в градусах
+	notify("Результаты", string.format("rotationOffset (градусы): X: %.2f, Y: %.2f, Z: %.2f", 
+	    rotationOffsetDegreesX, rotationOffsetDegreesY, rotationOffsetDegreesZ))
 
     return savedPosition, rotationOffset
 end
