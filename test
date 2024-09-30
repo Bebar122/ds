@@ -4670,7 +4670,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '29uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '30uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10641,6 +10641,31 @@ local function updateStoredPeriastrons()
     end
 end
 
+local function calculatePositionAndRotationOffset(selectedPart, clonedPart)
+    -- Получаем позицию игрока
+    local playerPosition = game.Players.LocalPlayer.Character.PrimaryPart.Position
+
+    -- Получаем относительное положение игрока от selectedPart
+    local relativePosition = playerPosition - selectedPart.Position
+
+    -- Рассчитываем разницу в ротации между clonedPart и selectedPart
+    local rotationDifference = clonedPart.CFrame:ToObjectSpace(selectedPart.CFrame)
+
+    -- Обновляем rotationOffset (в данном случае только углы)
+    local rotationOffset = rotationDifference - CFrame.Angles(0, 0, 0)
+
+    -- Поворачиваем относительный вектор на разницу в ротации
+    local rotatedRelativePosition = rotationDifference:VectorToWorldSpace(relativePosition)
+
+    -- Помещаем начало этого вектора в центр clonedPart
+    local finalPosition = clonedPart.Position + rotatedRelativePosition
+
+    -- Обновляем savedPosition с новым значением
+    savedPosition = finalPosition
+    return savedPosition, rotationOffset
+end
+
+
 
 addcmd('tpclone', {'executeTP'}, function()
     local player = game.Players.LocalPlayer
@@ -10653,48 +10678,12 @@ addcmd('tpclone', {'executeTP'}, function()
         return
     end
 
-    -- Функция для вычисления savedPosition и rotationOffset
-    local function calculateSavedPositionAndRotation(selectedPart, clonedPart)
-        -- Получаем позицию игрока
-        local playerPosition = player.Character.HumanoidRootPart.Position
-        
-        -- Получаем позицию selectedPart
-        local selectedPartPosition = selectedPart.Position
-        
-        -- Вычисляем относительное положение игрока от selectedPart
-        local relativeVector = playerPosition - selectedPartPosition
-        
-        -- Получаем ротацию clonedPart и selectedPart
-        local selectedPartCFrame = selectedPart.CFrame
-        local clonedPartCFrame = clonedPart.CFrame
-        
-        -- Вычисляем разницу ротации
-        local rotationOffset = (clonedPartCFrame - clonedPart.Position) - (selectedPartCFrame - selectedPart.Position)
-        
-        -- Поворачиваем вектор на эту разницу
-        relativeVector = rotationOffset:pointToWorldSpace(relativeVector)
-        
-        -- Устанавливаем начало вектора в центр clonedPart
-        local clonedPartPosition = clonedPart.Position
-        local newStartPoint = clonedPartPosition
-        
-        -- Вычисляем конечную точку вектора
-        local savedPosition = newStartPoint + relativeVector
-        
-        return savedPosition, rotationOffset
-    end
+	savedPosition, rotationOffset = calculatePositionAndRotationOffset(selectedPart, clonedPart)
 
-    -- Здесь нужно указать selectedPart и clonedPart
-    --local selectedPart = --[[ Укажите ваш selectedPart ]]
-    --local clonedPart = --[[ Укажите ваш clonedPart ]]
-    
-    -- Вычисляем savedPosition и rotationOffset
-    savedPosition, rotationOffset = calculateSavedPositionAndRotation(selectedPart, clonedPart)
-
-    -- Получаем текущие углы ротации из HumanoidRootPart
+    -- Получаем текущие углы ротации из HumanoidRootPart (возвращает три значения)
     local hrpX, hrpY, hrpZ = hrp.CFrame:ToEulerAnglesXYZ()
 
-    -- Получаем значения смещения из rotationOffset
+    -- Получаем значения смещения из rotationOffset (возвращает три значения)
     local offsetX, offsetY, offsetZ = rotationOffset:ToEulerAnglesXYZ()
 
     -- Преобразуем радианы в градусы
@@ -10710,11 +10699,6 @@ addcmd('tpclone', {'executeTP'}, function()
     savedRotation = CFrame.Angles(math.rad(savedX), math.rad(savedY), math.rad(savedZ))
     print("Ротация с учётом смещения сохранена:", savedRotation)
 
-    -- Уведомление с координатами векторов
-    --notify('Shiftlock', string.format("Saved Position: (%.2f, %.2f, %.2f)\nRotation Offset: (%.2f, %.2f, %.2f)", 
-        savedPosition.X, savedPosition.Y, savedPosition.Z, 
-        offsetX, offsetY, offsetZ))
-
     -- Убираем все вещи из рук
     humanoid:UnequipTools()
 
@@ -10722,6 +10706,7 @@ addcmd('tpclone', {'executeTP'}, function()
     if #storedPeriastrons < MaxPeri then
         updateStoredPeriastrons()
 
+        -- Проверяем, что удалось найти 7 периастронов
         if #storedPeriastrons < MaxPeri then
             print("Не хватает 7 IvoryPeriastron в инвентаре.")
             return
@@ -10732,33 +10717,43 @@ addcmd('tpclone', {'executeTP'}, function()
     for i, periastron in pairs(storedPeriastrons) do
         if not periastron or not periastron.Parent then
             print("Обнаружен невалидный периастрон: " .. tostring(i))
+            -- Очищаем список периастронов и останавливаем выполнение
             storedPeriastrons = {}
             return
         end
     end
 
+    -- Определяем количество итераций в зависимости от смещения ротации
     local iterations = MaxPeri
     if rotationOffset == CFrame.Angles(0, 0, 0) then
-        iterations = 1
+        iterations = 1 -- Если смещение ротации нулевое, то только 1 итерация
     end
 
+    -- Экипируем периастроны
     for i = 1, iterations do
         local ivoryPeriastron = storedPeriastrons[i]
+
+        -- Перемещаем периастрон в Character, чтобы экипировать
         ivoryPeriastron.Parent = character
         print(i .. "-й IvoryPeriastron экипирован.")
     end
 
+    -- Телепортируем игрока на сохранённую позицию (можно добавить сохранение позиции)
     hrp.CFrame = CFrame.new(savedPosition)
 
-    local delayTime = 0.1
+    -- Цикл для установки ротации с задержкой (выполняется один раз или 7 раз в зависимости от условий)
+    local delayTime = 0.1 -- Задержка между изменениями ротации
     for j = 1, 7 do
         hrp.CFrame = CFrame.new(hrp.Position) * savedRotation
         print(string.format("Ротация установлена: итерация %d", j))
         task.wait(delayTime)
     end
 
+    -- Вызов Remote для периастронов (только для первого, если смещение ротации нулевое)
     for i = 1, iterations do
         local ivoryPeriastron = storedPeriastrons[i]
+
+        -- Выполняем событие Remote с клавишей E для каждого периастрона
         local args = {
             [1] = Enum.KeyCode.E
         }
@@ -10772,7 +10767,6 @@ addcmd('tpclone', {'executeTP'}, function()
         end
     end
 end)
-
 
 
 
