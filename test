@@ -4635,7 +4635,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '25uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '27uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10619,61 +10619,78 @@ addcmd('tpclone', {'executeTP'}, function()
         return
     end
 
-    -- Извлекаем текущие углы ротации
-    local currentRotationX, currentRotationY, currentRotationZ = hrp.CFrame:ToEulerAnglesXYZ() -- Получаем углы в радианах по X, Y, Z
+    -- Получаем текущие углы ротации в радианах
+    local currentRotationX, currentRotationY, currentRotationZ = hrp.CFrame:ToEulerAnglesXYZ()
 
-    -- Преобразуем смещение в радианы
-    local offsetRotationX = math.rad(rotationOffset.X)
-    local offsetRotationY = math.rad(rotationOffset.Y)
-    local offsetRotationZ = math.rad(rotationOffset.Z)
+    -- Преобразуем смещение в радианы (если смещение = 0, то сохраняем текущее значение)
+    local offsetRotationX = (rotationOffset.X ~= 0) and math.rad(rotationOffset.X) or currentRotationX
+    local offsetRotationY = (rotationOffset.Y ~= 0) and math.rad(rotationOffset.Y) or currentRotationY
+    local offsetRotationZ = (rotationOffset.Z ~= 0) and math.rad(rotationOffset.Z) or currentRotationZ
 
-    -- Меняем только те оси, где указано смещение, иначе оставляем старое значение
-    local newRotationX = (rotationOffset.X ~= 0) and offsetRotationX or currentRotationX
-    local newRotationY = (rotationOffset.Y ~= 0) and offsetRotationY or currentRotationY
-    local newRotationZ = (rotationOffset.Z ~= 0) and offsetRotationZ or currentRotationZ
+    -- Применяем смещение к ротации и сохраняем результат
+    savedRotation = CFrame.Angles(offsetRotationX, offsetRotationY, offsetRotationZ)
 
-    -- Применяем новую ротацию к HumanoidRootPart
-    local newRotationCFrame = CFrame.Angles(newRotationX, newRotationY, newRotationZ)
-    hrp.CFrame = CFrame.new(hrp.Position) * newRotationCFrame
-
-    print(string.format("Новая ротация: X: %d, Y: %d, Z: %d", math.deg(newRotationX), math.deg(newRotationY), math.deg(newRotationZ)))
+    print("Ротация с учётом смещения сохранена:", savedRotation)
 
     -- Убираем все вещи из рук
     humanoid:UnequipTools()
 
-    -- Проверка периастронов и экипировка
+    -- Если переменная с периастронами пуста, заполняем её
     if #storedPeriastrons < MaxPeri then
         updateStoredPeriastrons()
+
+        -- Проверяем, что удалось найти 7 периастронов
         if #storedPeriastrons < MaxPeri then
             print("Не хватает 7 IvoryPeriastron в инвентаре.")
             return
         end
     end
 
+    -- Проверяем валидность всех периастронов
     for i, periastron in pairs(storedPeriastrons) do
         if not periastron or not periastron.Parent then
             print("Обнаружен невалидный периастрон: " .. tostring(i))
+            -- Очищаем список периастронов и останавливаем выполнение
             storedPeriastrons = {}
             return
         end
     end
 
-    -- Экипировка периастронов
+    -- Определяем количество итераций в зависимости от смещения ротации
     local iterations = MaxPeri
-    if rotationOffset == Vector3.new(0, 0, 0) then
+    if rotationOffset == CFrame.Angles(0, 0, 0) then
         iterations = 1 -- Если смещение ротации нулевое, то только 1 итерация
     end
 
+    -- Экипируем периастроны
     for i = 1, iterations do
         local ivoryPeriastron = storedPeriastrons[i]
+
+        -- Перемещаем периастрон в Character, чтобы экипировать
         ivoryPeriastron.Parent = character
         print(i .. "-й IvoryPeriastron экипирован.")
     end
 
-    -- Вызов Remote для периастронов
+    -- Телепортируем игрока на сохранённую позицию (можно добавить сохранение позиции)
+    hrp.CFrame = CFrame.new(savedPosition)
+
+    -- Цикл для установки ротации с задержкой (выполняется один раз или 7 раз в зависимости от условий)
+    local delayTime = 0.1 -- Задержка между изменениями ротации
+    for j = 1, 7 do
+        hrp.CFrame = CFrame.new(hrp.Position) * savedRotation
+        print(string.format("Ротация установлена: итерация %d", j))
+        task.wait(delayTime)
+    end
+
+    -- Вызов Remote для периастронов (только для первого, если смещение ротации нулевое)
     for i = 1, iterations do
         local ivoryPeriastron = storedPeriastrons[i]
-        local args = {[1] = Enum.KeyCode.E}
+
+        -- Выполняем событие Remote с клавишей E для каждого периастрона
+        local args = {
+            [1] = Enum.KeyCode.E
+        }
+
         local remote = ivoryPeriastron:FindFirstChild("Remote")
         if remote then
             remote:FireServer(unpack(args))
@@ -10683,6 +10700,7 @@ addcmd('tpclone', {'executeTP'}, function()
         end
     end
 end)
+
 
 
 
