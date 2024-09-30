@@ -10783,7 +10783,7 @@ addcmd('tpclone', {'executeTP'}, function()
     for i, periastron in pairs(storedPeriastrons) do
         if not periastron or not periastron.Parent then
             storedPeriastrons = {}
-            return
+            updateStoredPeriastrons()
         end
     end
 
