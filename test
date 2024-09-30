@@ -4670,7 +4670,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '30uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '31uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10642,8 +10642,15 @@ local function updateStoredPeriastrons()
 end
 
 local function calculatePositionAndRotationOffset(selectedPart, clonedPart)
+    -- Получаем HumanoidRootPart игрока
+    local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if not hrp then
+        notify("Ошибка", "HumanoidRootPart не найден.")
+        return
+    end
+
     -- Получаем позицию игрока
-    local playerPosition = game.Players.LocalPlayer.Character.PrimaryPart.Position
+    local playerPosition = hrp.Position
 
     -- Получаем относительное положение игрока от selectedPart
     local relativePosition = playerPosition - selectedPart.Position
@@ -10662,6 +10669,10 @@ local function calculatePositionAndRotationOffset(selectedPart, clonedPart)
 
     -- Обновляем savedPosition с новым значением
     savedPosition = finalPosition
+
+    -- Добавляем уведомление с результатами
+    notify("Результаты", string.format("savedPosition: %s\nrotationOffset: %s", tostring(savedPosition), tostring(rotationOffset)))
+
     return savedPosition, rotationOffset
 end
 
@@ -10673,12 +10684,14 @@ addcmd('tpclone', {'executeTP'}, function()
     local humanoid = character:FindFirstChild("Humanoid")
     local hrp = character:FindFirstChild("HumanoidRootPart")
 
+    -- Проверяем наличие необходимых частей персонажа
     if not hrp or not humanoid then
         print("Humanoid или HumanoidRootPart не найдены.")
         return
     end
 
-	savedPosition, rotationOffset = calculatePositionAndRotationOffset(selectedPart, clonedPart)
+    -- Вызов функции для расчёта savedPosition и rotationOffset
+    savedPosition, rotationOffset = calculatePositionAndRotationOffset(selectedPart, clonedPart)
 
     -- Получаем текущие углы ротации из HumanoidRootPart (возвращает три значения)
     local hrpX, hrpY, hrpZ = hrp.CFrame:ToEulerAnglesXYZ()
@@ -10738,7 +10751,7 @@ addcmd('tpclone', {'executeTP'}, function()
         print(i .. "-й IvoryPeriastron экипирован.")
     end
 
-    -- Телепортируем игрока на сохранённую позицию (можно добавить сохранение позиции)
+    -- Телепортируем игрока на сохранённую позицию
     hrp.CFrame = CFrame.new(savedPosition)
 
     -- Цикл для установки ротации с задержкой (выполняется один раз или 7 раз в зависимости от условий)
@@ -10767,6 +10780,7 @@ addcmd('tpclone', {'executeTP'}, function()
         end
     end
 end)
+
 
 
 
