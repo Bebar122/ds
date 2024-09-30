@@ -13144,6 +13144,36 @@ addcmd('fullbright',{'fb','fullbrightness'},function(args, speaker)
 	Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
 end)
 
+-- Переменная для управления бесконечным циклом
+local followMouse = false
+
+-- Команда для запуска бесконечного цикла
+addcmd('clonemouse', {}, function()
+    followMouse = true -- Включаем флаг для выполнения цикла
+
+    spawn(function() -- Запускаем цикл в отдельном потоке
+        while followMouse do
+            -- Получаем позицию мыши
+            local mousePosition = IYMouse.Hit.Position
+
+            -- Получаем текущую позицию clonedPart
+            local clonedPartPosition = clonedPart.Position
+
+            -- Перемещаем clonedPart за мышью, игнорируя ось Y
+            clonedPart.Position = Vector3.new(mousePosition.X, clonedPartPosition.Y, mousePosition.Z)
+
+            -- Немного подождем, чтобы цикл не был слишком быстрым
+            wait(0.1)
+        end
+    end)
+end)
+
+-- Команда для остановки бесконечного цикла
+addcmd('stopclonemouse', {}, function()
+    followMouse = false -- Останавливаем цикл
+end)
+
+
 addcmd('loopfullbright',{'loopfb'},function(args, speaker)
 	if brightLoop then
 		brightLoop:Disconnect()
