@@ -10781,7 +10781,7 @@ addcmd('moveX', {}, function(args, speaker)
     startTime = tick()
     while running do
         local elapsed = tick() - startTime
-        local currentMove = moveAmount * (1 + math.floor(elapsed / 2))
+        local currentMove = moveAmount * (1 + math.pow(elapsed, 2) / 4)  -- Увеличение квадратично
         clonedPart.Position = clonedPart.Position + Vector3.new(currentMove * 0.1, 0, 0)
         wait(0.1)
     end
@@ -10793,7 +10793,7 @@ addcmd('moveY', {}, function(args, speaker)
     startTime = tick()
     while running do
         local elapsed = tick() - startTime
-        local currentMove = moveAmount * (1 + math.floor(elapsed / 2))
+        local currentMove = moveAmount * (1 + math.pow(elapsed, 2) / 4)
         clonedPart.Position = clonedPart.Position + Vector3.new(0, currentMove * 0.1, 0)
         wait(0.1)
     end
@@ -10805,7 +10805,7 @@ addcmd('moveZ', {}, function(args, speaker)
     startTime = tick()
     while running do
         local elapsed = tick() - startTime
-        local currentMove = moveAmount * (1 + math.floor(elapsed / 2))
+        local currentMove = moveAmount * (1 + math.pow(elapsed, 2) / 4)
         clonedPart.Position = clonedPart.Position + Vector3.new(0, 0, currentMove * 0.1)
         wait(0.1)
     end
@@ -10817,7 +10817,7 @@ addcmd('rotateX', {}, function(args, speaker)
     startTime = tick()
     while running do
         local elapsed = tick() - startTime
-        local currentRotate = rotateAmount * (1 + math.floor(elapsed / 2))
+        local currentRotate = rotateAmount * (1 + math.pow(elapsed, 2) / 4)
         clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(math.rad(currentRotate * 0.1), 0, 0)
         wait(0.1)
     end
@@ -10829,7 +10829,7 @@ addcmd('rotateY', {}, function(args, speaker)
     startTime = tick()
     while running do
         local elapsed = tick() - startTime
-        local currentRotate = rotateAmount * (1 + math.floor(elapsed / 2))
+        local currentRotate = rotateAmount * (1 + math.pow(elapsed, 2) / 4)
         clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(0, math.rad(currentRotate * 0.1), 0)
         wait(0.1)
     end
@@ -10841,7 +10841,7 @@ addcmd('rotateZ', {}, function(args, speaker)
     startTime = tick()
     while running do
         local elapsed = tick() - startTime
-        local currentRotate = rotateAmount * (1 + math.floor(elapsed / 2))
+        local currentRotate = rotateAmount * (1 + math.pow(elapsed, 2) / 4)
         clonedPart.CFrame = clonedPart.CFrame * CFrame.Angles(0, 0, math.rad(currentRotate * 0.1))
         wait(0.1)
     end
