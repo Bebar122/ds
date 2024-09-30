@@ -4670,7 +4670,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '35uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '36uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10730,9 +10730,10 @@ addcmd('tpclone', {'executeTP'}, function()
         return
     end
 
+	if clonedPart then
     -- Вызов функции для расчёта savedPosition и rotationOffset
-    savedPosition, rotationOffset = calculatePositionAndRotationOffset(selectedPart, clonedPart)
-
+		savedPosition, rotationOffset = calculatePositionAndRotationOffset(selectedPart, clonedPart)
+	end
     -- Получаем текущие углы ротации из HumanoidRootPart (возвращает три значения)
     local hrpX, hrpY, hrpZ = hrp.CFrame:ToEulerAnglesXYZ()
 
@@ -10754,6 +10755,10 @@ addcmd('tpclone', {'executeTP'}, function()
 
     -- Убираем все вещи из рук
     humanoid:UnequipTools()
+
+    if rotationOffset == CFrame.Angles(0, 0, 0) then
+        MaxPeri = 1 -- Если смещение ротации нулевое, то только 1 итерация
+    end
 
     -- Если переменная с периастронами пуста, заполняем её
     if #storedPeriastrons < MaxPeri then
@@ -10779,7 +10784,7 @@ addcmd('tpclone', {'executeTP'}, function()
     -- Определяем количество итераций в зависимости от смещения ротации
     local iterations = MaxPeri
     if rotationOffset == CFrame.Angles(0, 0, 0) then
-        iterations = 1 -- Если смещение ротации нулевое, то только 1 итерация
+        MaxPeri = 1 -- Если смещение ротации нулевое, то только 1 итерация
     end
 
     -- Экипируем периастроны
