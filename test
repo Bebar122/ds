@@ -4670,7 +4670,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '31uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '32uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10642,30 +10642,50 @@ local function updateStoredPeriastrons()
 end
 
 local function calculatePositionAndRotationOffset(selectedPart, clonedPart)
-    -- Получаем HumanoidRootPart игрока
+    -- Проверяем наличие HumanoidRootPart
     local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
     if not hrp then
         notify("Ошибка", "HumanoidRootPart не найден.")
         return
     end
 
+    -- Проверка наличия selectedPart и clonedPart
+    if not selectedPart then
+        notify("Ошибка", "selectedPart не найден.")
+        return
+    end
+
+    if not clonedPart then
+        notify("Ошибка", "clonedPart не найден.")
+        return
+    end
+
     -- Получаем позицию игрока
+    notify("Информация", "Получаем позицию игрока...")
     local playerPosition = hrp.Position
+    notify("Информация", "Позиция игрока: " .. tostring(playerPosition))
 
     -- Получаем относительное положение игрока от selectedPart
+    notify("Информация", "Вычисляем относительное положение игрока от selectedPart...")
     local relativePosition = playerPosition - selectedPart.Position
+    notify("Информация", "Относительное положение: " .. tostring(relativePosition))
 
     -- Рассчитываем разницу в ротации между clonedPart и selectedPart
+    notify("Информация", "Рассчитываем разницу в ротации между clonedPart и selectedPart...")
     local rotationDifference = clonedPart.CFrame:ToObjectSpace(selectedPart.CFrame)
 
     -- Обновляем rotationOffset (в данном случае только углы)
     local rotationOffset = rotationDifference - CFrame.Angles(0, 0, 0)
+    notify("Информация", "rotationOffset: " .. tostring(rotationOffset))
 
     -- Поворачиваем относительный вектор на разницу в ротации
+    notify("Информация", "Поворачиваем относительный вектор на разницу в ротации...")
     local rotatedRelativePosition = rotationDifference:VectorToWorldSpace(relativePosition)
+    notify("Информация", "Повернутый относительный вектор: " .. tostring(rotatedRelativePosition))
 
     -- Помещаем начало этого вектора в центр clonedPart
     local finalPosition = clonedPart.Position + rotatedRelativePosition
+    notify("Информация", "Финальная позиция: " .. tostring(finalPosition))
 
     -- Обновляем savedPosition с новым значением
     savedPosition = finalPosition
@@ -10675,6 +10695,7 @@ local function calculatePositionAndRotationOffset(selectedPart, clonedPart)
 
     return savedPosition, rotationOffset
 end
+
 
 
 
