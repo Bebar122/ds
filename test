@@ -1478,6 +1478,7 @@ PositionsHint.TextWrapped = true
 PositionsHint.ZIndex = 10
 table.insert(text1,PositionsHint)
 
+-- Создаем окно интерфейса
 ToPartFrame.Name = randomString()
 ToPartFrame.Parent = PARENT
 ToPartFrame.Active = true
@@ -1486,16 +1487,18 @@ ToPartFrame.Position = UDim2.new(0.5, -180, 0, -500)
 ToPartFrame.Size = UDim2.new(0, 360, 0, 20)
 ToPartFrame.ZIndex = 10
 
+-- Фон
 background_4.Name = "background"
 background_4.Parent = ToPartFrame
 background_4.Active = true
 background_4.BackgroundColor3 = Color3.fromRGB(36, 36, 37)
 background_4.BorderSizePixel = 0
 background_4.Position = UDim2.new(0, 0, 0, 20)
-background_4.Size = UDim2.new(0, 360, 0, 117)
+background_4.Size = UDim2.new(0, 360, 0, 200) -- Увеличиваем высоту для размещения новых кнопок
 background_4.ZIndex = 10
-table.insert(shade1,background_4)
+table.insert(shade1, background_4)
 
+-- Кнопка выбора части
 ChoosePart.Name = "ChoosePart"
 ChoosePart.Parent = background_4
 ChoosePart.BackgroundColor3 = Color3.fromRGB(46, 46, 47)
@@ -1507,9 +1510,10 @@ ChoosePart.TextSize = 14
 ChoosePart.Text = "Select Part"
 ChoosePart.TextColor3 = Color3.new(1, 1, 1)
 ChoosePart.ZIndex = 10
-table.insert(shade2,ChoosePart)
-table.insert(text1,ChoosePart)
+table.insert(shade2, ChoosePart)
+table.insert(text1, ChoosePart)
 
+-- Кнопка копирования пути
 CopyPath.Name = "CopyPath"
 CopyPath.Parent = background_4
 CopyPath.BackgroundColor3 = Color3.fromRGB(46, 46, 47)
@@ -1521,9 +1525,10 @@ CopyPath.TextSize = 14
 CopyPath.Text = "Copy Path"
 CopyPath.TextColor3 = Color3.new(1, 1, 1)
 CopyPath.ZIndex = 10
-table.insert(shade2,CopyPath)
-table.insert(text1,CopyPath)
+table.insert(shade2, CopyPath)
+table.insert(text1, CopyPath)
 
+-- Инструкции
 Directions_3.Name = "Directions"
 Directions_3.Parent = background_4
 Directions_3.BackgroundTransparency = 1
@@ -1532,13 +1537,14 @@ Directions_3.Position = UDim2.new(0, 51, 0, 17)
 Directions_3.Size = UDim2.new(0, 257, 0, 32)
 Directions_3.Font = Enum.Font.SourceSans
 Directions_3.TextSize = 14
-Directions_3.Text = 'Click on a part and then click the "Select Part" button below to set it as a teleport location'
+Directions_3.Text = 'Click on a part and then click "Select Part"'
 Directions_3.TextColor3 = Color3.new(1, 1, 1)
 Directions_3.TextWrapped = true
 Directions_3.TextYAlignment = Enum.TextYAlignment.Top
 Directions_3.ZIndex = 10
-table.insert(text1,Directions_3)
+table.insert(text1, Directions_3)
 
+-- Текст пути
 Path.Name = "Path"
 Path.Parent = background_4
 Path.BackgroundTransparency = 1
@@ -1553,104 +1559,56 @@ Path.TextScaled = true
 Path.TextWrapped = true
 Path.TextYAlignment = Enum.TextYAlignment.Top
 Path.ZIndex = 10
-table.insert(text1,Path)
+table.insert(text1, Path)
 
-shadow_4.Name = "shadow"
-shadow_4.Parent = ToPartFrame
-shadow_4.BackgroundColor3 = Color3.fromRGB(46, 46, 47)
-shadow_4.BorderSizePixel = 0
-shadow_4.Size = UDim2.new(0, 360, 0, 20)
-shadow_4.ZIndex = 10
-table.insert(shade2,shadow_4)
+-- Добавляем кнопки для изменения позиции и вращения блока
+-- Кнопка для перемещения вверх
+MoveUpButton = Instance.new("TextButton")
+MoveUpButton.Name = "MoveUpButton"
+MoveUpButton.Parent = background_4
+MoveUpButton.BackgroundColor3 = Color3.fromRGB(46, 46, 47)
+MoveUpButton.BorderSizePixel = 0
+MoveUpButton.Position = UDim2.new(0, 50, 0, 140)
+MoveUpButton.Size = UDim2.new(0, 50, 0, 30)
+MoveUpButton.Font = Enum.Font.SourceSans
+MoveUpButton.TextSize = 14
+MoveUpButton.Text = "Move Up"
+MoveUpButton.TextColor3 = Color3.new(1, 1, 1)
+MoveUpButton.ZIndex = 10
+table.insert(shade2, MoveUpButton)
+table.insert(text1, MoveUpButton)
 
-PopupText_5.Name = "PopupText"
-PopupText_5.Parent = shadow_4
-PopupText_5.BackgroundTransparency = 1
-PopupText_5.Size = UDim2.new(1, 0, 0.95, 0)
-PopupText_5.ZIndex = 10
-PopupText_5.Font = Enum.Font.SourceSans
-PopupText_5.TextSize = 14
-PopupText_5.Text = "Teleport to Part"
-PopupText_5.TextColor3 = Color3.new(1, 1, 1)
-PopupText_5.TextWrapped = true
-table.insert(text1,PopupText_5)
+-- Кнопка для перемещения вниз
+MoveDownButton = Instance.new("TextButton")
+MoveDownButton.Name = "MoveDownButton"
+MoveDownButton.Parent = background_4
+MoveDownButton.BackgroundColor3 = Color3.fromRGB(46, 46, 47)
+MoveDownButton.BorderSizePixel = 0
+MoveDownButton.Position = UDim2.new(0, 110, 0, 140)
+MoveDownButton.Size = UDim2.new(0, 50, 0, 30)
+MoveDownButton.Font = Enum.Font.SourceSans
+MoveDownButton.TextSize = 14
+MoveDownButton.Text = "Move Down"
+MoveDownButton.TextColor3 = Color3.new(1, 1, 1)
+MoveDownButton.ZIndex = 10
+table.insert(shade2, MoveDownButton)
+table.insert(text1, MoveDownButton)
 
-Exit_4.Name = "Exit"
-Exit_4.Parent = shadow_4
-Exit_4.BackgroundTransparency = 1
-Exit_4.Position = UDim2.new(1, -20, 0, 0)
-Exit_4.Size = UDim2.new(0, 20, 0, 20)
-Exit_4.Text = ""
-Exit_4.ZIndex = 10
-
-ExitImage_5.Parent = Exit_4
-ExitImage_5.BackgroundColor3 = Color3.new(1, 1, 1)
-ExitImage_5.BackgroundTransparency = 1
-ExitImage_5.Position = UDim2.new(0, 5, 0, 5)
-ExitImage_5.Size = UDim2.new(0, 10, 0, 10)
-ExitImage_5.Image = "rbxassetid://5054663650"
-ExitImage_5.ZIndex = 10
-
-logs.Name = randomString()
-logs.Parent = PARENT
-logs.Active = true
-logs.BackgroundTransparency = 1
-logs.Position = UDim2.new(0, 0, 1, 10)
-logs.Size = UDim2.new(0, 338, 0, 20)
-logs.ZIndex = 10
-
-shadow.Name = "shadow"
-shadow.Parent = logs
-shadow.BackgroundColor3 = Color3.new(0.180392, 0.180392, 0.184314)
-shadow.BorderSizePixel = 0
-shadow.Position = UDim2.new(0, 0, 0.00999999978, 0)
-shadow.Size = UDim2.new(0, 338, 0, 20)
-shadow.ZIndex = 10
-table.insert(shade2,shadow)
-
-Hide.Name = "Hide"
-Hide.Parent = shadow
-Hide.BackgroundTransparency = 1
-Hide.Position = UDim2.new(1, -40, 0, 0)
-Hide.Size = UDim2.new(0, 20, 0, 20)
-Hide.ZIndex = 10
-Hide.Text = ""
-
-ImageLabel.Parent = Hide
-ImageLabel.BackgroundColor3 = Color3.new(1, 1, 1)
-ImageLabel.BackgroundTransparency = 1
-ImageLabel.Position = UDim2.new(0, 3, 0, 3)
-ImageLabel.Size = UDim2.new(0, 14, 0, 14)
-ImageLabel.Image = "rbxassetid://2406617031"
-ImageLabel.ZIndex = 10
-
-PopupText.Name = "PopupText"
-PopupText.Parent = shadow
-PopupText.BackgroundTransparency = 1
-PopupText.Size = UDim2.new(1, 0, 0.949999988, 0)
-PopupText.ZIndex = 10
-PopupText.Font = Enum.Font.SourceSans
-PopupText.FontSize = Enum.FontSize.Size14
-PopupText.Text = "Logs"
-PopupText.TextColor3 = Color3.new(1, 1, 1)
-PopupText.TextWrapped = true
-table.insert(text1,PopupText)
-
-Exit.Name = "Exit"
-Exit.Parent = shadow
-Exit.BackgroundTransparency = 1
-Exit.Position = UDim2.new(1, -20, 0, 0)
-Exit.Size = UDim2.new(0, 20, 0, 20)
-Exit.ZIndex = 10
-Exit.Text = ""
-
-ImageLabel_2.Parent = Exit
-ImageLabel_2.BackgroundColor3 = Color3.new(1, 1, 1)
-ImageLabel_2.BackgroundTransparency = 1
-ImageLabel_2.Position = UDim2.new(0, 5, 0, 5)
-ImageLabel_2.Size = UDim2.new(0, 10, 0, 10)
-ImageLabel_2.Image = "rbxassetid://5054663650"
-ImageLabel_2.ZIndex = 10
+-- Кнопка для вращения по оси Y
+RotateButton = Instance.new("TextButton")
+RotateButton.Name = "RotateButton"
+RotateButton.Parent = background_4
+RotateButton.BackgroundColor3 = Color3.fromRGB(46, 46, 47)
+RotateButton.BorderSizePixel = 0
+RotateButton.Position = UDim2.new(0, 170, 0, 140)
+RotateButton.Size = UDim2.new(0, 75, 0, 30)
+RotateButton.Font = Enum.Font.SourceSans
+RotateButton.TextSize = 14
+RotateButton.Text = "Rotate"
+RotateButton.TextColor3 = Color3.new(1, 1, 1)
+RotateButton.ZIndex = 10
+table.insert(shade2, RotateButton)
+table.insert(text1, RotateButton)
 
 background.Name = "background"
 background.Parent = logs
@@ -4127,34 +4085,58 @@ CopyPath.MouseButton1Click:Connect(function()
 	end
 end)
 
-ChoosePart.MouseButton1Click:Connect(function()
-	if Path.Text ~= "" then
-		local tpNameExt = ''
-		local function handleWpNames()
-			local FoundDupe = false
-			for i,v in pairs(pWayPoints) do
-				if v.NAME:lower() == selected.Adornee.Name:lower()..tpNameExt then
-					FoundDupe = true
-				end
-			end
-			if not FoundDupe then
-				notify('Modified Waypoints',"Created waypoint: "..selected.Adornee.Name..tpNameExt)
-				pWayPoints[#pWayPoints + 1] = {NAME = selected.Adornee.Name..tpNameExt, COORD = {selected.Adornee}}
-			else
-				if isNumber(tpNameExt) then
-					tpNameExt = tpNameExt+1
-				else
-					tpNameExt = 1
-				end
-				handleWpNames()
-			end
-		end
-		handleWpNames()
-		refreshwaypoints()
-	else
-		notify('Part Selection','Select a part first')
-	end
+local function movePart(direction)
+    if selected.Adornee then
+        if direction == "up" then
+            selected.Adornee.Position = selected.Adornee.Position + Vector3.new(0, 1, 0)
+        elseif direction == "down" then
+            selected.Adornee.Position = selected.Adornee.Position - Vector3.new(0, 1, 0)
+        end
+    end
+end
+
+local function rotatePart()
+    if selected.Adornee then
+        selected.Adornee.Orientation = selected.Adornee.Orientation + Vector3.new(0, 45, 0) -- Вращаем на 45 градусов по оси Y
+    end
+end
+
+-- Привязка кнопок к функциям
+MoveUpButton.MouseButton1Click:Connect(function()
+    movePart("up")
 end)
+
+MoveDownButton.MouseButton1Click:Connect(function()
+    movePart("down")
+end)
+
+RotateButton.MouseButton1Click:Connect(function()
+    rotatePart()
+end)
+
+ChoosePart.MouseButton1Click:Connect(function()
+    if Path.Text ~= "" and selected.Adornee ~= nil then
+        -- Клонируем выбранный блок
+        local clonedPart = selected.Adornee:Clone()
+        
+        -- Изменяем свойства нового блока
+        clonedPart.Color = Color3.new(1, 0, 0) -- Красный цвет
+        clonedPart.Transparency = 0.5 -- Полупрозрачность
+        clonedPart.Anchored = true -- Оставляем блок на месте
+
+        -- Перемещаем новый блок рядом с исходным или на его место
+        clonedPart.CFrame = selected.Adornee.CFrame + Vector3.new(3, 0, 0) -- Смещаем на 3 единицы по оси X
+        
+        -- Помещаем клон в ту же родительскую папку, что и оригинал
+        clonedPart.Parent = selected.Adornee.Parent
+        
+        -- Уведомляем пользователя о создании клона
+        notify('Part Cloned', 'Создан клон выбранной части с красным цветом и прозрачностью 0.5')
+    else
+        notify('Part Selection', 'Select a part first')
+    end
+end)
+
 
 cmds={}
 customAlias = {}
