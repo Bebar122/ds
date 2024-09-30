@@ -4670,7 +4670,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '32uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '33uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10650,13 +10650,13 @@ local function calculatePositionAndRotationOffset(selectedPart, clonedPart)
     end
 
     -- Проверка наличия selectedPart и clonedPart
-    if not selectedPart then
-        notify("Ошибка", "selectedPart не найден.")
+    if not selectedPart or not selectedPart:IsA("BasePart") then
+        notify("Ошибка", "selectedPart не найден или не является BasePart.")
         return
     end
 
-    if not clonedPart then
-        notify("Ошибка", "clonedPart не найден.")
+    if not clonedPart or not clonedPart:IsA("BasePart") then
+        notify("Ошибка", "clonedPart не найден или не является BasePart.")
         return
     end
 
@@ -10672,7 +10672,14 @@ local function calculatePositionAndRotationOffset(selectedPart, clonedPart)
 
     -- Рассчитываем разницу в ротации между clonedPart и selectedPart
     notify("Информация", "Рассчитываем разницу в ротации между clonedPart и selectedPart...")
-    local rotationDifference = clonedPart.CFrame:ToObjectSpace(selectedPart.CFrame)
+    local success, rotationDifference = pcall(function()
+        return clonedPart.CFrame:ToObjectSpace(selectedPart.CFrame)
+    end)
+
+    if not success then
+        notify("Ошибка", "Не удалось вычислить rotationDifference.")
+        return
+    end
 
     -- Обновляем rotationOffset (в данном случае только углы)
     local rotationOffset = rotationDifference - CFrame.Angles(0, 0, 0)
@@ -10695,6 +10702,7 @@ local function calculatePositionAndRotationOffset(selectedPart, clonedPart)
 
     return savedPosition, rotationOffset
 end
+
 
 
 
