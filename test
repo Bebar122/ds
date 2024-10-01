@@ -4670,7 +4670,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '57uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '58uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10723,7 +10723,7 @@ local function calculatePositionAndRotationOffset(selectedPart, clonedPart)
     notify("Результаты", string.format("rotationOffset (градусы): X: %.2f, Y: %.2f, Z: %.2f", 
         rotationOffsetDegreesX, rotationOffsetDegreesY, rotationOffsetDegreesZ))
 
-    return savedPosition, rotationOffset
+    return savedPosition, rotationOffset, finalCFrame
 end
 
 
@@ -10782,7 +10782,7 @@ addcmd('tpclone', {'executeTP'}, function()
 
 	if clonedPart and selectedPart then
     -- Вызов функции для расчёта savedPosition и rotationOffset
-		savedPosition, rotationOffset = calculatePositionAndRotationOffset(selectedPart, clonedPart)
+		savedPosition, rotationOffset, local finalCFrame = calculatePositionAndRotationOffset(selectedPart, clonedPart)
 		--rotationOffset = calculateRotationOffset(player, selectedPart, clonedPart)
 	end
     -- Получаем текущие углы ротации из HumanoidRootPart (возвращает три значения)
@@ -10852,12 +10852,13 @@ addcmd('tpclone', {'executeTP'}, function()
     end
 
     -- Телепортируем игрока на сохранённую позицию
-    hrp.CFrame = CFrame.new(savedPosition)
+    --hrp.CFrame = CFrame.new(savedPosition)
 
     -- Цикл для установки ротации с задержкой (выполняется один раз или 7 раз в зависимости от условий)
     local delayTime = 0.1 -- Задержка между изменениями ротации
     for j = 1, 7 do
-        hrp.CFrame = CFrame.new(hrp.Position) * savedRotation
+	hrp.CFrame = finalCFrame
+        --hrp.CFrame = CFrame.new(hrp.Position) * savedRotation
         print(string.format("Ротация установлена: итерация %d", j))
         task.wait(delayTime)
     end
