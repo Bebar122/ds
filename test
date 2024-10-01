@@ -4670,7 +4670,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '48uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '50uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10670,6 +10670,10 @@ local function calculatePositionAndRotationOffset(selectedPart, clonedPart)
     local relativePosition = playerPosition - selectedPart.Position
     notify("Информация", "Относительное положение: " .. tostring(relativePosition))
 
+    -- Получаем вектора lookVector и upVector игрока
+    local lookVector = hrp.CFrame.LookVector
+    local upVector = hrp.CFrame.UpVector
+
     -- Рассчитываем разницу в позиции между clonedPart и selectedPart
     notify("Информация", "Рассчитываем разницу в позиции...")
     local positionDifference = clonedPart.Position - selectedPart.Position
@@ -10694,22 +10698,30 @@ local function calculatePositionAndRotationOffset(selectedPart, clonedPart)
     local rotatedRelativePosition = rotationOffset:VectorToWorldSpace(relativePosition)
     notify("Информация", "Повернутый относительный вектор: " .. tostring(rotatedRelativePosition))
 
+    -- Поворачиваем вектора lookVector и upVector на разницу в ротации
+    local rotatedLookVector = rotationOffset:VectorToWorldSpace(lookVector)
+    local rotatedUpVector = rotationOffset:VectorToWorldSpace(upVector)
+
     -- Помещаем начало этого вектора в центр clonedPart
     local finalPosition = clonedPart.Position + rotatedRelativePosition
     notify("Информация", "Финальная позиция: " .. tostring(finalPosition))
 
+    -- Находим новое значение CFrame для clonedPart, чтобы lookVector и upVector совпадали
+    local finalCFrame = CFrame.fromMatrix(finalPosition, rotatedLookVector, rotatedUpVector)
+
     -- Обновляем savedPosition с новым значением
     savedPosition = finalPosition
 
-    -- Добавляем уведомление с результатами
     -- Преобразуем ротационный офсет в градусы
-	local rotationOffsetDegreesX = math.deg(rotationOffsetX)
-	local rotationOffsetDegreesY = math.deg(rotationOffsetY)
-	local rotationOffsetDegreesZ = math.deg(rotationOffsetZ)
-	
-	-- Выводим rotationOffset в градусах
-	notify("Результаты", string.format("rotationOffset (градусы): X: %.2f, Y: %.2f, Z: %.2f", 
-	    rotationOffsetDegreesX, rotationOffsetDegreesY, rotationOffsetDegreesZ))
+    local rotationOffsetDegreesX = math.deg(rotationOffsetX)
+    local rotationOffsetDegreesY = math.deg(rotationOffsetY)
+    local rotationOffsetDegreesZ = math.deg(rotationOffsetZ)
+
+    local rotationOffset = hrp.CFrame:ToObjectSpace(finalCFrame)
+
+    -- Выводим rotationOffset в градусах
+    notify("Результаты", string.format("rotationOffset (градусы): X: %.2f, Y: %.2f, Z: %.2f", 
+        rotationOffsetDegreesX, rotationOffsetDegreesY, rotationOffsetDegreesZ))
 
     return savedPosition, rotationOffset
 end
@@ -10771,7 +10783,7 @@ addcmd('tpclone', {'executeTP'}, function()
 	if clonedPart and selectedPart then
     -- Вызов функции для расчёта savedPosition и rotationOffset
 		savedPosition, rotationOffset = calculatePositionAndRotationOffset(selectedPart, clonedPart)
-		rotationOffset = calculateRotationOffset(player, selectedPart, clonedPart)
+		--rotationOffset = calculateRotationOffset(player, selectedPart, clonedPart)
 	end
     -- Получаем текущие углы ротации из HumanoidRootPart (возвращает три значения)
     local hrpX, hrpY, hrpZ = hrp.CFrame:ToEulerAnglesXYZ()
