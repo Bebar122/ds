@@ -4670,7 +4670,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '55uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '56uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10707,7 +10707,7 @@ local function calculatePositionAndRotationOffset(selectedPart, clonedPart)
     notify("Информация", "Финальная позиция: " .. tostring(finalPosition))
 
     -- Находим новое значение CFrame для clonedPart, чтобы lookVector и upVector совпадали
-    local finalCFrame = CFrame.fromMatrix(finalPosition, rotatedUpVector:Cross(rotatedLookVector).Unit * -1, rotatedUpVector, rotatedLookVector)
+    local finalCFrame = CFrame.fromMatrix(finalPosition, rotatedUpVector:Cross(rotatedLookVector).Unit, rotatedUpVector, rotatedLookVector * -1)
 
     -- Обновляем savedPosition с новым значением
     savedPosition = finalPosition
