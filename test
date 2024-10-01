@@ -4670,7 +4670,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '69uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '70uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10880,13 +10880,13 @@ addcmd('tpclone', {'executeTP'}, function()
             print("Remote не найден у " .. i .. "-го IvoryPeriastron.")
         end
     end
-	--task.wait(0.3)
+	task.wait(1.0)
 
-	--keypress(0x31)
-	--wait(0.05)
-	--keyrelease(0x31)
-	--task.wait(0.3)
-	--execCmd('ivoryuse')
+	keypress(0x31)
+	wait(0.05)
+	keyrelease(0x31)
+	task.wait(1.0)
+	execCmd('ivoryuse')
 end)
 
 
