@@ -4670,7 +4670,7 @@ CMDs[#CMDs + 1] = {NAME = 'copyuserid / copyid [player]', DESC = 'Copies a playe
 CMDs[#CMDs + 1] = {NAME = 'appearanceid / aid [player]', DESC = 'Notifies a players appearance ID'}
 CMDs[#CMDs + 1] = {NAME = 'copyappearanceid / caid [player]', DESC = 'Copies a players appearance ID to your clipboard'}
 CMDs[#CMDs + 1] = {NAME = 'bang [player] [speed]', DESC = 'owo'}
-CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '47uwu'}
+CMDs[#CMDs + 1] = {NAME = 'tpclone', DESC = '48uwu'}
 CMDs[#CMDs + 1] = {NAME = 'unbang', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'setrot', DESC = 'uwu'}
 CMDs[#CMDs + 1] = {NAME = 'throwaxes', DESC = 'uwu'}
@@ -10717,7 +10717,7 @@ end
 
 
 
--- Функция для вычисления rotationOffset через вектор направления
+-- Функция для вычисления rotationOffset с точной ротацией по всем осям
 function calculateRotationOffset(player, selectedPart, clonedPart)
     -- Получаем HumanoidRootPart игрока
     local hrp = player.Character:FindFirstChild("HumanoidRootPart")
@@ -10730,15 +10730,19 @@ function calculateRotationOffset(player, selectedPart, clonedPart)
 
     -- Получаем forward-вектор (вектор направления взгляда) игрока
     local playerLookVector = hrp.CFrame.LookVector
+    -- Получаем верхний вектор игрока
+    local playerUpVector = hrp.CFrame.UpVector
 
     -- Получаем относительную ротацию clonedPart по отношению к selectedPart
     local rotationDelta = selectedPart.CFrame:ToObjectSpace(clonedPart.CFrame)
 
     -- Поворачиваем forward-вектор игрока на разницу в ротациях
     local rotatedLookVector = rotationDelta:VectorToWorldSpace(playerLookVector)
+    -- Поворачиваем верхний вектор игрока на ту же разницу
+    local rotatedUpVector = rotationDelta:VectorToWorldSpace(playerUpVector)
 
-    -- Чтобы вычислить rotationOffset, нужно повернуть игрока так, чтобы его forward-вектор совпал с rotatedLookVector
-    local targetCFrame = CFrame.lookAt(hrp.Position, hrp.Position + rotatedLookVector)
+    -- Чтобы вычислить rotationOffset, нужно повернуть игрока так, чтобы его forward-вектор и верхний вектор совпали с новыми
+    local targetCFrame = CFrame.lookAt(hrp.Position, hrp.Position + rotatedLookVector, rotatedUpVector)
 
     -- Вычисляем разницу между текущим CFrame игрока и целевым CFrame
     local rotationOffset = hrp.CFrame:ToObjectSpace(targetCFrame)
