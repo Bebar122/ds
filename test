@@ -10779,10 +10779,10 @@ addcmd('tpclone', {'executeTP'}, function()
     end
 
 	MaxPeri = 7
-
+	local finalCFrame
 	if clonedPart and selectedPart then
     -- Вызов функции для расчёта savedPosition и rotationOffset
-		savedPosition, rotationOffset, local finalCFrame = calculatePositionAndRotationOffset(selectedPart, clonedPart)
+		savedPosition, rotationOffset, finalCFrame = calculatePositionAndRotationOffset(selectedPart, clonedPart)
 		--rotationOffset = calculateRotationOffset(player, selectedPart, clonedPart)
 	end
     -- Получаем текущие углы ротации из HumanoidRootPart (возвращает три значения)
