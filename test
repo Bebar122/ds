@@ -4566,6 +4566,7 @@ CMDs[#CMDs + 1] = {NAME = 'esp', DESC = 'View all players and their status'}
 CMDs[#CMDs + 1] = {NAME = 'movetools', DESC = 'View all players and their status'}
 CMDs[#CMDs + 1] = {NAME = 'movetool', DESC = 'View all players and their status'}
 CMDs[#CMDs + 1] = {NAME = 'noesp / unesp', DESC = 'Removes esp'}
+CMDs[#CMDs + 1] = {NAME = 'scanev', DESC = 'Removes esp'}
 CMDs[#CMDs + 1] = {NAME = 'esptransparency [number]', DESC = 'Changes the transparency of esp related commands'}
 CMDs[#CMDs + 1] = {NAME = 'partesp [part name]', DESC = 'Highlights a part'}
 CMDs[#CMDs + 1] = {NAME = 'unpartesp / nopartesp [part name]', DESC = 'removes partesp'}
@@ -11468,6 +11469,24 @@ addcmd('copyposition', {'copypos'}, function(args, speaker)
         -- Копируем позицию в буфер обмена в виде строки
         toClipboard(roundedPos.X .. ", " .. roundedPos.Y .. ", " .. roundedPos.Z)
     end
+end)
+
+addcmd('scanevents',{'scanev','scaninventory'},function(args, speaker)
+	local inventory = speaker.Backpack:GetChildren() -- Сканируем инвентарь игрока
+	local eventsList = {}
+
+	for _, item in pairs(inventory) do
+		local descendants = item:GetDescendants() -- Получаем всех потомков предмета
+		for _, desc in pairs(descendants) do
+			if desc:IsA("RemoteEvent") or desc:IsA("RemoteFunction") then
+				table.insert(eventsList, item.Name .. " - " .. desc.Name) -- Добавляем название предмета и имя эвента
+			end
+		end
+	end
+
+	local result = table.concat(eventsList, "\n") -- Собираем строку из всех эвентов
+	toClipboard(result) -- Копируем результат в буфер обмена
+	notify('Scan Complete', 'Events have been copied to clipboard')
 end)
 
 
