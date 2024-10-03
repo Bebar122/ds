@@ -4596,6 +4596,8 @@ CMDs[#CMDs + 1] = {NAME = 'copyfreecamposition / copyfcpos', DESC = 'Copies your
 CMDs[#CMDs + 1] = {NAME = 'gotocamera / gotocam', DESC = 'Teleports you to the location of your camera'}
 CMDs[#CMDs + 1] = {NAME = 'tweengotocam / tgotocam', DESC = 'Tweens you to the location of your camera'}
 CMDs[#CMDs + 1] = {NAME = 'firstp', DESC = 'Forces camera to go into first person'}
+CMDs[#CMDs + 1] = {NAME = 'launchrc', DESC = 'Forces camera to go into first person'}
+CMDs[#CMDs + 1] = {NAME = 'stoprc', DESC = 'Forces camera to go into first person'}
 CMDs[#CMDs + 1] = {NAME = 'thirdp', DESC = 'Allows camera to go into third person'}
 CMDs[#CMDs + 1] = {NAME = 'noclipcam / nccam', DESC = 'Allows camera to go through objects like walls'}
 CMDs[#CMDs + 1] = {NAME = 'maxzoom [num]', DESC = 'Maximum camera zoom'}
@@ -14049,6 +14051,95 @@ addcmd('stopBarrier',{'stoprcb'},function()
         rocketBarrierServ = nil
     end
 end)
+
+
+
+
+
+
+
+
+
+
+local rocketLaunchServ
+local rocketLaunchActive = false
+
+-- Функция для создания и запуска ракет по всей площади прямоугольника
+function launchRocketsInRectangle(minPos, maxPos, density, spawnHeight)
+    local xRange = math.abs(maxPos.X - minPos.X)
+    local zRange = math.abs(maxPos.Z - minPos.Z)
+
+    -- Количество ракет по X и Z осям
+    local numXRockets = math.ceil(density * (xRange / (xRange + zRange)))
+    local numZRockets = density - numXRockets
+
+    -- Запуск ракет по оси X
+    for i = 1, numXRockets do
+        local x = minPos.X + (xRange / numXRockets) * (i - 0.5) -- Равномерное распределение по X
+        local z = math.random(minPos.Z, maxPos.Z) -- Случайное значение по Z
+        local spawnPosition = Vector3.new(x, maxPos.Y + spawnHeight, z)
+        local targetPosition = Vector3.new(x, maxPos.Y, z)
+
+        -- Запуск ракеты
+        game:GetService("Players").LocalPlayer.Backpack.RocketJumper.FireRocket:FireServer(targetPosition, spawnPosition)
+    end
+
+    -- Запуск ракет по оси Z
+    for i = 1, numZRockets do
+        local z = minPos.Z + (zRange / numZRockets) * (i - 0.5) -- Равномерное распределение по Z
+        local x = math.random(minPos.X, maxPos.X) -- Случайное значение по X
+        local spawnPosition = Vector3.new(x, maxPos.Y + spawnHeight, z)
+        local targetPosition = Vector3.new(x, maxPos.Y, z)
+
+        -- Запуск ракеты
+        game:GetService("Players").LocalPlayer.Backpack.RocketJumper.FireRocket:FireServer(targetPosition, spawnPosition)
+    end
+end
+
+-- Команда для запуска ракетного барьера в прямоугольнике
+addcmd('launchRocketRect', {'launchrc'}, function(args, speaker)
+    if rocketLaunchServ then
+        rocketLaunchActive = false
+        wait(0.1)  -- Даем время для завершения текущей корутины
+        rocketLaunchServ = nil
+    end
+
+    -- Координаты первой и второй точки прямоугольника
+    local x1 = tonumber(args[1]) or speaker.Character.HumanoidRootPart.Position.X
+    local y1 = tonumber(args[2]) or speaker.Character.HumanoidRootPart.Position.Y
+    local z1 = tonumber(args[3]) or speaker.Character.HumanoidRootPart.Position.Z
+    local x2 = tonumber(args[4]) or speaker.Character.HumanoidRootPart.Position.X + 20 -- По умолчанию 20 блоков от первой точки
+    local y2 = tonumber(args[5]) or speaker.Character.HumanoidRootPart.Position.Y
+    local z2 = tonumber(args[6]) or speaker.Character.HumanoidRootPart.Position.Z + 20
+
+    local minPos = Vector3.new(math.min(x1, x2), math.min(y1, y2), math.min(z1, z2))
+    local maxPos = Vector3.new(math.max(x1, x2), math.max(y1, y2), math.max(z1, z2))
+
+    local density = tonumber(args[7]) or 10 -- Плотность ракет, по умолчанию 10
+    local spawnHeight = tonumber(args[8]) or 10 -- Высота спавна ракет, по умолчанию 10
+
+    rocketLaunchServ = coroutine.wrap(function()
+        launchRocketsInRectangle(minPos, maxPos, density, spawnHeight)
+    end)
+    rocketLaunchServ()
+end)
+
+-- Команда для остановки ракетного барьера
+addcmd('stopRocketLaunch', {'stoprc'}, function()
+    if rocketLaunchServ then
+        rocketLaunchActive = false
+        rocketLaunchServ = nil
+    end
+end)
+
+
+
+
+
+
+
+
+
 
 
 
