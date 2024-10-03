@@ -14096,8 +14096,17 @@ function launchRocketsInRectangle(minPos, maxPos, density, spawnHeight)
     end
 end
 
--- Команда для запуска ракетного барьера в прямоугольнике
-addcmd('launchRocketRect', {'launchrc'}, function(args, speaker)
+-- Функция для запуска ракетного барьера в бесконечном цикле
+function startRocketLoop(minPos, maxPos, density, spawnHeight, spawnInterval)
+    rocketLaunchActive = true
+    while rocketLaunchActive do
+        launchRocketsInRectangle(minPos, maxPos, density, spawnHeight)
+        wait(spawnInterval)
+    end
+end
+
+-- Команда для запуска ракетного барьера в прямоугольнике в бесконечном цикле
+addcmd('startRocketLoop', {'launchrc'}, function(args, speaker)
     if rocketLaunchServ then
         rocketLaunchActive = false
         wait(0.1)  -- Даем время для завершения текущей корутины
@@ -14117,20 +14126,22 @@ addcmd('launchRocketRect', {'launchrc'}, function(args, speaker)
 
     local density = tonumber(args[7]) or 10 -- Плотность ракет, по умолчанию 10
     local spawnHeight = tonumber(args[8]) or 10 -- Высота спавна ракет, по умолчанию 10
+    local spawnInterval = tonumber(args[9]) or 1 -- Интервал между запусками ракет, по умолчанию 1 секунда
 
     rocketLaunchServ = coroutine.wrap(function()
-        launchRocketsInRectangle(minPos, maxPos, density, spawnHeight)
+        startRocketLoop(minPos, maxPos, density, spawnHeight, spawnInterval)
     end)
     rocketLaunchServ()
 end)
 
 -- Команда для остановки ракетного барьера
-addcmd('stopRocketLaunch', {'stoprc'}, function()
+addcmd('stopRocketLoop', {'stoprc'}, function()
     if rocketLaunchServ then
         rocketLaunchActive = false
         rocketLaunchServ = nil
     end
 end)
+
 
 
 
