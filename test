@@ -10900,14 +10900,14 @@ end)
 addcmd("spawnhp", {"spawnhp"}, function(args, speaker)
 	game:GetService("Players").LocalPlayer.Backpack.OverseerwrathSword.Parent = speaker.Character
 	for i=1, 11 do
-		task.wait(0.1)
+		task.wait(0.25)
 		execCmd('permhold 1')
 	end
 	--hum = speaker.Character:FindFirstChild("Humanoid")
 	--hum:UnequipTools()
 end)
 
-addcmd("makestclone", {"mstcl"}, function(args, speaker)
+addcmd("clsetup", {"clset"}, function(args, speaker)
 
 	keypress(0x36)
 	wait(0.05)
@@ -10930,7 +10930,46 @@ addcmd("makestclone", {"mstcl"}, function(args, speaker)
 	--hum:UnequipTools()
 end)
 
+addcmd("makestclone", {"makestc"}, function(args, speaker)
+	local function sleep(a) 
+		startTime = tick()
+		local sec = startTime + a; 
+		while (tick() < sec) do 
+		end 
+	end
+	for i=1, 50 do
+		keypress(0x36)
+		keyrelease(0x36)
+		if i==46 then
+			keypress(0x52)
+			keyrelease(0x52)
+		end
+	
+		keypress(0x35)
+		keyrelease(0x35)
+		sleep(0.008)
+		keypress(0x35)
+		keyrelease(0x35)
+	
+		keypress(0x35)
+		keyrelease(0x35)
+		sleep(0.008)
+		keypress(0x35)
+		keyrelease(0x35)
+	
+		keypress(0x35)
+		keyrelease(0x35)
+		sleep(0.008)
+		keypress(0x35)
+		keyrelease(0x35)
+	
+		keypress(0x35)
+		keyrelease(0x35)
+		sleep(0.008)
+	end
 
+
+end)
 
 addcmd('setRotation', {'rotoff'}, function(args, speaker)
     local player = game.Players.LocalPlayer
