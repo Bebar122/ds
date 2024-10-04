@@ -10528,6 +10528,9 @@ addcmd('nolimbs',{'rlimbs'},function(args, speaker)
 	end
 end)
 
+
+
+
 addcmd('noarms',{'rarms'},function(args, speaker)
 	if r15(speaker) then
 		for i,v in pairs(speaker.Character:GetChildren()) do
@@ -10894,6 +10897,36 @@ end)
 
 
 
+addcmd("spawnhp", {"spawnhp"}, function(args, speaker)
+	game:GetService("Players").LocalPlayer.Backpack.OverseerwrathSword.Parent = speaker.Character
+	task.wait(0.1)
+	execCmd('permhold 13')
+	--hum = speaker.Character:FindFirstChild("Humanoid")
+	--hum:UnequipTools()
+end)
+
+addcmd("makestclone", {"mstcl"}, function(args, speaker)
+
+	keypress(0x36)
+	wait(0.05)
+	keyrelease(0x36)
+	task.wait(0.1)
+	execCmd('dst')
+	task.wait(0.1)
+	game:GetService("Players").LocalPlayer.Backpack.SpectralSword.Parent = speaker.Character
+	task.wait(0.5)
+
+	keypress(0x35)
+	wait(0.05)
+	keyrelease(0x35)
+	task.wait(0.1)
+	execCmd('dst')
+	task.wait(0.1)
+	game:GetService("Players").LocalPlayer.Backpack.EnergySword.Parent = speaker.Character
+
+	--hum = speaker.Character:FindFirstChild("Humanoid")
+	--hum:UnequipTools()
+end)
 
 
 
