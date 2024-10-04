@@ -14780,6 +14780,49 @@ end)
 
 
 
+
+addcmd('teleportsclone', {'tpsclone'}, function(args, speaker)
+    -- Поиск клона, у которого есть EnergySword
+    local clone = nil
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj:IsA("Model") and obj:FindFirstChild("EnergySword") then
+            local tool = obj:FindFirstChild("EnergySword")
+            local handle = tool:FindFirstChild("Handle")
+            if handle then
+                clone = obj
+                break
+            end
+        end
+    end
+
+    if not clone then
+        return notify("Handle Kill", "Клон с EnergySword не найден в рабочем пространстве.")
+    end
+    
+    -- Проверка наличия EnergySword и Handle у клона
+    local Tool = clone:FindFirstChild("EnergySword")
+    local Handle = Tool and Tool:FindFirstChild("Handle")
+    
+    if not Tool or not Handle then
+        return notify("Handle Kill", "Необходимо, чтобы клон держал \"EnergySword\" с ручкой для касания.")
+    end
+
+	local head = clone:FindFirstChild("Head")
+	local torso = clone:FindFirstChild("Torso")
+    local hrp = speaker.Character and speaker.Character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+	hrp.CFrame = CFrame.new(head.Position)*CFrame.new(0, 5, 0)
+	--print("Игрок телепортирован к спавну: " .. spawnLocation.Name)
+    else
+	print("HumanoidRootPart не найден у персонажа.")
+    end
+	wait(0.4)
+	torso.CFrame = CFrame.new(-1001, 277, 927)	
+
+end)
+
+
+
 local activeKillsClone = {}
 local connectionsClone = {}
 local clone = nil
