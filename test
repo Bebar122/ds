@@ -14078,7 +14078,10 @@ local projectileServ -- Переменная для хранения подкл�
 -- Функция для касания объектов Projectile с целью
 local function touchProjectile(target)
     local targetHRP = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
-    if not targetHRP then return end
+    if not targetHRP then 
+        notify('Ошибка', 'HumanoidRootPart не найден у цели')
+        return 
+    end
 
     -- Проходим по всем объектам в Workspace
     for _, obj in pairs(workspace:GetChildren()) do
@@ -14089,18 +14092,26 @@ local function touchProjectile(target)
             if touchInterest then
                 -- Имитируем касание цели
                 firetouchinterest(obj, targetHRP, 0) -- 0 = начало касания
-                wait(0.1) -- небольшая задержка
+                --notify('Касание', 'Коснулся объекта: ' .. obj.Name .. ' (Начало касания)')
+                
+                --wait(0.1) -- небольшая задержка
+
                 firetouchinterest(obj, targetHRP, 1) -- 1 = конец касания
-		notify('casanie','коснулся')
+                notify('Касание', 'Коснулся объекта: ' .. obj.Name .. ' (Конец касания)')
+            else
+                notify('Отсутствие TouchInterest', 'TouchInterest не найден у объекта: ' .. obj.Name)
             end
+        else
+            --notify('Пропуск объекта', 'Объект ' .. obj.Name .. ' не является Projectile')
         end
     end
 end
 
+
 -- Команда для активации постоянного касания объектов Projectile
 addcmd('touchprojectile', {'fprojectile'}, function(args, speaker)
     if projectileServ then projectileServ:Disconnect() end -- Отключаем предыдущее подключение, если оно было
-
+	notify('casanie','запущен')
     projectileServ = RunService.RenderStepped:Connect(function()
         local players = getPlayer(args[1], speaker)
         for _, player in pairs(players) do
