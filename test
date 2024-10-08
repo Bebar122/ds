@@ -14083,7 +14083,7 @@ local function touchProjectile(target)
     -- Проходим по всем объектам в Workspace
     for _, obj in pairs(workspace:GetChildren()) do
         -- Проверяем, является ли объект Projectile и является ли его прямым потомком
-        if obj:IsA("BasePart") and obj.Name == "Projectile" then
+        if obj.Name == "Projectile" then
             -- Проверяем, есть ли у объекта TouchInterest
             local touchInterest = obj:FindFirstChildOfClass("TouchTransmitter")
             if touchInterest then
@@ -14091,6 +14091,7 @@ local function touchProjectile(target)
                 firetouchinterest(obj, targetHRP, 0) -- 0 = начало касания
                 wait(0.1) -- небольшая задержка
                 firetouchinterest(obj, targetHRP, 1) -- 1 = конец касания
+		notify('casanie','коснулся')
             end
         end
     end
