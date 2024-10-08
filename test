@@ -4429,7 +4429,7 @@ function autoComplete(str,curText)
 end
 
 CMDs = {}
-CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = '333nvite to 674the Infinite Yield support server.'}
+CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = '111nvite to 674the Infinite Yield support server.'}
 CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'L3333444oads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
@@ -14070,6 +14070,47 @@ end)
 -- Команда для остановки касаний объектов Effect
 addcmd('stopeffect', {}, function(args, speaker)
     if effectServ then effectServ:Disconnect() end -- Отключаем RenderStepped, чтобы остановить касания
+end)
+
+
+local projectileServ -- Переменная для хранения подключения RenderStepped
+
+-- Функция для касания объектов Projectile с целью
+local function touchProjectile(target)
+    local targetHRP = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+    if not targetHRP then return end
+
+    -- Проходим по всем объектам в Workspace
+    for _, obj in pairs(workspace:GetChildren()) do
+        -- Проверяем, является ли объект Projectile и является ли его прямым потомком
+        if obj:IsA("BasePart") and obj.Name == "Projectile" then
+            -- Проверяем, есть ли у объекта TouchInterest
+            local touchInterest = obj:FindFirstChildOfClass("TouchTransmitter")
+            if touchInterest then
+                -- Имитируем касание цели
+                firetouchinterest(obj, targetHRP, 0) -- 0 = начало касания
+                wait(0.1) -- небольшая задержка
+                firetouchinterest(obj, targetHRP, 1) -- 1 = конец касания
+            end
+        end
+    end
+end
+
+-- Команда для активации постоянного касания объектов Projectile
+addcmd('touchprojectile', {'fprojectile'}, function(args, speaker)
+    if projectileServ then projectileServ:Disconnect() end -- Отключаем предыдущее подключение, если оно было
+
+    projectileServ = RunService.RenderStepped:Connect(function()
+        local players = getPlayer(args[1], speaker)
+        for _, player in pairs(players) do
+            touchProjectile(Players[player])
+        end
+    end)
+end)
+
+-- Команда для остановки касаний объектов Projectile
+addcmd('stopprojectile', {}, function(args, speaker)
+    if projectileServ then projectileServ:Disconnect() end -- Отключаем RenderStepped, чтобы остановить касания
 end)
 
 
