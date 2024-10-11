@@ -4429,7 +4429,7 @@ function autoComplete(str,curText)
 end
 
 CMDs = {}
-CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = '111nvite to 674the Infinite Yield support server.'}
+CMDs[#CMDs + 1] = {NAME = 'discord / support / help', DESC = '222nvite to 674the Infinite Yield support server.'}
 CMDs[#CMDs + 1] = {NAME = 'console', DESC = 'L3333444oads old Roblox consol332e'}
 CMDs[#CMDs + 1] = {NAME = 'explorer / dex', DESC = 'Opens DEX by Moon'}
 CMDs[#CMDs + 1] = {NAME = 'olddex / odex', DESC = 'Opens Old DEX by Moon'}
@@ -4547,7 +4547,7 @@ CMDs[#CMDs + 1] = {NAME = 'nowalltp / unwalltp', DESC = 'Disables walltp'}
 CMDs[#CMDs + 1] = {NAME = 'teleporttool / tptool', DESC = 'Gives you a teleport tool'}
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'logs', DESC = 'Opens the logs GUI'}
-CMDs[#CMDs + 1] = {NAME = 'godm2', DESC = 'Opens the logs GUI'}
+CMDs[#CMDs + 1] = {NAME = '2', DESC = 'Opens the logs GUI'}
 CMDs[#CMDs + 1] = {NAME = 'chatlogs / clogs', DESC = 'Log what people say or whisper'}
 CMDs[#CMDs + 1] = {NAME = 'joinlogs / jlogs', DESC = 'Log when people join'}
 CMDs[#CMDs + 1] = {NAME = 'chat / say [text]', DESC = 'Makes you chat a string (possible mute bypass)'}
@@ -4575,7 +4575,7 @@ CMDs[#CMDs + 1] = {NAME = 'nochams / unchams', DESC = 'Removes chams'}
 CMDs[#CMDs + 1] = {NAME = 'locate [player]', DESC = 'View a single player and their status'}
 CMDs[#CMDs + 1] = {NAME = 'unlocate / nolocate [player]', DESC = 'Removes locate'}
 CMDs[#CMDs + 1] = {NAME = 'xray', DESC = 'Makes all parts in workspace transparent'}
-CMDs[#CMDs + 1] = {NAME = 'godmode', DESC = 'Makes all parts in workspace transparent'}
+CMDs[#CMDs + 1] = {NAME = 'ode', DESC = 'Makes all parts in workspace transparent'}
 CMDs[#CMDs + 1] = {NAME = 'unxray / noxray', DESC = 'Restores transparency'}
 CMDs[#CMDs + 1] = {NAME = 'loopxray', DESC = 'Makes all parts in workspace transparent but looped'}
 CMDs[#CMDs + 1] = {NAME = 'unloopunxray', DESC = 'Unloops xray1'}
@@ -5658,10 +5658,21 @@ UserInputService.TextBoxFocused:Connect(function(obj)
 	end)
 end)
 
+local tigerskin = nil
+
 addcmd('godmode', {'godm'}, function(args, speaker)
     local player = game:GetService("Players").LocalPlayer
     local backpack = player.Backpack
     local humanoid = player.Character:FindFirstChildOfClass('Humanoid')
+
+	if not tigerskin then
+		tigerskin = backpack:FindFirstChild("TigerSkin")
+	end
+	tigerskin.Parent = player.Character
+	wait()
+	tigerskin:Activate()
+	wait()
+
 
     -- 1. Берем ChartreusePeriastron в руки
     if backpack:FindFirstChild("ChartreusePeriastron") then
@@ -5700,6 +5711,16 @@ addcmd('godmode', {'godm'}, function(args, speaker)
     humanoid:UnequipTools()
 
     notify("Sequence", "Action sequence completed.")
+end)
+
+
+addcmd('ungodm',{'ungod'},function(args, speaker) 
+	local player = game:GetService("Players").LocalPlayer
+	local backpack = player.Backpack
+	local humanoid = player.Character:FindFirstChildOfClass('Humanoid')
+	tigerskin.Parent = player.Character
+	wait()
+	humanoid:UnequipTools()
 end)
 
 
