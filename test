@@ -5665,9 +5665,9 @@ addcmd('godmode', {'godm'}, function(args, speaker)
     local backpack = player.Backpack
     local humanoid = player.Character:FindFirstChildOfClass('Humanoid')
 
-	if not tigerskin then
-		tigerskin = backpack:FindFirstChild("TigerSkin")
-	end
+
+	tigerskin = backpack:FindFirstChild("TigerSkin")
+
 	tigerskin.Parent = player.Character
 	wait()
 	tigerskin:Activate()
