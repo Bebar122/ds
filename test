@@ -4753,7 +4753,7 @@ CMDs[#CMDs + 1] = {NAME = 'lay / laydown', DESC = 'Makes your character lay down
 CMDs[#CMDs + 1] = {NAME = 'sitwalk', DESC = 'Makes your character sit while still being able to walk'}
 CMDs[#CMDs + 1] = {NAME = 'nosit', DESC = 'Prevents your character from sitting'}
 CMDs[#CMDs + 1] = {NAME = 'unnosit', DESC = 'Disables nosit'}
-CMDs[#CMDs + 1] = {NAME = 'moveobjects', DESC = '11Disables nosit'}
+CMDs[#CMDs + 1] = {NAME = 'moveobjects', DESC = '12221Disables nosit'}
 CMDs[#CMDs + 1] = {NAME = 'moveblock', DESC = '1Disables nosit'}
 CMDs[#CMDs + 1] = {NAME = 'jump', DESC = 'Makes your character jump'}
 CMDs[#CMDs + 1] = {NAME = 'infinitejump / infjump', DESC = 'Allows you to jump before hitting the ground'}
@@ -12921,11 +12921,14 @@ local function moveObjectsToMouse(speaker)
         return
     end
 
-    -- Найти все объекты в Workspace с таким же именем, как и инструмент
+    -- Найти все объекты в Workspace с таким же именем, как и инструмент, кроме инструмента в руках
     local matchingObjects = {}
     for _, obj in pairs(workspace:GetChildren()) do
         if obj.Name:lower() == tool and obj:FindFirstChild("Handle") then
-            table.insert(matchingObjects, obj.Handle) -- Добавляем все объекты с совпадающим именем
+            -- Исключаем объект, который игрок держит в руках
+            if obj ~= tool and not obj:IsDescendantOf(character) then
+                table.insert(matchingObjects, obj.Handle) -- Добавляем все объекты с совпадающим именем
+            end
         end
     end
 
