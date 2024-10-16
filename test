@@ -4753,7 +4753,7 @@ CMDs[#CMDs + 1] = {NAME = 'lay / laydown', DESC = 'Makes your character lay down
 CMDs[#CMDs + 1] = {NAME = 'sitwalk', DESC = 'Makes your character sit while still being able to walk'}
 CMDs[#CMDs + 1] = {NAME = 'nosit', DESC = 'Prevents your character from sitting'}
 CMDs[#CMDs + 1] = {NAME = 'unnosit', DESC = 'Disables nosit'}
-CMDs[#CMDs + 1] = {NAME = 'moveobjects', DESC = 'Disables nosit'}
+CMDs[#CMDs + 1] = {NAME = 'moveobjects', DESC = '11Disables nosit'}
 CMDs[#CMDs + 1] = {NAME = 'moveblock', DESC = '1Disables nosit'}
 CMDs[#CMDs + 1] = {NAME = 'jump', DESC = 'Makes your character jump'}
 CMDs[#CMDs + 1] = {NAME = 'infinitejump / infjump', DESC = 'Allows you to jump before hitting the ground'}
@@ -12886,15 +12886,27 @@ end)
 
 
 
-
 local Players = game:GetService("Players")
-local MouseService = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local active = false -- Флаг для отслеживания состояния команды
+local connection -- Переменная для хранения подключения к RenderStepped
 
 local function moveObjectsToMouse(speaker)
+    if active then
+        -- Отключить, если команда уже активна
+        if connection then
+            connection:Disconnect()
+            connection = nil
+        end
+        active = false
+        print("Команда отключена.")
+        return
+    end
+
     local character = speaker.Character
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
     local mouse = speaker:GetMouse()
-    
+
     -- Найти инструмент в руках игрока
     local tool
     for _, v in pairs(character:GetChildren()) do
@@ -12910,59 +12922,65 @@ local function moveObjectsToMouse(speaker)
     end
 
     -- Найти все объекты в Workspace с таким же именем, как и инструмент
+    local matchingObjects = {}
     for _, obj in pairs(workspace:GetChildren()) do
         if obj.Name:lower() == tool and obj:FindFirstChild("Handle") then
-            local handle = obj.Handle
-
-            -- Добавить BodyGyro для стабилизации ориентации
-            local gyro = Instance.new("BodyGyro", handle)
-            gyro.MaxTorque = Vector3.new(4000, 4000, 4000)
-            gyro.P = 3000
-            gyro.CFrame = handle.CFrame
-
-            -- Добавить BodyVelocity для плавного движения к цели
-            local velocity = Instance.new("BodyVelocity", handle)
-            velocity.MaxForce = Vector3.new(4000, 4000, 4000)
-            velocity.P = 1250  -- Более плавное движение
-
-            -- Логика для перемещения объекта к позиции мыши
-            local function updateMovement()
-                if speaker.Character then
-                    local hitPosition = mouse.Hit.Position
-                    local rootPartPosition = handle.Position
-                    -- Вычислить новое положение, ориентированное на положение мыши
-                    velocity.Velocity = (hitPosition - rootPartPosition).unit * 50
-                    -- Поворот объекта в сторону курсора
-                    gyro.CFrame = CFrame.new(rootPartPosition, hitPosition)
-                end
-            end
-
-            -- Привязка обновления перемещения к RenderStepped для постоянного обновления позиции
-            local connection
-            connection = game:GetService("RunService").RenderStepped:Connect(function()
-                if not handle.Parent then
-                    -- Прерываем, если объект удалён
-                    connection:Disconnect()
-                else
-                    updateMovement()
-                end
-            end)
+            table.insert(matchingObjects, obj.Handle) -- Добавляем все объекты с совпадающим именем
         end
     end
+
+    if #matchingObjects == 0 then
+        print("Объекты с таким же именем не найдены.")
+        return
+    end
+
+    active = true -- Включаем команду
+
+    -- Логика для перемещения объектов к позиции мыши
+    local function updateMovement()
+        if speaker.Character then
+            local hitPosition = mouse.Hit.Position
+            local characterY = character.HumanoidRootPart.Position.Y -- Высота персонажа
+            for _, handle in pairs(matchingObjects) do
+                -- Добавить BodyGyro для стабилизации ориентации
+                if not handle:FindFirstChild("BodyGyro") then
+                    local gyro = Instance.new("BodyGyro", handle)
+                    gyro.MaxTorque = Vector3.new(4000, 4000, 4000)
+                    gyro.P = 3000
+                    gyro.CFrame = handle.CFrame
+                end
+
+                -- Добавить BodyVelocity для плавного движения к цели
+                if not handle:FindFirstChild("BodyVelocity") then
+                    local velocity = Instance.new("BodyVelocity", handle)
+                    velocity.MaxForce = Vector3.new(4000, 4000, 4000)
+                    velocity.P = 1250  -- Более плавное движение
+                end
+
+                local velocity = handle:FindFirstChild("BodyVelocity")
+                local gyro = handle:FindFirstChild("BodyGyro")
+
+                local rootPartPosition = handle.Position
+                -- Устанавливаем высоту, равную высоте персонажа
+                local targetPosition = Vector3.new(hitPosition.X, characterY, hitPosition.Z)
+
+                -- Обновляем направление и скорость движения
+                velocity.Velocity = (targetPosition - rootPartPosition).unit * 50
+                gyro.CFrame = CFrame.new(rootPartPosition, targetPosition)
+            end
+        end
+    end
+
+    -- Привязка обновления перемещения к RenderStepped для постоянного обновления позиции
+    connection = RunService.RenderStepped:Connect(function()
+        updateMovement()
+    end)
 end
 
--- Команда для перемещения всех объектов с тем же именем, что и инструмент в руках игрока, к позиции курсора мыши
+-- Команда для активации/деактивации движения объектов к позиции курсора
 addcmd('moveobjects', {'moveobjects'}, function(args, speaker)
     moveObjectsToMouse(speaker)
 end)
-
--- Логика для запуска при правом клике мыши
-UserInputService.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton2 then -- Правый клик
-        moveObjectsToMouse(Players.LocalPlayer)
-    end
-end)
-
 
 
 
