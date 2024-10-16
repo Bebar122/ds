@@ -4753,6 +4753,7 @@ CMDs[#CMDs + 1] = {NAME = 'lay / laydown', DESC = 'Makes your character lay down
 CMDs[#CMDs + 1] = {NAME = 'sitwalk', DESC = 'Makes your character sit while still being able to walk'}
 CMDs[#CMDs + 1] = {NAME = 'nosit', DESC = 'Prevents your character from sitting'}
 CMDs[#CMDs + 1] = {NAME = 'unnosit', DESC = 'Disables nosit'}
+CMDs[#CMDs + 1] = {NAME = 'moveobjects', DESC = 'Disables nosit'}
 CMDs[#CMDs + 1] = {NAME = 'moveblock', DESC = '1Disables nosit'}
 CMDs[#CMDs + 1] = {NAME = 'jump', DESC = 'Makes your character jump'}
 CMDs[#CMDs + 1] = {NAME = 'infinitejump / infjump', DESC = 'Allows you to jump before hitting the ground'}
@@ -12882,6 +12883,89 @@ addcmd('removespecifictool',{'rst'},function(args, speaker)
 		specifictoolremoval[tool] = RST
 	end
 end)
+
+
+
+
+local Players = game:GetService("Players")
+local MouseService = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+
+local function moveObjectsToMouse(speaker)
+    local character = speaker.Character
+    local mouse = speaker:GetMouse()
+    
+    -- Найти инструмент в руках игрока
+    local tool
+    for _, v in pairs(character:GetChildren()) do
+        if v:IsA('Tool') then
+            tool = v.Name:lower() -- Имя инструмента в нижнем регистре
+            break
+        end
+    end
+
+    if not tool then
+        print("Инструмент не найден.")
+        return
+    end
+
+    -- Найти все объекты в Workspace с таким же именем, как и инструмент
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj.Name:lower() == tool and obj:FindFirstChild("Handle") then
+            local handle = obj.Handle
+
+            -- Добавить BodyGyro для стабилизации ориентации
+            local gyro = Instance.new("BodyGyro", handle)
+            gyro.MaxTorque = Vector3.new(4000, 4000, 4000)
+            gyro.P = 3000
+            gyro.CFrame = handle.CFrame
+
+            -- Добавить BodyVelocity для плавного движения к цели
+            local velocity = Instance.new("BodyVelocity", handle)
+            velocity.MaxForce = Vector3.new(4000, 4000, 4000)
+            velocity.P = 1250  -- Более плавное движение
+
+            -- Логика для перемещения объекта к позиции мыши
+            local function updateMovement()
+                if speaker.Character then
+                    local hitPosition = mouse.Hit.Position
+                    local rootPartPosition = handle.Position
+                    -- Вычислить новое положение, ориентированное на положение мыши
+                    velocity.Velocity = (hitPosition - rootPartPosition).unit * 50
+                    -- Поворот объекта в сторону курсора
+                    gyro.CFrame = CFrame.new(rootPartPosition, hitPosition)
+                end
+            end
+
+            -- Привязка обновления перемещения к RenderStepped для постоянного обновления позиции
+            local connection
+            connection = game:GetService("RunService").RenderStepped:Connect(function()
+                if not handle.Parent then
+                    -- Прерываем, если объект удалён
+                    connection:Disconnect()
+                else
+                    updateMovement()
+                end
+            end)
+        end
+    end
+end
+
+-- Команда для перемещения всех объектов с тем же именем, что и инструмент в руках игрока, к позиции курсора мыши
+addcmd('moveobjects', {'moveobjects'}, function(args, speaker)
+    moveObjectsToMouse(speaker)
+end)
+
+-- Логика для запуска при правом клике мыши
+UserInputService.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton2 then -- Правый клик
+        moveObjectsToMouse(Players.LocalPlayer)
+    end
+end)
+
+
+
+
 
 addcmd('unremovespecifictool',{},function(args, speaker)
 	if args[1] then
