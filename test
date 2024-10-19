@@ -4802,6 +4802,7 @@ CMDs[#CMDs + 1] = {NAME = 'unstrengthen', DESC = 'Sets your characters CustomPhy
 CMDs[#CMDs + 1] = {NAME = 'breakvelocity', DESC = 'Sets your characters velocity to 0'}
 CMDs[#CMDs + 1] = {NAME = 'spin [speed]', DESC = 'Spins your character'}
 CMDs[#CMDs + 1] = {NAME = 'unspin', DESC = 'Disables spin'}
+CMDs[#CMDs + 1] = {NAME = 'rebinds', DESC = 'Disables spin'}
 CMDs[#CMDs + 1] = {NAME = 'split', DESC = 'Splits your character in half'}
 CMDs[#CMDs + 1] = {NAME = 'nilchar', DESC = 'Sets your characters parent to nil'}
 CMDs[#CMDs + 1] = {NAME = 'unnilchar / nonilchar', DESC = 'Sets your characters parent to workspace'}
@@ -11356,6 +11357,29 @@ end)
 
 addcmd('reanim',{},function(args, speaker)
 	speaker.Character.Animate.Disabled = false
+end)
+
+local savedBinds = nil -- Переменная для хранения сохраненных биндов
+local bindsDisabled = false 
+
+addcmd('rebinds',{},function(args, speaker)
+	if bindsDisabled then
+		-- Восстановить бинды
+		binds = savedBinds or {}
+		refreshbinds()
+		--updatesaves()
+		notify('Keybinds Updated', 'Restored all keybinds')
+		savedBinds = nil -- Очищаем временную переменную
+		bindsDisabled = false
+	else
+		-- Сохранить текущие бинды и отключить их
+		savedBinds = binds
+		binds = {}
+		refreshbinds()
+		--updatesaves()
+		notify('Keybinds Updated', 'Removed all keybinds')
+		bindsDisabled = true
+	end
 end)
 
 addcmd('animspeed',{},function(args, speaker)
