@@ -4702,7 +4702,7 @@ CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NE
 CMDs[#CMDs + 1] = {NAME = '1kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'killstop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'rotoff', DESC = '11Disables orbit'}
-CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '4bit'}
+CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '5bit'}
 CMDs[#CMDs + 1] = {NAME = 'rocketBarrier / ', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'stop / stop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'giveblocks', DESC = 'Disables orbit'}
@@ -13253,7 +13253,6 @@ end)
 
 
 
-
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
@@ -13266,7 +13265,7 @@ local maxVelocity = 500 -- Максимальная скорость
 -- Флаг активности команды
 local isPushing = false
 
--- Функция для добавления импульса с постепенным уменьшением силы и обновлением поворота персонажа
+-- Функция для добавления импульса с постепенным обновлением силы и поворота персонажа
 local function pushCharacter(speaker)
     local character = speaker.Character
     local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
@@ -13293,22 +13292,18 @@ local function pushCharacter(speaker)
     -- Добавляем новый импульс в список активных
     table.insert(activeImpulses, bodyVelocity)
 
-    -- Обновляем силу импульса на протяжении нескольких секунд
-    local duration = 1 -- Время действия импульса в секундах
-    local startTime = tick()
-
+    -- Поддерживаем непрерывный импульс
     local connection
     connection = RunService.Heartbeat:Connect(function()
-        local elapsedTime = tick() - startTime
         if isPushing then
-            -- Рассчитываем коэффициент уменьшения силы (от 1 до 0.5)
-            local decayFactor = 1 -- (elapsedTime / duration) * 0.5
-            cameraLookVector = camera.CFrame.LookVector
+            -- Увеличиваем силу импульса в зависимости от времени, которое команда активна
+            local cameraLookVector = camera.CFrame.LookVector
+            local decayFactor = 1 -- Можем добавить динамическое изменение decayFactor, если нужно
 
-            -- Обновляем силу импульса с учетом уменьшения
-            bodyVelocity.Velocity = camera.CFrame.LookVector * 250 * decayFactor
+            -- Обновляем силу импульса
+            bodyVelocity.Velocity = cameraLookVector * 250 * decayFactor
 
-            -- Суммируем импульсы
+            -- Суммируем все импульсы
             local totalVelocity = Vector3.new(0, 0, 0)
             for _, impulse in ipairs(activeImpulses) do
                 totalVelocity = totalVelocity + impulse.Velocity
@@ -13325,7 +13320,7 @@ local function pushCharacter(speaker)
             -- Обновляем поворот персонажа по оси Y в зависимости от камеры
             humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position) * CFrame.Angles(0, math.atan2(cameraLookVector.X, cameraLookVector.Z) + math.pi, 0)
         else
-            -- Останавливаем импульс после завершения времени или отключения команды
+            -- Если команда деактивирована, останавливаем импульс
             bodyVelocity:Destroy()
             humanoid.PlatformStand = false
             connection:Disconnect()
@@ -13359,6 +13354,7 @@ addcmd('pushforward', {'pushf'}, function(args, speaker)
         notify('Pushforward', 'Activated pushforward command')
     end
 end)
+
 
 
 
