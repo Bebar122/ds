@@ -13300,9 +13300,9 @@ local function pushCharacter(speaker)
     local connection
     connection = RunService.Heartbeat:Connect(function()
         local elapsedTime = tick() - startTime
-        if elapsedTime < duration and isPushing then
+        if isPushing then
             -- Рассчитываем коэффициент уменьшения силы (от 1 до 0.5)
-            local decayFactor = 1 - (elapsedTime / duration) * 0.5
+            local decayFactor = 1 -- (elapsedTime / duration) * 0.5
             cameraLookVector = camera.CFrame.LookVector
 
             -- Обновляем силу импульса с учетом уменьшения
