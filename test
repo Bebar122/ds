@@ -4702,7 +4702,7 @@ CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NE
 CMDs[#CMDs + 1] = {NAME = '1kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'killstop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'rotoff', DESC = '11Disables orbit'}
-CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '16bit'}
+CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '2bit'}
 CMDs[#CMDs + 1] = {NAME = 'rocketBarrier / ', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'stop / stop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'giveblocks', DESC = 'Disables orbit'}
@@ -13250,6 +13250,10 @@ addcmd('split',{},function(args, speaker)
 end)
 
 
+
+
+
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
@@ -13259,7 +13263,7 @@ local activeImpulses = {}
 -- Лимит по скорости
 local maxVelocity = 500 -- Максимальная скорость
 
--- Функция для добавления импульса с постепенным уменьшением силы
+-- Функция для добавления импульса с постепенным уменьшением силы и обновлением поворота персонажа
 local function pushCharacter(speaker)
     local character = speaker.Character
     local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
@@ -13287,7 +13291,7 @@ local function pushCharacter(speaker)
     table.insert(activeImpulses, bodyVelocity)
 
     -- Обновляем силу импульса на протяжении нескольких секунд
-    local duration = 1 -- Время действия импульса в секундах
+    local duration = 2 -- Время действия импульса в секундах
     local startTime = tick()
 
     local connection
@@ -13313,6 +13317,10 @@ local function pushCharacter(speaker)
 
             -- Применяем итоговую сумму к персонажу
             bodyVelocity.Velocity = totalVelocity
+
+            -- Обновляем поворот персонажа по оси Y в зависимости от камеры
+            local newOrientation = CFrame.new(humanoidRootPart.Position, humanoidRootPart.Position + cameraLookVector)
+            humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position) * CFrame.Angles(0, math.atan2(cameraLookVector.X, cameraLookVector.Z), 0)
         else
             -- Останавливаем импульс после завершения времени
             bodyVelocity:Destroy()
@@ -13334,6 +13342,7 @@ end
 addcmd('pushforward', {'pushf'}, function(args, speaker)
     pushCharacter(speaker)
 end)
+
 
 
 
