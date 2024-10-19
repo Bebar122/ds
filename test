@@ -4702,7 +4702,7 @@ CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NE
 CMDs[#CMDs + 1] = {NAME = '1kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'killstop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'rotoff', DESC = '11Disables orbit'}
-CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '1bit'}
+CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '13bit'}
 CMDs[#CMDs + 1] = {NAME = 'rocketBarrier / ', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'stop / stop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'giveblocks', DESC = 'Disables orbit'}
@@ -13253,6 +13253,9 @@ end)
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
+-- Храним все активные импульсы, чтобы их суммировать
+local activeImpulses = {}
+
 -- Функция для добавления импульса с постепенным уменьшением силы
 local function pushCharacter(speaker)
     local character = speaker.Character
@@ -13260,12 +13263,12 @@ local function pushCharacter(speaker)
     local camera = workspace.CurrentCamera
     local humanoid = character:FindFirstChildOfClass('Humanoid')
 
-    -- Включаем режим PlatformStand, чтобы персонаж не двигался самостоятельно
-    humanoid.PlatformStand = true
-
     if not humanoidRootPart or not camera then
         return
     end
+
+    -- Включаем режим PlatformStand, чтобы персонаж не двигался самостоятельно
+    humanoid.PlatformStand = true
 
     -- Получаем направление взгляда камеры (вектор направления)
     local cameraLookVector = camera.CFrame.LookVector
@@ -13277,24 +13280,43 @@ local function pushCharacter(speaker)
     bodyVelocity.P = 3000
     bodyVelocity.Parent = humanoidRootPart
 
+    -- Добавляем новый импульс в список активных
+    table.insert(activeImpulses, bodyVelocity)
+
     -- Обновляем силу импульса на протяжении нескольких секунд
     local duration = 2 -- Время действия импульса в секундах
     local startTime = tick()
-	humanoid.PlatformStand = false
+
     local connection
     connection = RunService.Heartbeat:Connect(function()
         local elapsedTime = tick() - startTime
         if elapsedTime < duration then
-            -- Рассчитываем коэффициент уменьшения силы (от 1 до 0)
-            local decayFactor = 1 - (elapsedTime / duration)
-            --local decayFactor = 1
+            -- Рассчитываем коэффициент уменьшения силы (от 1 до 0.5)
+            local decayFactor = 1 - (elapsedTime / duration) * 0.5
+
             -- Обновляем силу импульса с учетом уменьшения
             bodyVelocity.Velocity = camera.CFrame.LookVector * 250 * decayFactor
+
+            -- Суммируем импульсы
+            local totalVelocity = Vector3.new(0, 0, 0)
+            for _, impulse in ipairs(activeImpulses) do
+                totalVelocity = totalVelocity + impulse.Velocity
+            end
+            -- Применяем итоговую сумму к персонажу
+            bodyVelocity.Velocity = totalVelocity
         else
             -- Останавливаем импульс после завершения времени
             bodyVelocity:Destroy()
-            
+            humanoid.PlatformStand = false
             connection:Disconnect()
+
+            -- Убираем импульс из активных
+            for i, impulse in ipairs(activeImpulses) do
+                if impulse == bodyVelocity then
+                    table.remove(activeImpulses, i)
+                    break
+                end
+            end
         end
     end)
 end
@@ -13303,6 +13325,7 @@ end
 addcmd('pushforward', {'pushf'}, function(args, speaker)
     pushCharacter(speaker)
 end)
+
 
 
 
