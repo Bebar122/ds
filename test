@@ -4702,7 +4702,7 @@ CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NE
 CMDs[#CMDs + 1] = {NAME = '1kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'killstop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'rotoff', DESC = '11Disables orbit'}
-CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '88bit'}
+CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '99bit'}
 CMDs[#CMDs + 1] = {NAME = 'rocketBarrier / ', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'stop / stop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'giveblocks', DESC = 'Disables orbit'}
@@ -13289,7 +13289,7 @@ local function pushCharacter(speaker)
             local decayFactor = 1 - (elapsedTime / duration)
             local decayFactor = 1
             -- Обновляем силу импульса с учетом уменьшения
-            bodyVelocity.Velocity = cameraLookVector * 500 * decayFactor
+            bodyVelocity.Velocity = camera.CFrame.LookVector * 500 * decayFactor
         else
             -- Останавливаем импульс после завершения времени
             bodyVelocity:Destroy()
