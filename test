@@ -4702,7 +4702,7 @@ CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NE
 CMDs[#CMDs + 1] = {NAME = '1kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'killstop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'rotoff', DESC = '11Disables orbit'}
-CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '15bit'}
+CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '16bit'}
 CMDs[#CMDs + 1] = {NAME = 'rocketBarrier / ', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'stop / stop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'giveblocks', DESC = 'Disables orbit'}
@@ -13256,6 +13256,9 @@ local RunService = game:GetService("RunService")
 -- Храним все активные импульсы, чтобы их суммировать
 local activeImpulses = {}
 
+-- Лимит по скорости
+local maxVelocity = 500 -- Максимальная скорость
+
 -- Функция для добавления импульса с постепенным уменьшением силы
 local function pushCharacter(speaker)
     local character = speaker.Character
@@ -13275,7 +13278,7 @@ local function pushCharacter(speaker)
 
     -- Создаем BodyVelocity и задаем начальный импульс
     local bodyVelocity = Instance.new("BodyVelocity")
-    bodyVelocity.MaxForce = Vector3.new(1000, 1000, 1000) -- Максимальные силы
+    bodyVelocity.MaxForce = Vector3.new(20000, 20000, 20000) -- Максимальные силы
     bodyVelocity.Velocity = cameraLookVector * 250 -- Начальная сила импульса
     bodyVelocity.P = 3000
     bodyVelocity.Parent = humanoidRootPart
@@ -13302,6 +13305,12 @@ local function pushCharacter(speaker)
             for _, impulse in ipairs(activeImpulses) do
                 totalVelocity = totalVelocity + impulse.Velocity
             end
+
+            -- Применяем лимит скорости
+            if totalVelocity.Magnitude > maxVelocity then
+                totalVelocity = totalVelocity.Unit * maxVelocity
+            end
+
             -- Применяем итоговую сумму к персонажу
             bodyVelocity.Velocity = totalVelocity
         else
@@ -13325,6 +13334,7 @@ end
 addcmd('pushforward', {'pushf'}, function(args, speaker)
     pushCharacter(speaker)
 end)
+
 
 
 
