@@ -4702,7 +4702,7 @@ CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NE
 CMDs[#CMDs + 1] = {NAME = '1kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'killstop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'rotoff', DESC = '11Disables orbit'}
-CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '12222bit'}
+CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '333bit'}
 CMDs[#CMDs + 1] = {NAME = 'rocketBarrier / ', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'stop / stop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'giveblocks', DESC = 'Disables orbit'}
@@ -13268,13 +13268,13 @@ local function pushCharacter(speaker)
 
     -- Добавляем импульс в сторону, куда смотрит камера
     local bodyVelocity = Instance.new("BodyVelocity")
-    bodyVelocity.Velocity = cameraLookVector * 100 -- Задаем силу импульса (50 можно изменить)
+    bodyVelocity.Velocity = cameraLookVector * 500 -- Задаем силу импульса (50 можно изменить)
     bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
     bodyVelocity.P = 1000
     bodyVelocity.Parent = humanoidRootPart
 
     -- Удаляем импульс через короткий промежуток времени, чтобы не было постоянного движения
-    RunService.Heartbeat:Wait(0.3)
+    RunService.Heartbeat:Wait(2.3)
 	Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
     bodyVelocity:Destroy()
 end
