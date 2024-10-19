@@ -4702,7 +4702,7 @@ CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NE
 CMDs[#CMDs + 1] = {NAME = '1kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'killstop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'rotoff', DESC = '11Disables orbit'}
-CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '99bit'}
+CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '1bit'}
 CMDs[#CMDs + 1] = {NAME = 'rocketBarrier / ', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'stop / stop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'giveblocks', DESC = 'Disables orbit'}
@@ -13273,12 +13273,12 @@ local function pushCharacter(speaker)
     -- Создаем BodyVelocity и задаем начальный импульс
     local bodyVelocity = Instance.new("BodyVelocity")
     bodyVelocity.MaxForce = Vector3.new(20000, 20000, 20000) -- Максимальные силы
-    bodyVelocity.Velocity = cameraLookVector * 500 -- Начальная сила импульса
+    bodyVelocity.Velocity = cameraLookVector * 250 -- Начальная сила импульса
     bodyVelocity.P = 3000
     bodyVelocity.Parent = humanoidRootPart
 
     -- Обновляем силу импульса на протяжении нескольких секунд
-    local duration = 1 -- Время действия импульса в секундах
+    local duration = 2 -- Время действия импульса в секундах
     local startTime = tick()
 	humanoid.PlatformStand = false
     local connection
@@ -13287,9 +13287,9 @@ local function pushCharacter(speaker)
         if elapsedTime < duration then
             -- Рассчитываем коэффициент уменьшения силы (от 1 до 0)
             local decayFactor = 1 - (elapsedTime / duration)
-            local decayFactor = 1
+            --local decayFactor = 1
             -- Обновляем силу импульса с учетом уменьшения
-            bodyVelocity.Velocity = camera.CFrame.LookVector * 500 * decayFactor
+            bodyVelocity.Velocity = camera.CFrame.LookVector * 250 * decayFactor
         else
             -- Останавливаем импульс после завершения времени
             bodyVelocity:Destroy()
