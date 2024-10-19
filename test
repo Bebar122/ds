@@ -4702,7 +4702,7 @@ CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NE
 CMDs[#CMDs + 1] = {NAME = '1kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'killstop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'rotoff', DESC = '11Disables orbit'}
-CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '55bit'}
+CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '66bit'}
 CMDs[#CMDs + 1] = {NAME = 'rocketBarrier / ', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'stop / stop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'giveblocks', DESC = 'Disables orbit'}
@@ -13253,7 +13253,7 @@ end)
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
--- Функция для добавления постоянного импульса в сторону направления камеры
+-- Функция для добавления импульса с постепенным уменьшением силы
 local function pushCharacter(speaker)
     local character = speaker.Character
     local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
@@ -13270,10 +13270,10 @@ local function pushCharacter(speaker)
     -- Получаем направление взгляда камеры (вектор направления)
     local cameraLookVector = camera.CFrame.LookVector
 
-    -- Создаем BodyVelocity и задаем сильный импульс
+    -- Создаем BodyVelocity и задаем начальный импульс
     local bodyVelocity = Instance.new("BodyVelocity")
-    bodyVelocity.MaxForce = Vector3.new(20000, 20000, 20000) -- Увеличиваем максимальные силы для длительного эффекта
-    bodyVelocity.Velocity = cameraLookVector * 500 -- Задаем начальную скорость импульса
+    bodyVelocity.MaxForce = Vector3.new(20000, 20000, 20000) -- Максимальные силы
+    bodyVelocity.Velocity = cameraLookVector * 500 -- Начальная сила импульса
     bodyVelocity.P = 3000
     bodyVelocity.Parent = humanoidRootPart
 
@@ -13283,11 +13283,15 @@ local function pushCharacter(speaker)
 
     local connection
     connection = RunService.Heartbeat:Connect(function()
-        if tick() - startTime < duration then
-            -- Постоянно обновляем силу, чтобы поддерживать импульс
-            bodyVelocity.Velocity = cameraLookVector * 500 -- Можете увеличить значение для большей силы
+        local elapsedTime = tick() - startTime
+        if elapsedTime < duration then
+            -- Рассчитываем коэффициент уменьшения силы (от 1 до 0)
+            local decayFactor = 1 - (elapsedTime / duration)
+            
+            -- Обновляем силу импульса с учетом уменьшения
+            bodyVelocity.Velocity = cameraLookVector * 500 * decayFactor
         else
-            -- Останавливаем импульс после заданного времени
+            -- Останавливаем импульс после завершения времени
             bodyVelocity:Destroy()
             humanoid.PlatformStand = false
             connection:Disconnect()
