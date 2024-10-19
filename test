@@ -4702,7 +4702,7 @@ CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NE
 CMDs[#CMDs + 1] = {NAME = '1kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'killstop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'rotoff', DESC = '11Disables orbit'}
-CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '13bit'}
+CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '14bit'}
 CMDs[#CMDs + 1] = {NAME = 'rocketBarrier / ', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'stop / stop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'giveblocks', DESC = 'Disables orbit'}
@@ -13275,7 +13275,7 @@ local function pushCharacter(speaker)
 
     -- Создаем BodyVelocity и задаем начальный импульс
     local bodyVelocity = Instance.new("BodyVelocity")
-    bodyVelocity.MaxForce = Vector3.new(20000, 20000, 20000) -- Максимальные силы
+    bodyVelocity.MaxForce = Vector3.new(5000, 5000, 5000) -- Максимальные силы
     bodyVelocity.Velocity = cameraLookVector * 250 -- Начальная сила импульса
     bodyVelocity.P = 3000
     bodyVelocity.Parent = humanoidRootPart
