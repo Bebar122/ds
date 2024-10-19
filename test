@@ -4702,7 +4702,7 @@ CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NE
 CMDs[#CMDs + 1] = {NAME = '1kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'killstop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'rotoff', DESC = '11Disables orbit'}
-CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '23bit'}
+CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '24bit'}
 CMDs[#CMDs + 1] = {NAME = 'rocketBarrier / ', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'stop / stop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'giveblocks', DESC = 'Disables orbit'}
@@ -13320,7 +13320,7 @@ local function pushCharacter(speaker)
 
             -- Обновляем поворот персонажа по оси Y в зависимости от камеры
             local newOrientation = CFrame.new(humanoidRootPart.Position, humanoidRootPart.Position + cameraLookVector)
-            humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position) * CFrame.Angles(0, math.atan2(cameraLookVector.X, cameraLookVector.Z), 0)
+            humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position) * CFrame.Angles(0, -1*math.atan2(cameraLookVector.X, cameraLookVector.Z), 0)
         else
             -- Останавливаем импульс после завершения времени
             bodyVelocity:Destroy()
