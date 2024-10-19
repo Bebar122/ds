@@ -4702,7 +4702,7 @@ CMDs[#CMDs + 1] = {NAME = 'kill [player] (TOOL)', DESC = 'Kills a player (YOU NE
 CMDs[#CMDs + 1] = {NAME = '1kill [player] (TOOL)', DESC = 'Kills a player (YOU NEED A TOOL)'}
 CMDs[#CMDs + 1] = {NAME = 'killstop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'rotoff', DESC = '11Disables orbit'}
-CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '6bit'}
+CMDs[#CMDs + 1] = {NAME = 'pushf', DESC = '7bit'}
 CMDs[#CMDs + 1] = {NAME = 'rocketBarrier / ', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'stop / stop', DESC = 'Disables orbit'}
 CMDs[#CMDs + 1] = {NAME = 'giveblocks', DESC = 'Disables orbit'}
@@ -13261,7 +13261,7 @@ local activeImpulses = {}
 
 -- Лимит по скорости
 local maxVelocity = 500 -- Максимальная скорость
-local minVelocity = 100 -- Начальная скорость, уменьшенная в 3 раза
+local minVelocity = 30 -- Начальная скорость, уменьшенная в 3 раза
 
 -- Флаг активности команды
 local isPushing = false
