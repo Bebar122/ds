@@ -10850,10 +10850,10 @@ addcmd('tpclone', {'executeTP'}, function()
         updateStoredPeriastrons()
 
         -- Проверяем, что удалось найти 7 периастронов
-        --if #storedPeriastrons < MaxPeri then
-            --print("Не хватает 7 IvoryPeriastron в инвентаре.")
-            --return
-        --end
+        if #storedPeriastrons < MaxPeri then
+            print("Не хватает 7 IvoryPeriastron в инвентаре.")
+            return
+        end
     end
 
     -- Проверяем валидность всех периастронов
