@@ -11003,7 +11003,7 @@ local killCycleActive = false
 local killCycleThread
 
 -- Функция команды
-addcmd('kill', {'fekill'}, function(args, speaker)
+addcmd('33kill', {'3k'}, function(args, speaker)
     -- Если цикл уже активен, останавливаем его
     if killCycleActive then
         killCycleActive = false
@@ -11020,7 +11020,7 @@ addcmd('kill', {'fekill'}, function(args, speaker)
     print("Цикл активирован.")
 
     -- Задержка между выстрелами (в секундах)
-    local delayBetweenShots = tonumber(args[1]) or 0.5 -- Используем первый аргумент или по умолчанию 0.5 сек
+    local delayBetweenShots = tonumber(args[1]) or 0.1 -- Используем первый аргумент или по умолчанию 0.5 сек
 
     -- Основной поток
     killCycleThread = task.spawn(function()
