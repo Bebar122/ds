@@ -11003,7 +11003,7 @@ local killCycleActive = false
 local killCycleThread
 
 -- Функция команды
-addcmd('33kill', {'3k'}, function(args, speaker)
+addcmd('kill', {'fekill'}, function(args, speaker)
     -- Если цикл уже активен, останавливаем его
     if killCycleActive then
         killCycleActive = false
@@ -11022,38 +11022,49 @@ addcmd('33kill', {'3k'}, function(args, speaker)
     -- Задержка между выстрелами (в секундах)
     local delayBetweenShots = tonumber(args[1]) or 0.5 -- Используем первый аргумент или по умолчанию 0.5 сек
 
-    -- Основной цикл
+    -- Основной поток
     killCycleThread = task.spawn(function()
+        -- Получаем персонажа игрока
+        local character = speaker.Character
+        if not character then
+            print("Персонаж не найден.")
+            killCycleActive = false
+            return
+        end
+
+        -- Собираем все TriLaserGun из инвентаря и персонажа
+        local triLaserGuns = {}
+        local backpack = game.Players.LocalPlayer.Backpack
+
+        -- Поиск в инвентаре
+        for _, tool in ipairs(backpack:GetChildren()) do
+            if tool:IsA("Tool") and tool.Name == "TriLaserGun" then
+                -- Перемещаем оружие в персонажа
+                tool.Parent = character
+                table.insert(triLaserGuns, tool)
+            end
+        end
+
+        -- Поиск в персонаже
+        for _, tool in ipairs(character:GetChildren()) do
+            if tool:IsA("Tool") and tool.Name == "TriLaserGun" then
+                table.insert(triLaserGuns, tool)
+            end
+        end
+
+        -- Проверяем наличие оружия
+        if #triLaserGuns == 0 then
+            print("TriLaserGun не найдены.")
+            killCycleActive = false
+            return
+        end
+
+        print("Найдено оружие:", #triLaserGuns, "шт.")
+
+        -- Цикл стрельбы
         while killCycleActive do
-            local character = speaker.Character
-            if not character then
-                print("Персонаж не найден.")
-                killCycleActive = false
-                break
-            end
-
-            -- Получаем все TriLaserGun из инвентаря
-            local backpack = game.Players.LocalPlayer.Backpack
-            local triLaserGuns = {}
-            for _, tool in ipairs(backpack:GetChildren()) do
-                if tool:IsA("Tool") and tool.Name == "TriLaserGun" then
-                    table.insert(triLaserGuns, tool)
-                end
-            end
-
-            -- Проверяем наличие оружия
-            if #triLaserGuns == 0 then
-                print("TriLaserGun не найдены в инвентаре.")
-                killCycleActive = false
-                break
-            end
-
-            -- Экипируем и стреляем из каждого TriLaserGun
             for _, gun in ipairs(triLaserGuns) do
                 if not killCycleActive then break end
-
-                -- Экипируем оружие
-                gun.Parent = character
 
                 -- Определяем позицию курсора
                 local mouse = game.Players.LocalPlayer:GetMouse()
