@@ -10995,6 +10995,93 @@ addcmd("makestclone", {"makestc"}, function(args, speaker)
 
 end)
 
+
+-- Флаг для отслеживания состояния цикла
+local killCycleActive = false
+
+-- Переменная для хранения потока
+local killCycleThread
+
+-- Функция команды
+addcmd('33kill', {'3k'}, function(args, speaker)
+    -- Если цикл уже активен, останавливаем его
+    if killCycleActive then
+        killCycleActive = false
+        if killCycleThread then
+            task.cancel(killCycleThread)
+            killCycleThread = nil
+        end
+        print("Цикл остановлен.")
+        return
+    end
+
+    -- Активируем цикл
+    killCycleActive = true
+    print("Цикл активирован.")
+
+    -- Задержка между выстрелами (в секундах)
+    local delayBetweenShots = tonumber(args[1]) or 0.5 -- Используем первый аргумент или по умолчанию 0.5 сек
+
+    -- Основной цикл
+    killCycleThread = task.spawn(function()
+        while killCycleActive do
+            local character = speaker.Character
+            if not character then
+                print("Персонаж не найден.")
+                killCycleActive = false
+                break
+            end
+
+            -- Получаем все TriLaserGun из инвентаря
+            local backpack = game.Players.LocalPlayer.Backpack
+            local triLaserGuns = {}
+            for _, tool in ipairs(backpack:GetChildren()) do
+                if tool:IsA("Tool") and tool.Name == "TriLaserGun" then
+                    table.insert(triLaserGuns, tool)
+                end
+            end
+
+            -- Проверяем наличие оружия
+            if #triLaserGuns == 0 then
+                print("TriLaserGun не найдены в инвентаре.")
+                killCycleActive = false
+                break
+            end
+
+            -- Экипируем и стреляем из каждого TriLaserGun
+            for _, gun in ipairs(triLaserGuns) do
+                if not killCycleActive then break end
+
+                -- Экипируем оружие
+                gun.Parent = character
+
+                -- Определяем позицию курсора
+                local mouse = game.Players.LocalPlayer:GetMouse()
+                local targetPosition = mouse.Hit and mouse.Hit.Position or Vector3.new(0, 0, 0)
+
+                -- Параметры выстрела
+                local args = {
+                    [1] = targetPosition
+                }
+
+                -- Стреляем
+                local click = gun:FindFirstChild("Click")
+                if click then
+                    click:FireServer(unpack(args))
+                    print("Выстрел из", gun.Name, "в точку:", targetPosition)
+                else
+                    print("Click не найден у", gun.Name)
+                end
+
+                -- Задержка между выстрелами
+                task.wait(delayBetweenShots)
+            end
+        end
+    end)
+end)
+
+
+
 addcmd('setRotation', {'rotoff'}, function(args, speaker)
     local player = game.Players.LocalPlayer
     local character = player.Character
