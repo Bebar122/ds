@@ -10952,12 +10952,15 @@ addcmd("clsetup", {"clset"}, function(args, speaker)
 
 	--hum = speaker.Character:FindFirstChild("Humanoid")
 	--hum:UnequipTools()
-	game:GetService("Players").LocalPlayer.Backpack.SpectralSword.Parent = speaker.Character
-	task.wait(0.1)
+
 	game:GetService("Players").LocalPlayer.Backpack.EnergySword.Parent = speaker.Character
 	task.wait(0.1)
+
+	game:GetService("Players").LocalPlayer.Backpack.SpectralSword.Parent = speaker.Character
+	task.wait(0.1)
+
 	local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
-	wait(1)
+	
 	-- Ищем все инструменты (Tools), которые находятся у персонажа
 	local tools = {}
 	for _, child in ipairs(character:GetChildren()) do
