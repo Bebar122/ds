@@ -15997,6 +15997,174 @@ addcmd('tpunanchored',{'tpua'},function(args, speaker)
     end
 end)
 
+
+
+
+
+
+
+
+
+
+addcmd('activateE',{'acte'},function(args, speaker)
+	-- Получаем персонажа игрока
+	local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+	
+	-- Ищем все инструменты (Tools), которые находятся у персонажа
+	local tools = {}
+	for _, child in ipairs(character:GetChildren()) do
+	    if child:IsA("Tool") then
+	        table.insert(tools, child)
+	    end
+	end
+	
+	-- Выполняем событие Remote для каждого инструмента
+	for i, tool in ipairs(tools) do
+	    -- Ищем Remote в инструменте
+	    local remote = tool:FindFirstChild("Remote")
+	    if remote then
+	        -- Параметры события
+	        local args = {
+	            [1] = Enum.KeyCode.E -- Используем клавишу E как аргумент
+	        }
+	
+	        -- Вызываем событие Remote
+	        remote:FireServer(unpack(args))
+	        print(i .. "-й инструмент использован:", tool.Name)
+	    else
+	        print("Remote не найден у инструмента:", tool.Name)
+	    end
+	end
+
+end)
+
+addcmd('activateQ',{'actq'},function(args, speaker)
+	-- Получаем персонажа игрока
+	local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+	
+	-- Ищем все инструменты (Tools), которые находятся у персонажа
+	local tools = {}
+	for _, child in ipairs(character:GetChildren()) do
+	    if child:IsA("Tool") then
+	        table.insert(tools, child)
+	    end
+	end
+	
+	-- Выполняем событие Remote для каждого инструмента
+	for i, tool in ipairs(tools) do
+	    -- Ищем Remote в инструменте
+	    local remote = tool:FindFirstChild("Remote")
+	    if remote then
+	        -- Параметры события
+	        local args = {
+	            [1] = Enum.KeyCode.Q -- Используем клавишу E как аргумент
+	        }
+	
+	        -- Вызываем событие Remote
+	        remote:FireServer(unpack(args))
+	        print(i .. "-й инструмент использован:", tool.Name)
+	    else
+	        print("Remote не найден у инструмента:", tool.Name)
+	    end
+	end
+
+end)
+
+addcmd('activateClone',{'actcl'},function(args, speaker)
+	-- Получаем персонажа игрока
+	local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+	
+	-- Ищем все инструменты (Tools), которые находятся у персонажа
+	local tools = {}
+	for _, child in ipairs(character:GetChildren()) do
+	    if child:IsA("Tool") then
+	        table.insert(tools, child)
+	    end
+	end
+	
+	-- Параметры события
+	local args = {
+	    [1] = "r", -- Клавиша, например "r"
+	    [2] = Vector3.new(-1203.982666015625, 190.5998992919922, 200.66754150390625) -- Позиция
+	}
+	
+	-- Выполняем событие KeyDown для каждого инструмента
+	for i, tool in ipairs(tools) do
+	    -- Проверяем наличие объекта KeyDown в инструменте
+	    local keyDown = tool:FindFirstChild("KeyDown")
+	    if keyDown then
+	        -- Вызываем событие KeyDown
+	        keyDown:FireServer(unpack(args))
+	        print(i .. "-й инструмент использован:", tool.Name)
+	    else
+	        print("KeyDown не найден у инструмента:", tool.Name)
+	    end
+	end
+end)
+
+addcmd('equiptoolbyname ', {'et'}, function(args, speaker)
+    local toolName = args[1] -- Имя тулза передается в аргументах команды
+    if not toolName then
+        return
+    end
+
+    -- Проверяем инвентарь игрока
+    for i, v in pairs(speaker.Backpack:GetChildren()) do
+        if v:IsA('Tool') and v.Name == toolName then
+            v.Parent = speaker.Character -- Перемещаем тулз в руки игрока
+            return
+        end
+    end
+end)
+
+local firstUse = true -- Флаг для отслеживания первого запуска команды
+
+addcmd('togglecape', {'tc'}, function(args, speaker)
+    local toolName = "TrololoCapeOfInvisibility"
+    local character = speaker.Character
+    local backpack = speaker.Backpack
+
+    if not character or not backpack then
+        return
+    end
+
+    local tool = backpack:FindFirstChild(toolName) -- Ищем тулз в инвентаре
+
+    if not tool then
+        return
+    end
+
+    -- Перемещаем тулз в руки
+    tool.Parent = character
+
+    -- Активируем тулз
+    tool:Activate()
+
+
+    if firstUse then
+        -- При первом запуске удаляем тулз через 1 секунду
+        task.delay(1, function()
+            if tool and tool.Parent == character then
+                tool:Destroy()
+            end
+        end)
+        firstUse = false
+    else
+        firstUse = true
+        -- При повторном запуске убираем тулз из рук через 1 секунду
+        task.delay(1, function()
+            if tool and tool.Parent == character then
+                tool.Parent = backpack -- Возвращаем тулз в инвентарь
+            end
+        end)
+    end
+end)
+
+
+
+
+
+
 keycodeMap = {
 	["0"] = 0x30,
 	["1"] = 0x31,
