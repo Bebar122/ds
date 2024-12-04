@@ -16209,17 +16209,19 @@ addcmd('killclones', {'kcl'}, function(args, speaker)
 
     -- Небольшая задержка перед касанием
     wait(delayTime)
-
+	notify('Touch Triggered', 'start')
     for _, obj in pairs(workspace:GetChildren()) do
         if obj:IsA("BasePart") and obj.Name == "Effect" then
+		notify('Touch Triggered', 'effect found')
             local touchInterest = obj:FindFirstChildOfClass("TouchTransmitter")
             if touchInterest then
                 for _, obj1 in pairs(workspace:GetChildren()) do
                     if obj1.Name:sub(-5) == "Clone" then
+			notify('Touch Triggered', 'clone found')
                         local torso = obj1:FindFirstChild("Torso")
                         if torso and torso:IsA("BasePart") then
                             firetouchinterest(obj, torso, 0)
-                            wait(0.1) -- Small delay to ensure proper triggering
+                            --wait(0.1) -- Small delay to ensure proper triggering
                             firetouchinterest(obj, torso, 1)
                             notify('Touch Triggered', 'Effect "' .. obj.Name .. '" touched "' .. obj1.Name .. '"')
                         else
