@@ -16182,7 +16182,7 @@ addcmd('killclones', {'kcl'}, function(args, speaker)
     local delayTime = tonumber(args[1]) or 0.6 -- Задержка в секундах
 
     -- Проверяем наличие TriLaserGun в руках или экипируем его из инвентаря
-    local toolEquipped = speaker.Character:FindFirstChild("TriLaserGun") or equipTool3(speaker, "TriLaserGun")
+    local toolEquipped = speaker.Character:FindFirstChild("HyperlaserGun") or equipTool3(speaker, "HyperlaserGun")
     if not toolEquipped then
         print("TriLaserGun не найден в инвентаре.")
         return
@@ -16197,11 +16197,15 @@ addcmd('killclones', {'kcl'}, function(args, speaker)
 
 	local predictedPosition = shooterHRP.Position - Vector3.new(0, 100, 0)
 
-	-- Стреляем в предсказанную позицию цели
 	local args = {
-	    [1] = predictedPosition
+	    [1] = "Click",
+	    [2] = true,
+	    [3] = predictedPosition
 	}
-	speaker.Character.TriLaserGun.Click:FireServer(unpack(args))
+	
+	speaker.Character.HyperlaserGun.ServerControl:InvokeServer(unpack(args))
+
+	
 
     -- Небольшая задержка перед касанием
     wait(delayTime)
