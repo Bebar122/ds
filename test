@@ -16179,7 +16179,7 @@ end
 -- Основная команда
 addcmd('killclones', {'kcl'}, function(args, speaker)
     -- Установите задержку перед касанием (можете настроить это значение под себя)
-    local delayTime = tonumber(args[1]) or 0.5 -- Задержка в секундах
+    local delayTime = tonumber(args[1]) or 0.6 -- Задержка в секундах
 
     -- Проверяем наличие TriLaserGun в руках или экипируем его из инвентаря
     local toolEquipped = speaker.Character:FindFirstChild("TriLaserGun") or equipTool3(speaker, "TriLaserGun")
@@ -16206,17 +16206,23 @@ addcmd('killclones', {'kcl'}, function(args, speaker)
     -- Небольшая задержка перед касанием
     wait(delayTime)
 
-    -- Проходим по всем объектам в Workspace
-    for _, obj in pairs(workspace:GetChildren()) do
-        -- Проверяем, оканчивается ли имя объекта на "Clone" и является ли это моделью
-        if obj.Name:sub(-5) == "Clone" then
-            local torso = obj:FindFirstChild("Torso")
-            if torso and torso:IsA("BasePart") then
-                -- Активируем касание Torso
-                touchTorso(obj)
-            end
-        end
-    end
+	for _, obj in pairs(workspace:GetChildren()) do
+		if obj:IsA("BasePart") and obj.Name == "Effect" then
+		    local touchInterest = obj:FindFirstChildOfClass("TouchTransmitter")
+		    if touchInterest then
+			    for _, obj1 in pairs(workspace:GetChildren()) do
+			        if obj1.Name:sub(-5) == "Clone" then
+			            local torso = obj1:FindFirstChild("Torso")
+			            if torso and torso:IsA("BasePart") then
+					firetouchinterest(obj, obj1, 0)
+					--wait(0.1) -- небольшая задержка
+					firetouchinterest(obj, obj1, 1)
+			            end
+			        end
+			    end
+		    end
+		end
+	end
 end)
 
 
