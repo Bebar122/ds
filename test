@@ -16205,9 +16205,6 @@ addcmd('killclones', {'kcl'}, function(args, speaker)
 	
 	speaker.Character.HyperlaserGun.ServerControl:InvokeServer(unpack(args))
 
-	for _, obj in pairs(workspace:GetChildren()) do
-        	if obj:IsA("BasePart") and obj.Name == "Effect" then
-
     -- Небольшая задержка перед касанием
     wait(delayTime)
 	notify('Touch Triggered', 'start')
