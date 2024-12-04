@@ -16120,7 +16120,13 @@ end)
 local firstUse = true -- Флаг для отслеживания первого запуска команды
 
 addcmd('togglecape', {'tc'}, function(args, speaker)
-    local toolName = "TrololoCapeOfInvisibility"
+
+	if firstUse then
+		local toolName = "TrololoCapeOfInvisibility"
+	else
+		local toolName = "ScytheOfSingularity"
+	end
+    
     local character = speaker.Character
     local backpack = speaker.Backpack
 
@@ -16143,7 +16149,7 @@ addcmd('togglecape', {'tc'}, function(args, speaker)
 
     if firstUse then
         -- При первом запуске удаляем тулз через 1 секунду
-        task.delay(1, function()
+        task.delay(3, function()
             if tool and tool.Parent == character then
                 tool:Destroy()
             end
@@ -16152,7 +16158,7 @@ addcmd('togglecape', {'tc'}, function(args, speaker)
     else
         firstUse = true
         -- При повторном запуске убираем тулз из рук через 1 секунду
-        task.delay(1, function()
+        task.delay(0.5, function()
             if tool and tool.Parent == character then
                 tool.Parent = backpack -- Возвращаем тулз в инвентарь
             end
