@@ -16160,7 +16160,8 @@ addcmd('togglecape', {'tc'}, function(args, speaker)
     end
 end)
 
--- Функция для активации касания объекта Torso
+
+
 local function touchTorso(target)
     local torso = target:FindFirstChild("Torso")
     if not torso then return end
@@ -16187,13 +16188,20 @@ addcmd('killclones', {'kcl'}, function(args, speaker)
         return
     end
 
-    -- Выстрел из TriLaserGun
-    if speaker.Character.TriLaserGun:FindFirstChild("Click") then
-        speaker.Character.TriLaserGun.Click:FireServer()
-    else
-        print("Невозможно выстрелить из TriLaserGun.")
-        return
-    end
+        local shooterHRP = speaker.Character:FindFirstChild("HumanoidRootPart")
+        if not shooterHRP then
+            print("HumanoidRootPart не найден.")
+            return
+        end
+
+
+	local predictedPosition = shooterHRP.Position - Vector3.new(0, 100, 0)
+
+	-- Стреляем в предсказанную позицию цели
+	local args = {
+	    [1] = predictedPosition
+	}
+	speaker.Character.TriLaserGun.Click:FireServer(unpack(args))
 
     -- Небольшая задержка перед касанием
     wait(delayTime)
@@ -16201,7 +16209,7 @@ addcmd('killclones', {'kcl'}, function(args, speaker)
     -- Проходим по всем объектам в Workspace
     for _, obj in pairs(workspace:GetChildren()) do
         -- Проверяем, оканчивается ли имя объекта на "Clone" и является ли это моделью
-        if obj:IsA("Model") and obj.Name:sub(-5) == "Clone" then
+        if obj.Name:sub(-5) == "Clone" then
             local torso = obj:FindFirstChild("Torso")
             if torso and torso:IsA("BasePart") then
                 -- Активируем касание Torso
