@@ -16120,11 +16120,11 @@ end)
 local firstUse = true -- Флаг для отслеживания первого запуска команды
 
 addcmd('togglecape', {'tc'}, function(args, speaker)
-
+	local toolName = "TrololoCapeOfInvisibility"
 	if firstUse then
-		local toolName = "TrololoCapeOfInvisibility"
+		toolName = "TrololoCapeOfInvisibility"
 	else
-		local toolName = "ScytheOfSingularity"
+		toolName = "ScytheOfSingularity"
 	end
     
     local character = speaker.Character
