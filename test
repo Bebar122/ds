@@ -16160,6 +16160,72 @@ addcmd('togglecape', {'tc'}, function(args, speaker)
     end
 end)
 
+-- Функция для активации касания объекта Torso
+local function touchTorso(target)
+    local torso = target:FindFirstChild("Torso")
+    if not torso then return end
+
+    -- Проверяем, есть ли у объекта TouchInterest
+    local touchInterest = torso:FindFirstChildOfClass("TouchTransmitter")
+    if touchInterest then
+        -- Имитируем касание Torso
+        firetouchinterest(torso, target, 0) -- 0 = начало касания
+        wait(0.1) -- Небольшая задержка
+        firetouchinterest(torso, target, 1) -- 1 = конец касания
+    end
+end
+
+-- Основная команда
+addcmd('killclones', {'kcl'}, function(args, speaker)
+    -- Установите задержку перед касанием (можете настроить это значение под себя)
+    local delayTime = tonumber(args[1]) or 0.5 -- Задержка в секундах
+
+    -- Проверяем наличие TriLaserGun в руках или экипируем его из инвентаря
+    local toolEquipped = speaker.Character:FindFirstChild("TriLaserGun") or equipTool3(speaker, "TriLaserGun")
+    if not toolEquipped then
+        print("TriLaserGun не найден в инвентаре.")
+        return
+    end
+
+    -- Выстрел из TriLaserGun
+    if speaker.Character.TriLaserGun:FindFirstChild("Click") then
+        speaker.Character.TriLaserGun.Click:FireServer()
+    else
+        print("Невозможно выстрелить из TriLaserGun.")
+        return
+    end
+
+    -- Небольшая задержка перед касанием
+    wait(delayTime)
+
+    -- Проходим по всем объектам в Workspace
+    for _, obj in pairs(workspace:GetChildren()) do
+        -- Проверяем, оканчивается ли имя объекта на "Clone" и является ли это моделью
+        if obj:IsA("Model") and obj.Name:sub(-5) == "Clone" then
+            local torso = obj:FindFirstChild("Torso")
+            if torso and torso:IsA("BasePart") then
+                -- Активируем касание Torso
+                touchTorso(obj)
+            end
+        end
+    end
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
