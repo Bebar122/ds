@@ -16458,13 +16458,6 @@ addcmd('moveclone', {'mc'}, function(args, speaker)
         return
     end
 
-    -- Берём владение над всеми частями клона
-    for _, part in ipairs(closestClone:GetDescendants()) do
-        if part:IsA("BasePart") then
-            Network.RetainPart(part) -- Берём сетевое владение
-        end
-    end
-
     -- Получаем позицию под курсором
     local targetPosition = mouse.Hit and mouse.Hit.Position
     if not targetPosition then
@@ -16475,6 +16468,7 @@ addcmd('moveclone', {'mc'}, function(args, speaker)
     -- Перемещаем клона в позицию под курсором
     local clonePrimaryPart = closestClone.PrimaryPart or closestClone:FindFirstChild("HumanoidRootPart") or closestClone:FindFirstChild("Torso")
     if clonePrimaryPart then
+	Network.RetainPart(clonePrimaryPart)
         clonePrimaryPart.CFrame = CFrame.new(targetPosition)
         print("Клон перемещён в позицию под курсором:", targetPosition)
     else
