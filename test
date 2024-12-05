@@ -1,4 +1,4 @@
-print("em3212")
+print("em4")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16393,7 +16393,7 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local active = false -- Флаг для отслеживания состояния команды
 local connection -- Переменная для хранения подключения к RenderStepped
-local movingObjects = {} -- Храним ссылки на объекты с изменениями
+local movingObjects = {} -- Список объектов для перемещения
 local drawnLines = {} -- Список нарисованных линий
 
 local function moveObjectsToMouse(speaker)
@@ -16422,34 +16422,58 @@ local function moveObjectsToMouse(speaker)
     end
 
     local character = speaker.Character
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
     local mouse = speaker:GetMouse()
+    local targetObject
 
-    -- Найти инструмент в руках игрока
-    local tool
-    for _, v in pairs(character:GetChildren()) do
-        if v:IsA('Tool') then
-            tool = v.Name:lower()
-            break
+    -- Определяем объект под курсором мыши
+    local function getTargetObject()
+        local target = mouse.Target
+        if target and not target.Anchored then
+            local parent = target
+            -- Ищем родителя объекта, который является потомком Workspace
+            while parent and parent ~= workspace do
+                parent = parent.Parent
+            end
+            return parent or target
         end
+        return nil
     end
 
-    if not tool then
-        print("Инструмент не найден.")
+    targetObject = getTargetObject()
+
+    if not targetObject then
+        print("Объект под курсором не найден или он Anchored.")
         return
     end
 
-    -- Найти все объекты в Workspace с таким же именем, как инструмент
+    local targetObjectPath = targetObject:GetFullName()
+    local targetName = targetObject.Name
+
+    -- Найти все объекты в Workspace с таким же именем и аналогичной структурой
     for _, obj in pairs(workspace:GetChildren()) do
-        if obj.Name:lower() == tool and obj:FindFirstChild("Handle") then
-            if obj ~= tool and not obj:IsDescendantOf(character) then
-                table.insert(movingObjects, obj.Handle)
+        if obj.Name == targetName then
+            local isMatch = true
+            local current = obj
+            local target = targetObject
+
+            -- Сравниваем пути объекта
+            while target and target.Parent and current and current.Parent do
+                if target.Parent.Name ~= current.Parent.Name then
+                    isMatch = false
+                    break
+                end
+                target = target.Parent
+                current = current.Parent
+            end
+
+            if isMatch and current == workspace then
+                table.insert(movingObjects, obj)
             end
         end
     end
 
     if #movingObjects == 0 then
-        print("Объекты с таким же именем не найдены.")
+        print("Похожие объекты не найдены.")
         return
     end
 
@@ -16480,7 +16504,6 @@ local function moveObjectsToMouse(speaker)
     end
 
     local function drawPolygons()
-        -- Удаляем старые линии
         for _, line in pairs(drawnLines) do
             line:Destroy()
         end
@@ -16491,13 +16514,12 @@ local function moveObjectsToMouse(speaker)
             if player ~= speaker and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
                 local otherPosition = player.Character.HumanoidRootPart.Position
                 local midPoint = (myPosition + otherPosition) / 2
-                midPoint = Vector3.new(midPoint.X, myPosition.Y, midPoint.Z) -- Устанавливаем высоту на уровне игрока
+                midPoint = Vector3.new(midPoint.X, myPosition.Y, midPoint.Z)
                 local direction = (otherPosition - myPosition).unit
-                local perpendicular = Vector3.new(-direction.Z, 0, direction.X) -- Перпендикулярный вектор
+                local perpendicular = Vector3.new(-direction.Z, 0, direction.X)
                 local lineStart = midPoint + perpendicular * 50
                 local lineEnd = midPoint - perpendicular * 50
 
-                -- Создаем линию
                 local part = Instance.new("Part", workspace)
                 part.Size = Vector3.new(0.1, 0.1, (lineEnd - lineStart).Magnitude)
                 part.CFrame = CFrame.new((lineStart + lineEnd) / 2, lineEnd)
@@ -16519,6 +16541,7 @@ end
 addcmd('moveobjects', {'mvo'}, function(args, speaker)
     moveObjectsToMouse(speaker)
 end)
+
 
 
 
