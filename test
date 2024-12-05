@@ -16239,6 +16239,55 @@ end)
 
 
 
+-- Функция для поиска ближайшего объекта
+local function getClosestClone(speaker)
+    local closestClone = nil
+    local shortestDistance = math.huge -- Бесконечность
+    local playerPosition = speaker.Character.HumanoidRootPart.Position
+
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj:IsA("Model") and obj.Name:sub(-5) == "Clone" then
+            local objPosition = obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChild("Torso")
+            if objPosition and objPosition:IsA("BasePart") then
+                local distance = (playerPosition - objPosition.Position).Magnitude
+                if distance < shortestDistance then
+                    closestClone = obj
+                    shortestDistance = distance
+                end
+            end
+        end
+    end
+
+    return closestClone
+end
+
+-- Команда для перемещения ближайшего клона под курсор
+addcmd('moveclone', {'mc'}, function(args, speaker)
+    local mouse = speaker:GetMouse() -- Получаем объект мыши игрока
+
+    -- Проверяем, что есть ближайший клон
+    local closestClone = getClosestClone(speaker)
+    if not closestClone then
+        print("Ближайший клон не найден.")
+        return
+    end
+
+    -- Получаем позицию под курсором
+    local targetPosition = mouse.Hit and mouse.Hit.Position
+    if not targetPosition then
+        print("Не удалось получить позицию под курсором.")
+        return
+    end
+
+    -- Перемещаем клона в позицию под курсором
+    local clonePrimaryPart = closestClone.PrimaryPart or closestClone:FindFirstChild("HumanoidRootPart") or closestClone:FindFirstChild("Torso")
+    if clonePrimaryPart then
+        clonePrimaryPart.CFrame = CFrame.new(targetPosition)
+        print("Клон перемещён в позицию под курсором:", targetPosition)
+    else
+        print("У клона нет PrimaryPart или подходящей части для перемещения.")
+    end
+end)
 
 
 
