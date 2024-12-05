@@ -1,4 +1,4 @@
-print("em321")
+print("em3212")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16315,7 +16315,7 @@ if not getgenv().Network then
 
 	Network["Output"].Send(print,": Loaded.")
 end
-coroutine.resume(Network["PartOwnership"]["Enable"])
+--coroutine.resume(Network["PartOwnership"]["Enable"])
 
 
 
@@ -16366,7 +16366,7 @@ addcmd('moveclone', {'mc'}, function(args, speaker)
     -- Перемещаем клона в позицию под курсором
     local clonePrimaryPart = closestClone.PrimaryPart or closestClone:FindFirstChild("HumanoidRootPart") or closestClone:FindFirstChild("Torso")
     if clonePrimaryPart then
-        Network.RetainPart(clonePrimaryPart)
+        --Network.RetainPart(clonePrimaryPart)
         clonePrimaryPart.CFrame = CFrame.new(targetPosition)
         print("Клон перемещён в позицию под курсором:", targetPosition)
     else
@@ -16393,14 +16393,29 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local active = false -- Флаг для отслеживания состояния команды
 local connection -- Переменная для хранения подключения к RenderStepped
+local movingObjects = {} -- Храним ссылки на объекты с изменениями
+local drawnLines = {} -- Список нарисованных линий
 
 local function moveObjectsToMouse(speaker)
     if active then
-        -- Отключить, если команда уже активна
+        -- Отключить команду и удалить изменения
         if connection then
             connection:Disconnect()
             connection = nil
         end
+        for _, handle in pairs(movingObjects) do
+            if handle:FindFirstChild("BodyGyro") then
+                handle.BodyGyro:Destroy()
+            end
+            if handle:FindFirstChild("BodyVelocity") then
+                handle.BodyVelocity:Destroy()
+            end
+        end
+        movingObjects = {}
+        for _, line in pairs(drawnLines) do
+            line:Destroy() -- Удаляем нарисованные линии
+        end
+        drawnLines = {}
         active = false
         print("Команда отключена.")
         return
@@ -16414,7 +16429,7 @@ local function moveObjectsToMouse(speaker)
     local tool
     for _, v in pairs(character:GetChildren()) do
         if v:IsA('Tool') then
-            tool = v.Name:lower() -- Имя инструмента в нижнем регистре
+            tool = v.Name:lower()
             break
         end
     end
@@ -16424,67 +16439,83 @@ local function moveObjectsToMouse(speaker)
         return
     end
 
-    -- Найти все объекты в Workspace с таким же именем, как и инструмент, кроме инструмента в руках
-    local matchingObjects = {}
+    -- Найти все объекты в Workspace с таким же именем, как инструмент
     for _, obj in pairs(workspace:GetChildren()) do
         if obj.Name:lower() == tool and obj:FindFirstChild("Handle") then
-            -- Исключаем объект, который игрок держит в руках
             if obj ~= tool and not obj:IsDescendantOf(character) then
-                table.insert(matchingObjects, obj.Handle) -- Добавляем все объекты с совпадающим именем
-		Network.RetainPart(obj.Handle)
+                table.insert(movingObjects, obj.Handle)
             end
         end
     end
 
-    if #matchingObjects == 0 then
+    if #movingObjects == 0 then
         print("Объекты с таким же именем не найдены.")
         return
     end
 
     active = true -- Включаем команду
 
-    -- Логика для перемещения объектов к позиции мыши
     local function updateMovement()
-        if speaker.Character then
-            local hitPosition = mouse.Hit.Position
-            local characterY = character.HumanoidRootPart.Position.Y -- Высота персонажа
-            for _, handle in pairs(matchingObjects) do
-                -- Добавить BodyGyro для стабилизации ориентации
-                if not handle:FindFirstChild("BodyGyro") then
-                    local gyro = Instance.new("BodyGyro", handle)
-                    gyro.MaxTorque = Vector3.new(4000, 4000, 4000)
-                    gyro.P = 3000
-                    gyro.CFrame = handle.CFrame
-                end
+        local hitPosition = mouse.Hit.Position
+        local characterY = character.HumanoidRootPart.Position.Y
+        for _, handle in pairs(movingObjects) do
+            if not handle:FindFirstChild("BodyGyro") then
+                local gyro = Instance.new("BodyGyro", handle)
+                gyro.MaxTorque = Vector3.new(4000, 4000, 4000)
+                gyro.P = 3000
+                gyro.CFrame = handle.CFrame
+            end
+            if not handle:FindFirstChild("BodyVelocity") then
+                local velocity = Instance.new("BodyVelocity", handle)
+                velocity.MaxForce = Vector3.new(4000, 4000, 4000)
+                velocity.P = 1250
+            end
+            local velocity = handle:FindFirstChild("BodyVelocity")
+            local gyro = handle:FindFirstChild("BodyGyro")
+            local rootPartPosition = handle.Position
+            local targetPosition = Vector3.new(hitPosition.X, characterY, hitPosition.Z)
+            velocity.Velocity = (targetPosition - rootPartPosition).unit * 50
+            gyro.CFrame = CFrame.new(rootPartPosition, targetPosition)
+        end
+    end
 
-                -- Добавить BodyVelocity для плавного движения к цели
-                if not handle:FindFirstChild("BodyVelocity") then
-                    local velocity = Instance.new("BodyVelocity", handle)
-                    velocity.MaxForce = Vector3.new(4000, 4000, 4000)
-                    velocity.P = 1250  -- Более плавное движение
-                end
+    local function drawPolygons()
+        -- Удаляем старые линии
+        for _, line in pairs(drawnLines) do
+            line:Destroy()
+        end
+        drawnLines = {}
 
-                local velocity = handle:FindFirstChild("BodyVelocity")
-                local gyro = handle:FindFirstChild("BodyGyro")
+        local myPosition = character.HumanoidRootPart.Position
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= speaker and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                local otherPosition = player.Character.HumanoidRootPart.Position
+                local midPoint = (myPosition + otherPosition) / 2
+                midPoint = Vector3.new(midPoint.X, myPosition.Y, midPoint.Z) -- Устанавливаем высоту на уровне игрока
+                local direction = (otherPosition - myPosition).unit
+                local perpendicular = Vector3.new(-direction.Z, 0, direction.X) -- Перпендикулярный вектор
+                local lineStart = midPoint + perpendicular * 50
+                local lineEnd = midPoint - perpendicular * 50
 
-                local rootPartPosition = handle.Position
-                -- Устанавливаем высоту, равную высоте персонажа
-                local targetPosition = Vector3.new(hitPosition.X, characterY, hitPosition.Z)
-
-                -- Обновляем направление и скорость движения
-                velocity.Velocity = (targetPosition - rootPartPosition).unit * 50
-                gyro.CFrame = CFrame.new(rootPartPosition, targetPosition)
+                -- Создаем линию
+                local part = Instance.new("Part", workspace)
+                part.Size = Vector3.new(0.1, 0.1, (lineEnd - lineStart).Magnitude)
+                part.CFrame = CFrame.new((lineStart + lineEnd) / 2, lineEnd)
+                part.Anchored = true
+                part.CanCollide = false
+                part.BrickColor = BrickColor.new("Bright red")
+                table.insert(drawnLines, part)
             end
         end
     end
 
-    -- Привязка обновления перемещения к RenderStepped для постоянного обновления позиции
     connection = RunService.RenderStepped:Connect(function()
         updateMovement()
+        drawPolygons()
     end)
 end
 
--- Команда для активации/деактивации движения объектов к позиции курсора
+-- Команда для активации/деактивации
 addcmd('moveobjects', {'mvo'}, function(args, speaker)
     moveObjectsToMouse(speaker)
 end)
