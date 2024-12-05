@@ -16440,6 +16440,18 @@ addcmd('moveclone', {'mc'}, function(args, speaker)
         return
     end
 
+	-- Вывод NetworkOwner для всех BasePart клона
+	for _, part in ipairs(closestClone:GetDescendants()) do
+	    if part:IsA("BasePart") then
+	        local owner = part:GetNetworkOwner()
+	        if owner then
+	            print("NetworkOwner of", part.Name, ":", owner.Name)
+	        else
+	            print("NetworkOwner of", part.Name, ": Server (nil)")
+	        end
+	    end
+	end
+
     -- Получаем позицию под курсором
     local targetPosition = mouse.Hit and mouse.Hit.Position
     if not targetPosition then
