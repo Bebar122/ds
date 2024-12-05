@@ -1,4 +1,4 @@
-print("em4")
+print("em41")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16428,11 +16428,22 @@ local function moveObjectsToMouse(speaker)
     -- Определяем объект под курсором мыши
     local function getTargetObject()
         local target = mouse.Target
+        if target then
+            print("Объект под курсором: " .. target:GetFullName())  -- Отладка
+        else
+            print("Нет объекта под курсором")  -- Отладка
+        end
+
         if target and not target.Anchored then
             local parent = target
             -- Ищем родителя объекта, который является потомком Workspace
             while parent and parent ~= workspace do
                 parent = parent.Parent
+            end
+            if parent then
+                print("Родитель объекта найден: " .. parent:GetFullName())  -- Отладка
+            else
+                print("Родитель объекта не найден.")  -- Отладка
             end
             return parent or target
         end
@@ -16448,10 +16459,12 @@ local function moveObjectsToMouse(speaker)
 
     local targetObjectPath = targetObject:GetFullName()
     local targetName = targetObject.Name
+    print("Целевой объект: " .. targetObjectPath)  -- Отладка
 
     -- Найти все объекты в Workspace с таким же именем и аналогичной структурой
     for _, obj in pairs(workspace:GetChildren()) do
         if obj.Name == targetName then
+            print("Проверяем объект: " .. obj:GetFullName())  -- Отладка
             local isMatch = true
             local current = obj
             local target = targetObject
@@ -16460,6 +16473,7 @@ local function moveObjectsToMouse(speaker)
             while target and target.Parent and current and current.Parent do
                 if target.Parent.Name ~= current.Parent.Name then
                     isMatch = false
+                    print("Не совпадают родительские имена: " .. target.Parent.Name .. " и " .. current.Parent.Name)  -- Отладка
                     break
                 end
                 target = target.Parent
@@ -16467,6 +16481,7 @@ local function moveObjectsToMouse(speaker)
             end
 
             if isMatch and current == workspace then
+                print("Совпадение найдено: " .. obj:GetFullName())  -- Отладка
                 table.insert(movingObjects, obj)
             end
         end
@@ -16541,6 +16556,7 @@ end
 addcmd('moveobjects', {'mvo'}, function(args, speaker)
     moveObjectsToMouse(speaker)
 end)
+
 
 
 
