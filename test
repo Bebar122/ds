@@ -1,4 +1,4 @@
-print("em42133")
+print("em45")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16437,10 +16437,15 @@ local function moveObjectsToMouse(speaker)
         if target and not target.Anchored then
             local parent = target.Parent
             -- Ищем родителя объекта, который является потомком Workspace, но не Workspace
-            while parent and parent ~= workspace do
+		print(parent:GetFullName())
+		print(parent.Name)
+		print(workspace.Name)
+            while parent and parent.Name ~= workspace.Name do
                 parent = parent.Parent
+		print("while" .. parent.Name)
             end
-            if parent and parent ~= workspace then
+		print("after while" .. parent.Name)
+            if parent and parent.Name ~= workspace.Name then
                 print("Родитель объекта найден: " .. parent:GetFullName())  -- Отладка
             else
                 print("Родитель объекта не найден.")  -- Отладка
