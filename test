@@ -1,4 +1,4 @@
-print("em31")
+print("em312")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16296,7 +16296,7 @@ if not getgenv().Network then
         end
     end
     Network["SuperStepper"] = Instance.new("BindableEvent") --make super fast event to connect to
-    setfflag("NewRunServiceSignals","true")
+    --setfflag("NewRunServiceSignals","true")
     for _,Event in pairs({RunService.RenderStepped,RunService.Heartbeat,RunService.Stepped,RunService.PreSimulation,RunService.PostSimulation}) do
         Event:Connect(function()
             return Network["SuperStepper"]:Fire(Network["SuperStepper"],tick())
