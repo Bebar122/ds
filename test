@@ -1,4 +1,4 @@
-
+print("111")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16455,6 +16455,17 @@ addcmd('moveclone', {'mc'}, function(args, speaker)
         return
     end
 
+    -- Выводим NetworkOwner для всех BasePart клона
+    for _, part in ipairs(closestClone:GetDescendants()) do
+        if part:IsA("BasePart") then
+            local owner = part:GetNetworkOwner()
+            if owner then
+                print("NetworkOwner of", part.Name, ":", owner.Name)
+            else
+                print("NetworkOwner of", part.Name, ": Server (nil)")
+            end
+        end
+    end
 
     -- Получаем позицию под курсором
     local targetPosition = mouse.Hit and mouse.Hit.Position
@@ -16466,13 +16477,14 @@ addcmd('moveclone', {'mc'}, function(args, speaker)
     -- Перемещаем клона в позицию под курсором
     local clonePrimaryPart = closestClone.PrimaryPart or closestClone:FindFirstChild("HumanoidRootPart") or closestClone:FindFirstChild("Torso")
     if clonePrimaryPart then
-	Network.RetainPart(clonePrimaryPart)
+        Network.RetainPart(clonePrimaryPart)
         clonePrimaryPart.CFrame = CFrame.new(targetPosition)
         print("Клон перемещён в позицию под курсором:", targetPosition)
     else
         print("У клона нет PrimaryPart или подходящей части для перемещения.")
     end
 end)
+
 
 
 
