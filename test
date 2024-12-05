@@ -1,4 +1,4 @@
-print("em421")
+print("em42133")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16396,64 +16396,6 @@ local connection -- Переменная для хранения подключ�
 local movingObjects = {} -- Список объектов для перемещения
 local drawnLines = {} -- Список нарисованных линий
 
--- Функция для поиска родителя объекта, который является прямым потомком Workspace
-local function getParentInWorkspace(object)
-    local parent = object.Parent
-    while parent and parent.Parent ~= workspace do
-        parent = parent.Parent
-    end
-    if parent and parent.Parent == workspace then
-        return parent
-    end
-    return nil
-end
-
--- Функция для поиска объектов, аналогичных объекту под курсором
-local function getMatchingObjects(objectUnderMouse)
-    local matchingObjects = {}
-
-    -- Получаем путь объекта под курсором
-    local objectPath = {}
-    local currentObject = objectUnderMouse
-    while currentObject do
-        table.insert(objectPath, 1, currentObject.Name)
-        currentObject = currentObject.Parent
-        if currentObject == workspace then
-            break
-        end
-    end
-
-    -- Найдем родителя, который является прямым потомком Workspace
-    local rootParent = getParentInWorkspace(objectUnderMouse)
-    if not rootParent then
-        print("Родитель, являющийся прямым потомком Workspace, не найден!")
-        return {}
-    end
-
-    -- Перебираем все объекты с таким же именем родителя в Workspace
-    for _, obj in pairs(workspace:GetChildren()) do
-        if obj.Name == rootParent.Name then
-            -- Теперь строим путь, аналогичный пути объекта под курсором
-            local potentialMatch = obj
-            local matchFound = true
-            for i, partName in ipairs(objectPath) do
-                -- Проверяем, соответствует ли путь
-                potentialMatch = potentialMatch:FindFirstChild(partName)
-                if not potentialMatch then
-                    matchFound = false
-                    break
-                end
-            end
-            if matchFound then
-                table.insert(matchingObjects, potentialMatch)
-            end
-        end
-    end
-
-    return matchingObjects
-end
-
--- Основная функция для перемещения объектов к позиции мыши
 local function moveObjectsToMouse(speaker)
     if active then
         -- Отключить команду и удалить изменения
@@ -16515,21 +16457,35 @@ local function moveObjectsToMouse(speaker)
         return
     end
 
-    -- Получаем все объекты, аналогичные объекту под курсором
-    local matchingObjects = getMatchingObjects(targetObject)
+    local targetObjectPath = targetObject:GetFullName()
+    local targetName = targetObject.Name
+    print("Целевой объект: " .. targetObjectPath)  -- Отладка
 
-    if #matchingObjects == 0 then
-        print("Похожие объекты не найдены.")
+    -- Найти все объекты в Workspace с таким же именем и аналогичной структурой
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj.Name == targetObject.Name then
+            print("Проверяем объект: " .. obj:GetFullName())  -- Отладка
+            -- Проверяем, есть ли у этого объекта Handle
+            local handle = obj:FindFirstChild("Handle")
+            if handle then
+                print("Объект с Handle найден: " .. obj:GetFullName())  -- Отладка
+                -- Добавляем все объекты с совпадающим именем и имеющим Handle
+                table.insert(movingObjects, handle)
+            end
+        end
+    end
+
+    if #movingObjects == 0 then
+        print("Похожие объекты с Handle не найдены.")
         return
     end
 
     active = true -- Включаем команду
 
-    -- Перемещение объектов к позиции мыши
     local function updateMovement()
         local hitPosition = mouse.Hit.Position
         local characterY = character.HumanoidRootPart.Position.Y
-        for _, handle in pairs(matchingObjects) do
+        for _, handle in pairs(movingObjects) do
             if not handle:FindFirstChild("BodyGyro") then
                 local gyro = Instance.new("BodyGyro", handle)
                 gyro.MaxTorque = Vector3.new(4000, 4000, 4000)
@@ -16550,7 +16506,6 @@ local function moveObjectsToMouse(speaker)
         end
     end
 
-    -- Рисуем полигоны между игроками
     local function drawPolygons()
         for _, line in pairs(drawnLines) do
             line:Destroy()
@@ -16579,7 +16534,6 @@ local function moveObjectsToMouse(speaker)
         end
     end
 
-    -- Подключаем RenderStepped для обновления движения и рисования линий
     connection = RunService.RenderStepped:Connect(function()
         updateMovement()
         drawPolygons()
@@ -16590,6 +16544,92 @@ end
 addcmd('moveobjects', {'mvo'}, function(args, speaker)
     moveObjectsToMouse(speaker)
 end)
+
+
+
+
+
+
+local Players = game:GetService("Players")
+local mouse = game.Players.LocalPlayer:GetMouse()
+
+-- Функция для поиска родителя, который является прямым потомком Workspace
+local function getParentInWorkspace(object)
+    local parent = object.Parent
+    while parent and parent.Parent ~= workspace do
+        parent = parent.Parent
+    end
+    if parent and parent.Parent == workspace then
+        return parent
+    end
+    return nil
+end
+
+-- Функция для поиска объектов в Workspace, совпадающих с путем объекта под курсором
+local function getMatchingObjects(objectUnderMouse)
+    local matchingObjects = {}
+
+    -- Получаем путь объекта под курсором
+    local objectPath = {}
+    local currentObject = objectUnderMouse
+    while currentObject do
+        table.insert(objectPath, 1, currentObject.Name)
+        currentObject = currentObject.Parent
+        if currentObject == workspace then
+            break
+        end
+    end
+
+    -- Найдем родителя, который является прямым потомком Workspace
+    local rootParent = getParentInWorkspace(objectUnderMouse)
+    if not rootParent then
+        print("Родитель, являющийся прямым потомком Workspace, не найден!")
+        return {}
+    end
+
+    -- Перебираем все объекты с таким же именем родителя в Workspace
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj.Name == rootParent.Name then
+            -- Теперь строим путь, аналогичный пути объекта под курсором
+            local potentialMatch = obj
+            local matchFound = true
+            for i, partName in ipairs(objectPath) do
+                -- Проверяем, соответствует ли путь
+                potentialMatch = potentialMatch:FindFirstChild(partName)
+                if not potentialMatch then
+                    matchFound = false
+                    break
+                end
+            end
+            if matchFound then
+                table.insert(matchingObjects, potentialMatch)
+            end
+        end
+    end
+
+    return matchingObjects
+end
+
+-- Команда для активации поиска объектов
+addcmd('findmatchingobjects', {'fmo'}, function(args, speaker)
+    local targetObject = mouse.Target
+    if targetObject then
+        print("Объект под курсором: " .. targetObject:GetFullName()) -- Отладка
+        local matchingObjects = getMatchingObjects(targetObject)
+        
+        if #matchingObjects > 0 then
+            print("Найдено " .. #matchingObjects .. " объектов, которые совпадают с путем под курсором:")
+            for _, obj in pairs(matchingObjects) do
+                print(obj:GetFullName()) -- Отладка
+            end
+        else
+            print("Не найдено объектов, соответствующих пути.")
+        end
+    else
+        print("Нет объекта под курсором.")
+    end
+end)
+
 
 
 
