@@ -16468,7 +16468,7 @@ local function moveObjectsToMouse(speaker)
 		for _, child in pairs(obj:GetDescendants()) do
 			if child.Name == underM.Name then
 				table.insert(movingObjects, child)
-				break
+				--break
 			end
 		end
         end
