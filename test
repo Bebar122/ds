@@ -1,4 +1,4 @@
-print("em45")
+print("em451")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16440,7 +16440,7 @@ local function moveObjectsToMouse(speaker)
 		print(parent:GetFullName())
 		print(parent.Name)
 		print(workspace.Name)
-            while parent and parent.Name ~= workspace.Name do
+            while parent and parent.Parent.Name ~= workspace.Name do
                 parent = parent.Parent
 		print("while" .. parent.Name)
             end
