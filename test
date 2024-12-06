@@ -16484,9 +16484,10 @@ local function moveObjectsToMouse(speaker)
 
     active = true -- Включаем команду
 
-	execCmd('anim 86504773 1')
-	task.wait(4.0)
-	execCmd('freezeanims')
+	execCmd('anim 86504773 2')
+	task.delay(2.0, function()
+	    execCmd('freezeanims')
+	end)
 
 local function updateMovement()
     -- Настраиваем уровень плоскости, где должны двигаться объекты
