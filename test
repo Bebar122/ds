@@ -1,4 +1,4 @@
-print("em451")
+print("em452")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16435,17 +16435,12 @@ local function moveObjectsToMouse(speaker)
         end
 
         if target and not target.Anchored then
-            local parent = target.Parent
-            -- Ищем родителя объекта, который является потомком Workspace, но не Workspace
-		print(parent:GetFullName())
-		print(parent.Name)
-		print(workspace.Name)
-            while parent and parent.Parent.Name ~= workspace.Name do
+            local parent = target
+            -- Ищем родителя объекта, который является потомком Workspace
+            while parent and parent.Parent ~= workspace do
                 parent = parent.Parent
-		print("while" .. parent.Name)
             end
-		print("after while" .. parent.Name)
-            if parent and parent.Name ~= workspace.Name then
+            if parent then
                 print("Родитель объекта найден: " .. parent:GetFullName())  -- Отладка
             else
                 print("Родитель объекта не найден.")  -- Отладка
@@ -16468,20 +16463,32 @@ local function moveObjectsToMouse(speaker)
 
     -- Найти все объекты в Workspace с таким же именем и аналогичной структурой
     for _, obj in pairs(workspace:GetChildren()) do
-        if obj.Name == targetObject.Name then
+        if obj.Name == targetName then
             print("Проверяем объект: " .. obj:GetFullName())  -- Отладка
-            -- Проверяем, есть ли у этого объекта Handle
-            local handle = obj:FindFirstChild("Handle")
-            if handle then
-                print("Объект с Handle найден: " .. obj:GetFullName())  -- Отладка
-                -- Добавляем все объекты с совпадающим именем и имеющим Handle
-                table.insert(movingObjects, handle)
+            local isMatch = true
+            local current = obj
+            local target = targetObject
+
+            -- Сравниваем пути объекта
+            while target and target.Parent and current and current.Parent do
+                if target.Parent.Name ~= current.Parent.Name then
+                    isMatch = false
+                    print("Не совпадают родительские имена: " .. target.Parent.Name .. " и " .. current.Parent.Name)  -- Отладка
+                    break
+                end
+                target = target.Parent
+                current = current.Parent
+            end
+
+            if isMatch and current == workspace then
+                print("Совпадение найдено: " .. obj:GetFullName())  -- Отладка
+                table.insert(movingObjects, obj)
             end
         end
     end
 
     if #movingObjects == 0 then
-        print("Похожие объекты с Handle не найдены.")
+        print("Похожие объекты не найдены.")
         return
     end
 
