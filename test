@@ -1,4 +1,4 @@
-print("em452")
+print("em453")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16424,10 +16424,11 @@ local function moveObjectsToMouse(speaker)
     local character = speaker.Character
     local mouse = speaker:GetMouse()
     local targetObject
-
+	local underM = mouse.Target
+	
     -- Определяем объект под курсором мыши
     local function getTargetObject()
-        local target = mouse.Target
+        local target = underM
         if target then
             print("Объект под курсором: " .. target:GetFullName())  -- Отладка
         else
@@ -16464,26 +16465,12 @@ local function moveObjectsToMouse(speaker)
     -- Найти все объекты в Workspace с таким же именем и аналогичной структурой
     for _, obj in pairs(workspace:GetChildren()) do
         if obj.Name == targetName then
-            print("Проверяем объект: " .. obj:GetFullName())  -- Отладка
-            local isMatch = true
-            local current = obj
-            local target = targetObject
-
-            -- Сравниваем пути объекта
-            while target and target.Parent and current and current.Parent do
-                if target.Parent.Name ~= current.Parent.Name then
-                    isMatch = false
-                    print("Не совпадают родительские имена: " .. target.Parent.Name .. " и " .. current.Parent.Name)  -- Отладка
-                    break
-                end
-                target = target.Parent
-                current = current.Parent
-            end
-
-            if isMatch and current == workspace then
-                print("Совпадение найдено: " .. obj:GetFullName())  -- Отладка
-                table.insert(movingObjects, obj)
-            end
+		for _, child in pairs(obj:GetDescendants()) do
+			if child.Name == underM.Name then
+				table.insert(movingObjects, child)
+				break
+			end
+		end
         end
     end
 
