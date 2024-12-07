@@ -1,4 +1,4 @@
-print("em522")
+print("em5221")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -12008,6 +12008,35 @@ addcmd('deleteselectedtool',{'dst'},function(args, speaker)
 	end
 end)
 
+addcmd('screentest',{'scrt'},function(args, speaker)
+	local function processEarthObjects(argument)
+	    -- Получаем модель персонажа
+	    local character = game.Players.LocalPlayer.Character
+	    if not character then
+	        warn("Персонаж не найден!")
+	        return
+	    end
+	
+	    -- Перебираем все объекты внутри персонажа с именем "Earth"
+	    for _, earth in pairs(character:GetChildren()) do
+	        if earth.Name == "Earth" and earth:IsA("Model") then
+	            for _, child in pairs(earth:GetChildren()) do
+	                if argument == 1 then
+	                    -- Удаляем всех детей
+	                    child:Destroy()
+	                elseif argument == 2 then
+	                    -- Удаляем всех детей, кроме SelectionBox
+	                    if not child:IsA("SelectionBox") then
+	                        child:Destroy()
+	                    end
+	                end
+	            end
+	        end
+	    end
+	end
+	processEarthObjects(tonumber(args[1]))
+end)
+
 addcmd('spawnWall', {'wall'}, function(args, speaker)
     local player = game.Players:GetPlayerFromCharacter(speaker.Character)
     if not player or not speaker.Character then
@@ -12074,7 +12103,7 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
 
     -- Цикл для создания стены
     for w = 0, width - 1 do
-        for h = 0, height - 0 do
+        for h = 0, height - 1 do
             -- Рассчитываем смещение по X, Y, Z в зависимости от оси
             local offsetX = (axis == "X") and (w * spacing) or 0
             local offsetY = h * spacing
@@ -12086,7 +12115,7 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
             -- Если планета заспавнена успешно, продолжаем
             if success then
                 -- Ждем появления новой планеты в инвентаре
-                task.wait(0.99)
+                task.wait(1.2)
 
                 -- Вычисляем новую позицию для следующей планеты
                 local newPosition = startPosition + Vector3.new(offsetX, offsetY, offsetZ)
