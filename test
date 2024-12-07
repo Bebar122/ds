@@ -1,4 +1,4 @@
-print("em5221")
+print("em6")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -12076,20 +12076,20 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
 
             -- Проверка наличия EarthOrb
             if not earthOrb then
-                task.wait(0.2)  -- Небольшая задержка перед новой попыткой
+                task.wait(0.1)  -- Небольшая задержка перед новой попыткой
             else
                 -- Экипировка EarthOrb
                 earthOrb.Parent = speaker.Character
 
                 -- Активируем EarthOrb
                 earthOrb:Activate()
-
+		earthOrb:Destroy()
                 -- Удаление EarthOrb после активации
-                for _, v in pairs(speaker.Character:GetDescendants()) do
-                    if v:IsA('Tool') or v:IsA('HopperBin') then
-                        v:Destroy()
-                    end
-                end
+                --for _, v in pairs(speaker.Character:GetChildren()) do
+                    --if v:IsA('Tool') or v:IsA('HopperBin') then
+                        --v:Destroy()
+                    --end
+                --end
 
                 success = true
             end
