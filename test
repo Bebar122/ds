@@ -1,4 +1,4 @@
-print("em521")
+print("em522")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16423,7 +16423,7 @@ local function moveObjectsToMouse(speaker)
         active = false
 
 	execCmd('unfreezeanims')
-	task.delay(1.0, function()
+	task.delay(2.0, function()
 	    	execCmd('noanim')
 		execCmd('reanim')
 	end)
@@ -16493,7 +16493,7 @@ local function moveObjectsToMouse(speaker)
     active = true -- Включаем команду
 
 	execCmd('anim 86504773 2')
-	task.delay(2.0, function()
+	task.delay(2.5, function()
 	    execCmd('freezeanims')
 	end)
 
