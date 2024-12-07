@@ -12073,8 +12073,8 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
     local startPosition = speaker.Character.HumanoidRootPart.Position
 
     -- Цикл для создания стены
-    for w = 0, width - 1 do
-        for h = 0, height - 1 do
+    for w = 1, width - 0 do
+        for h = 1, height - 0 do
             -- Рассчитываем смещение по X, Y, Z в зависимости от оси
             local offsetX = (axis == "X") and (w * spacing) or 0
             local offsetY = h * spacing
