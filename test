@@ -16502,6 +16502,12 @@ local function updateMovement()
     local t = (characterY - rayOrigin.Y) / rayDirection.Y
     local hitPosition = rayOrigin + rayDirection * t -- Точка на плоскости, куда смотрит мышь
 
+    -- Поворачиваем персонажа в направлении конечной точки
+    local humanoidRootPart = character.HumanoidRootPart
+    local lookDirection = (Vector3.new(hitPosition.X, humanoidRootPart.Position.Y, hitPosition.Z) - humanoidRootPart.Position).unit
+    humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, humanoidRootPart.Position + lookDirection)
+
+    -- Обновляем движение объектов
     for _, handle in pairs(movingObjects) do
         -- Добавляем BodyGyro, если его нет
         if not handle:FindFirstChild("BodyGyro") then
@@ -16529,6 +16535,7 @@ local function updateMovement()
         gyro.CFrame = CFrame.new(rootPartPosition, targetPosition) -- Направляем объект к цели
     end
 end
+
 
 
     local function drawPolygons()
