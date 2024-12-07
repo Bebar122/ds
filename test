@@ -1,4 +1,4 @@
-print("em52")
+print("em521")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -12016,9 +12016,9 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
     end
 
     -- Параметры: ширина, высота, плотность и ось стены
-    local width = tonumber(args[1]) or 5  -- Ширина стены (по оси X или Z)
-    local height = tonumber(args[2]) or 5  -- Высота стены (по оси Y)
-    local density = tonumber(args[3]) or 1  -- Плотность планет
+    local width = tonumber(args[1]) or 4  -- Ширина стены (по оси X или Z)
+    local height = tonumber(args[2]) or 4  -- Высота стены (по оси Y)
+    local density = tonumber(args[3]) or 8  -- Плотность планет
     local axis = tostring(args[4]) or "X"  -- Ось, по которой строится стена (X или Z)
 
     -- Рассчитываем расстояние между планетами в зависимости от плотности (линейное изменение)
@@ -12073,8 +12073,8 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
     local startPosition = speaker.Character.HumanoidRootPart.Position
 
     -- Цикл для создания стены
-    for w = 1, width - 0 do
-        for h = 1, height - 0 do
+    for w = 0, width - 1 do
+        for h = 0, height - 0 do
             -- Рассчитываем смещение по X, Y, Z в зависимости от оси
             local offsetX = (axis == "X") and (w * spacing) or 0
             local offsetY = h * spacing
@@ -12086,7 +12086,7 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
             -- Если планета заспавнена успешно, продолжаем
             if success then
                 -- Ждем появления новой планеты в инвентаре
-                task.wait(0.75)
+                task.wait(0.99)
 
                 -- Вычисляем новую позицию для следующей планеты
                 local newPosition = startPosition + Vector3.new(offsetX, offsetY, offsetZ)
