@@ -1,4 +1,4 @@
-print("em51")
+print("em52")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -15142,7 +15142,11 @@ addcmd('dropclone', {'drc'}, function(args, speaker)
             if not Human or hkillstop then
                 break
             end
-            
+
+		if Human.Health <= 0 then
+			clone:Destroy()
+            	end
+		
             -- Перебираем все части тела игрока и касаемся их
             for _, v1 in ipairs(speaker.Character:GetChildren()) do
                 if v1:IsA("BasePart") then
@@ -16419,8 +16423,11 @@ local function moveObjectsToMouse(speaker)
         active = false
 
 	execCmd('unfreezeanims')
-	execCmd('noanim')
-	execCmd('reanim')
+	task.delay(1.0, function()
+	    	execCmd('noanim')
+		execCmd('reanim')
+	end)
+
         print("Команда отключена.")
         return
     end
