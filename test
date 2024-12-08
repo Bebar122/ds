@@ -1,4 +1,4 @@
-print("em6")
+print("em61")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -12008,34 +12008,7 @@ addcmd('deleteselectedtool',{'dst'},function(args, speaker)
 	end
 end)
 
-addcmd('screentest',{'scrt'},function(args, speaker)
-	local function processEarthObjects(argument)
-	    -- Получаем модель персонажа
-	    local character = game.Players.LocalPlayer.Character
-	    if not character then
-	        warn("Персонаж не найден!")
-	        return
-	    end
-	
-	    -- Перебираем все объекты внутри персонажа с именем "Earth"
-	    for _, earth in pairs(character:GetChildren()) do
-	        if earth.Name == "Earth" and earth:IsA("Model") then
-	            for _, child in pairs(earth:GetChildren()) do
-	                if argument == 1 then
-	                    -- Удаляем всех детей
-	                    child:Destroy()
-	                elseif argument == 2 then
-	                    -- Удаляем всех детей, кроме SelectionBox
-	                    if not child:IsA("SelectionBox") then
-	                        child:Destroy()
-	                    end
-	                end
-	            end
-	        end
-	    end
-	end
-	processEarthObjects(tonumber(args[1]))
-end)
+
 
 addcmd('spawnWall', {'wall'}, function(args, speaker)
     local player = game.Players:GetPlayerFromCharacter(speaker.Character)
@@ -16706,6 +16679,133 @@ end)
 
 
 
+
+
+
+
+local cleanupLoop -- Переменная для хранения текущего цикла
+local isRunning = false -- Флаг для отслеживания состояния цикла
+
+addcmd('clearlights', {}, function(args, speaker)
+    -- Если цикл уже запущен, остановим его
+    if isRunning then
+        isRunning = false
+        cleanupLoop = nil
+        notify(speaker, "Цикл остановлен.")
+        return
+    end
+
+    local character = speaker.Character
+    if not character then 
+        notify(speaker, "Персонаж не найден.")
+        return 
+    end
+
+    isRunning = true
+    notify(speaker, "Цикл запущен.")
+
+    -- Функция для удаления объектов
+    local function clearUnwantedObjects()
+        for _, child in pairs(character:GetDescendants()) do
+            if (child:IsA("PointLight") or child:IsA("SelectionBox")) and (child.Parent.Name ~= "Earth") then
+                child:Destroy()
+            end
+        end
+    end
+
+    -- Запускаем цикл
+    cleanupLoop = coroutine.create(function()
+        while isRunning do
+            clearUnwantedObjects()
+            wait(2)
+        end
+    end)
+
+    coroutine.resume(cleanupLoop)
+end)
+
+
+
+local RunService = game:GetService("RunService")
+
+addcmd('screentest',{'scrt'},function(args, speaker)
+    
+    if RunService then RunService:Disconnect() end
+    
+	local delay = tonumber(args[1]) or 0.1
+	
+	local character = game.Players.LocalPlayer.Character
+	
+	    -- Получаем необходимые сервисы
+    
+    local Players = game:GetService("Players")
+    
+    -- Получаем персонажа игрока
+    local player = Players.LocalPlayer
+    
+
+
+    -- Собираем все объекты "Earth" внутри персонажа
+    local earthObjects = {}
+    for _, obj in pairs(character:GetChildren()) do
+        if obj.Name == "Earth" then
+            table.insert(earthObjects, obj)
+        end
+    end
+    
+    local function processEarthObjects()
+    
+        local skipCount = 5 -- Количество объектов, которые нужно пропустить из центра
+        
+        -- Определяем центр массива
+        local centerIndex = math.ceil(#earthObjects / 2)
+        
+        -- Определяем индексы для пропуска
+        local skipIndices = {}
+        local halfSkip = math.floor(skipCount / 2)
+        
+        -- Добавляем индексы до центра
+        for i = centerIndex - halfSkip, centerIndex + halfSkip do
+            if #skipIndices < skipCount and earthObjects[i] then
+                table.insert(skipIndices, i)
+            end
+        end
+    
+        -- Обрабатываем объекты "Earth"
+        for index, earth in pairs(earthObjects) do
+            local skipbool = not table.find(skipIndices, index)
+            for _, child in pairs(earth:GetChildren()) do
+                if not child:IsA("SelectionBox") or skipbool then
+                    child:Destroy()
+                end
+            end
+        end
+    end
+    
+    
+    -- Флаг, чтобы временно приостановить RenderStepped
+    local isWaiting = false
+    
+    local earthObject = character:FindFirstChild("Earth")
+    
+    -- RenderStepped обработчик
+    RunService.RenderStepped:Connect(function()
+        if isWaiting then return end -- Если ожидание активно, пропускаем кадры
+    
+        if earthObject then
+            -- Проверяем, есть ли у объекта Earth ребенок PointLight
+            local pointLight = earthObject:FindFirstChild("PointLight")
+            if pointLight then
+                -- Устанавливаем флаг и добавляем паузу перед вызовом функции
+                isWaiting = true
+                wait(delay)
+                processEarthObjects()
+                isWaiting = false
+            end
+        end
+    end)
+	
+end)
 
 
 
