@@ -1,4 +1,4 @@
-print("em61")
+print("em612")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16755,21 +16755,16 @@ addcmd('screentest',{'scrt'},function(args, speaker)
     
     local function processEarthObjects()
     
-        local skipCount = 5 -- Количество объектов, которые нужно пропустить из центра
-        
-        -- Определяем центр массива
-        local centerIndex = math.ceil(#earthObjects / 2)
-        
-        -- Определяем индексы для пропуска
-        local skipIndices = {}
-        local halfSkip = math.floor(skipCount / 2)
-        
-        -- Добавляем индексы до центра
-        for i = centerIndex - halfSkip, centerIndex + halfSkip do
-            if #skipIndices < skipCount and earthObjects[i] then
-                table.insert(skipIndices, i)
-            end
-        end
+	    local skipCount = math.random(0, #earthObjects) -- Случайное количество объектов, которые не будут обработаны
+	
+	    -- Создаем массив случайных индексов для пропуска
+	    local skipIndices = {}
+	    while #skipIndices < skipCount do
+	        local randomIndex = math.random(1, #earthObjects)
+	        if not table.find(skipIndices, randomIndex) then
+	            table.insert(skipIndices, randomIndex)
+	        end
+	    end
     
         -- Обрабатываем объекты "Earth"
         for index, earth in pairs(earthObjects) do
