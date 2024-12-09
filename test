@@ -1,4 +1,4 @@
-print("em713")
+print("em714")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16403,10 +16403,22 @@ local movingObjects = {} -- Список объектов для перемещ�
 local drawnLines = {} -- Список нарисованных линий
 local Yoffset = 0
 
+-- Функция для обработки ввода с клавиатуры
 local UserInputService = game:GetService("UserInputService")
 
+UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+    if gameProcessedEvent then return end -- Игнорировать ввод в чате и т.д.
 
-
+    if input.KeyCode == Enum.KeyCode.E then
+        -- Увеличиваем Yoffset
+        Yoffset = Yoffset + 1
+        print("Yoffset увеличен:", Yoffset)
+    elseif input.KeyCode == Enum.KeyCode.Q then
+        -- Уменьшаем Yoffset
+        Yoffset = Yoffset - 1
+        print("Yoffset уменьшен:", Yoffset)
+    end
+end)
 
 
 local function moveObjectsToMouse(speaker)
@@ -16588,17 +16600,6 @@ end
     connection = RunService.RenderStepped:Connect(function()
         updateMovement()
         drawPolygons()
-	    if gameProcessedEvent then return end -- Игнорировать ввод в чате и т.д.
-	
-	    if input.KeyCode == Enum.KeyCode.E then
-	        -- Увеличиваем Yoffset
-	        Yoffset = Yoffset + 1
-	        print("Yoffset увеличен:", Yoffset)
-	    elseif input.KeyCode == Enum.KeyCode.Q then
-	        -- Уменьшаем Yoffset
-	        Yoffset = Yoffset - 1
-	        print("Yoffset уменьшен:", Yoffset)
-	    end
     end)
 end
 
