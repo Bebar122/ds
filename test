@@ -1,4 +1,4 @@
-print("em714")
+print("em72")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16523,7 +16523,7 @@ local function moveObjectsToMouse(speaker)
         print("Похожие объекты не найдены.")
         return
     end
-
+	Yoffset = 0
     active = true -- Включаем команду
 
 	
@@ -16581,33 +16581,48 @@ end
 
 
 
-    local function drawPolygons()
-        for _, line in pairs(drawnLines) do
-            line:Destroy()
-        end
-        drawnLines = {}
-
-        local myPosition = character.HumanoidRootPart.Position
-        for _, player in pairs(Players:GetPlayers()) do
-            if player ~= speaker and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                local otherPosition = player.Character.HumanoidRootPart.Position
-                local midPoint = (myPosition + otherPosition) / 2
-                midPoint = Vector3.new(midPoint.X, myPosition.Y, midPoint.Z)
-                local direction = (otherPosition - myPosition).unit
-                local perpendicular = Vector3.new(-direction.Z, 0, direction.X)
-                local lineStart = midPoint + perpendicular * 50
-                local lineEnd = midPoint - perpendicular * 50
-
-                local part = Instance.new("Part", workspace)
-                part.Size = Vector3.new(0.1, 0.1, (lineEnd - lineStart).Magnitude)
-                part.CFrame = CFrame.new((lineStart + lineEnd) / 2, lineEnd)
-                part.Anchored = true
-                part.CanCollide = false
-                part.BrickColor = BrickColor.new("Bright red")
-                table.insert(drawnLines, part)
-            end
-        end
-    end
+	local function drawPolygons()
+	    -- Очистка предыдущих линий
+	    for _, line in pairs(drawnLines) do
+	        line:Destroy()
+	    end
+	    drawnLines = {}
+	
+	    local myPosition = character.HumanoidRootPart.Position
+	
+	    -- Отрисовка перпендикулярной линии для каждого игрока
+	    for _, player in pairs(Players:GetPlayers()) do
+	        if player ~= speaker and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+	            local otherPosition = player.Character.HumanoidRootPart.Position
+	            local midPoint = (myPosition + otherPosition) / 2
+	            midPoint = Vector3.new(midPoint.X, myPosition.Y, midPoint.Z)
+	
+	            local direction = (otherPosition - myPosition).unit
+	            local perpendicular = Vector3.new(-direction.Z, 0, direction.X)
+	
+	            -- Перпендикулярная линия
+	            local lineStart = midPoint + perpendicular * 50
+	            local lineEnd = midPoint - perpendicular * 50
+	            local part = Instance.new("Part", workspace)
+	            part.Size = Vector3.new(0.1, 0.1, (lineEnd - lineStart).Magnitude)
+	            part.CFrame = CFrame.new((lineStart + lineEnd) / 2, lineEnd)
+	            part.Anchored = true
+	            part.CanCollide = false
+	            part.BrickColor = BrickColor.new("Bright red")
+	            table.insert(drawnLines, part)
+	        end
+	    end
+	
+	    -- Отрисовка крестика для Yoffset
+	    local cross = Instance.new("Part", workspace)
+	    cross.Size = Vector3.new(1, 1, 1)
+	    cross.Shape = Enum.PartType.Ball
+	    cross.CFrame = CFrame.new(myPosition + Vector3.new(0, Yoffset, 0))
+	    cross.Anchored = true
+	    cross.CanCollide = false
+	    cross.BrickColor = BrickColor.new("Bright yellow")
+	    table.insert(drawnLines, cross)
+	end
 
     connection = RunService.RenderStepped:Connect(function()
         updateMovement()
