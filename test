@@ -1,4 +1,4 @@
-print("em72")
+print("em721")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16542,7 +16542,7 @@ local function updateMovement()
     local rayDirection = unitRay.Direction
 
     -- Вычисляем точку пересечения луча с плоскостью Y = characterY
-    local t = (characterY - rayOrigin.Y) / rayDirection.Y
+    local t = (characterY - Yoffset - rayOrigin.Y) / rayDirection.Y
     local hitPosition = rayOrigin + rayDirection * t -- Точка на плоскости, куда смотрит мышь
 
     -- Поворачиваем персонажа в направлении конечной точки
@@ -16615,9 +16615,9 @@ end
 	
 	    -- Отрисовка крестика для Yoffset
 	    local cross = Instance.new("Part", workspace)
-	    cross.Size = Vector3.new(1, 1, 1)
+	    cross.Size = Vector3.new(1, Yoffset, 1)
 	    cross.Shape = Enum.PartType.Ball
-	    cross.CFrame = CFrame.new(myPosition + Vector3.new(0, Yoffset, 0))
+	    cross.CFrame = CFrame.new(myPosition + Vector3.new(5, Yoffset, 5))
 	    cross.Anchored = true
 	    cross.CanCollide = false
 	    cross.BrickColor = BrickColor.new("Bright yellow")
