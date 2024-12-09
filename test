@@ -1,4 +1,4 @@
-print("em712")
+print("em713")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16406,35 +16406,7 @@ local Yoffset = 0
 local UserInputService = game:GetService("UserInputService")
 
 
--- Булевые переменные для отслеживания нажатия кнопок
-local isMouseButton4Pressed = false
-local isMouseButton5Pressed = false
 
--- Скорость изменения Yoffset
-local changeSpeed = 1 -- Вы можете настроить скорость изменения
-
--- Обработка нажатия кнопок
-local function onInputBegan(input, gameProcessed)
-    if gameProcessed then return end -- Игнорируем, если действие обработано игрой
-
-    if input.UserInputType == Enum.KeyCode.E then
-        isMouseButton4Pressed = true
-    elseif input.UserInputType == Enum.KeyCode.Q then
-        isMouseButton5Pressed = true
-    end
-end
-
--- Обработка отпускания кнопок
-local function onInputEnded(input, gameProcessed)
-    if input.UserInputType == Enum.KeyCode.E then
-        isMouseButton4Pressed = false
-    elseif input.UserInputType == Enum.KeyCode.Q then
-        isMouseButton5Pressed = false
-    end
-end
-
-UserInputService.InputBegan:Connect(onInputBegan)
-UserInputService.InputEnded:Connect(onInputEnded)
 
 
 local function moveObjectsToMouse(speaker)
@@ -16616,12 +16588,15 @@ end
     connection = RunService.RenderStepped:Connect(function()
         updateMovement()
         drawPolygons()
-	    if isMouseButton4Pressed then
-	        Yoffset = Yoffset + changeSpeed
+	    if gameProcessedEvent then return end -- Игнорировать ввод в чате и т.д.
+	
+	    if input.KeyCode == Enum.KeyCode.E then
+	        -- Увеличиваем Yoffset
+	        Yoffset = Yoffset + 1
 	        print("Yoffset увеличен:", Yoffset)
-	    end
-	    if isMouseButton5Pressed then
-	        Yoffset = Yoffset - changeSpeed
+	    elseif input.KeyCode == Enum.KeyCode.Q then
+	        -- Уменьшаем Yoffset
+	        Yoffset = Yoffset - 1
 	        print("Yoffset уменьшен:", Yoffset)
 	    end
     end)
