@@ -16410,7 +16410,7 @@ local UserInputService = game:GetService("UserInputService")
 local Yoffset = 0
 local increase = false -- Увеличение Yoffset
 local decrease = false -- Уменьшение Yoffset
-local changeRate = 1 -- Скорость изменения
+local changeRate = 0.5 -- Скорость изменения
 
 UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
     if gameProcessedEvent then return end
