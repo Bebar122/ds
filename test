@@ -1,4 +1,4 @@
-print("em6123")
+print("em7")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16404,52 +16404,42 @@ local drawnLines = {} -- Список нарисованных линий
 local Yoffset = 0
 
 local UserInputService = game:GetService("UserInputService")
-local LocalPlayer = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
 
--- Флаг для активации кастомного поведения
-local isCustomScrollEnabled = false
 
--- Сохранение оригинального CameraType (если нужно)
-local originalCameraType = Camera.CameraType
+-- Булевые переменные для отслеживания нажатия кнопок
+local isMouseButton4Pressed = false
+local isMouseButton5Pressed = false
 
--- Функция для обработки прокрутки колесика мыши
-local function onScroll(input, gameProcessed)
-    if not isCustomScrollEnabled or gameProcessed then return end
+-- Скорость изменения Yoffset
+local changeSpeed = 1 -- Вы можете настроить скорость изменения
 
-    if input.UserInputType == Enum.UserInputType.MouseWheel then
-        if input.Position.Z > 0 then
-		Yoffset=Yoffset+5
-            print("Колесико вверх!")
-            -- Ваше действие (например, увеличение размера объекта)
-        elseif input.Position.Z < 0 then
-		Yoffset=Yoffset-5
-            print("Колесико вниз!")
-            -- Ваше действие (например, уменьшение размера объекта)
-        end
+-- Обработка нажатия кнопок
+local function onInputBegan(input, gameProcessed)
+    if gameProcessed then return end -- Игнорируем, если действие обработано игрой
+
+    if input.UserInputType == Enum.UserInputType.MouseButton4 then
+        isMouseButton4Pressed = true
+    elseif input.UserInputType == Enum.UserInputType.MouseButton5 then
+        isMouseButton5Pressed = true
     end
 end
 
--- Включить кастомное поведение
-local function enableCustomScroll()
-    isCustomScrollEnabled = true
-    Camera.CameraType = Enum.CameraType.Scriptable -- Отключаем стандартное управление
+-- Обработка отпускания кнопок
+local function onInputEnded(input, gameProcessed)
+    if input.UserInputType == Enum.UserInputType.MouseButton4 then
+        isMouseButton4Pressed = false
+    elseif input.UserInputType == Enum.UserInputType.MouseButton5 then
+        isMouseButton5Pressed = false
+    end
 end
 
--- Выключить кастомное поведение
-local function disableCustomScroll()
-    isCustomScrollEnabled = false
-    Camera.CameraType = originalCameraType -- Возвращаем стандартное управление
-end
-
--- Подключение события
-UserInputService.InputChanged:Connect(onScroll)
-
+UserInputService.InputBegan:Connect(onInputBegan)
+UserInputService.InputEnded:Connect(onInputEnded)
 
 
 local function moveObjectsToMouse(speaker)
     if active then
-	disableCustomScroll()
+	
         -- Отключить команду и удалить изменения
         if connection then
             connection:Disconnect()
@@ -16540,7 +16530,7 @@ local function moveObjectsToMouse(speaker)
 
     active = true -- Включаем команду
 
-	enableCustomScroll()
+	
 	execCmd('anim 86504773 2')
 	task.delay(2.5, function()
 	    execCmd('freezeanims')
@@ -16626,6 +16616,14 @@ end
     connection = RunService.RenderStepped:Connect(function()
         updateMovement()
         drawPolygons()
+	    if isMouseButton4Pressed then
+	        Yoffset = Yoffset + changeSpeed
+	        print("Yoffset увеличен:", Yoffset)
+	    end
+	    if isMouseButton5Pressed then
+	        Yoffset = Yoffset - changeSpeed
+	        print("Yoffset уменьшен:", Yoffset)
+	    end
     end)
 end
 
