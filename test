@@ -16406,20 +16406,32 @@ local Yoffset = 0
 -- Функция для обработки ввода с клавиатуры
 local UserInputService = game:GetService("UserInputService")
 
+-- Переменная Yoffset
+local Yoffset = 0
+local increase = false -- Увеличение Yoffset
+local decrease = false -- Уменьшение Yoffset
+local changeRate = 1 -- Скорость изменения
+
 UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
-    if gameProcessedEvent then return end -- Игнорировать ввод в чате и т.д.
+    if gameProcessedEvent then return end
 
     if input.KeyCode == Enum.KeyCode.E then
-        -- Увеличиваем Yoffset
-        Yoffset = Yoffset + 1
-        print("Yoffset увеличен:", Yoffset)
+        increase = true
     elseif input.KeyCode == Enum.KeyCode.Q then
-        -- Уменьшаем Yoffset
-        Yoffset = Yoffset - 1
-        print("Yoffset уменьшен:", Yoffset)
+        decrease = true
     end
 end)
 
+-- Обработка завершения нажатия клавиш
+UserInputService.InputEnded:Connect(function(input, gameProcessedEvent)
+    if gameProcessedEvent then return end
+
+    if input.KeyCode == Enum.KeyCode.E then
+        increase = false
+    elseif input.KeyCode == Enum.KeyCode.Q then
+        decrease = false
+    end
+end)
 
 local function moveObjectsToMouse(speaker)
     if active then
@@ -16600,6 +16612,14 @@ end
     connection = RunService.RenderStepped:Connect(function()
         updateMovement()
         drawPolygons()
+	    if increase then
+	        Yoffset = Yoffset + changeRate
+	        print("Yoffset увеличен:", Yoffset)
+	    end
+	    if decrease then
+	        Yoffset = Yoffset - changeRate
+	        print("Yoffset уменьшен:", Yoffset)
+	    end
     end)
 end
 
