@@ -1,4 +1,4 @@
-print("em7")
+print("em71")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16417,18 +16417,18 @@ local changeSpeed = 1 -- Вы можете настроить скорость �
 local function onInputBegan(input, gameProcessed)
     if gameProcessed then return end -- Игнорируем, если действие обработано игрой
 
-    if input.UserInputType == Enum.UserInputType.MouseButton4 then
+    if input.UserInputType == Enum.UserInputType.E then
         isMouseButton4Pressed = true
-    elseif input.UserInputType == Enum.UserInputType.MouseButton5 then
+    elseif input.UserInputType == Enum.UserInputType.Q then
         isMouseButton5Pressed = true
     end
 end
 
 -- Обработка отпускания кнопок
 local function onInputEnded(input, gameProcessed)
-    if input.UserInputType == Enum.UserInputType.MouseButton4 then
+    if input.UserInputType == Enum.UserInputType.E then
         isMouseButton4Pressed = false
-    elseif input.UserInputType == Enum.UserInputType.MouseButton5 then
+    elseif input.UserInputType == Enum.UserInputType.Q then
         isMouseButton5Pressed = false
     end
 end
