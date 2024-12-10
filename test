@@ -12010,6 +12010,10 @@ end)
 
 
 
+
+--local earthObjects = {}
+
+
 addcmd('spawnWall', {'wall'}, function(args, speaker)
     local player = game.Players:GetPlayerFromCharacter(speaker.Character)
 
@@ -12077,7 +12081,7 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
 
 	        local newPosition = startPosition + Vector3.new(offsetX, offsetY, offsetZ)
 	        speaker.Character.HumanoidRootPart.CFrame = CFrame.new(newPosition)
-	        task.wait(0.4)
+	        task.wait(0.5)
 
 	        local success = false
 	        repeat
@@ -12094,9 +12098,9 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
 	                task.wait(0.6) -- Ждем перед новой попыткой
 	            end
 	        until success -- Повторяем до успеха
-	
+		
 	        -- Если спавн удался, продолжаем
-		task.wait(0.2)
+		task.wait(0.3)
 	    end
 	end
 
