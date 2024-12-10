@@ -1,4 +1,4 @@
-print("em83")
+print("em831")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -12033,14 +12033,7 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
 	local function spawnAndEquipEarthOrb()
 	    local success = false
 	
-	    -- Ищем "EarthOrb" в инвентаре игрока
-	    local earthOrb = nil
-	    for _, item in pairs(player.Backpack:GetChildren()) do
-	        if item.Name == "EarthOrb" and item:IsA("Tool") then
-	            earthOrb = item
-	            break
-	        end
-	    end
+		local earthOrb = player.Backpack:FindFirstChild("EarthOrb")
 	
 	    -- Если "EarthOrb" найден
 	    if earthOrb then
@@ -12080,21 +12073,21 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
 
 	        local newPosition = startPosition + Vector3.new(offsetX, offsetY, offsetZ)
 	        speaker.Character.HumanoidRootPart.CFrame = CFrame.new(newPosition)
-	        task.wait(0.8)
+	        task.wait(0.1)
 
 	        local success = false
 	        repeat
 	            -- Попробуем заспавнить планету
 	            success = spawnAndEquipEarthOrb()
 	            if not success then
-			execCmd('giveblocks')
+			--execCmd('giveblocks')
 	                notify("Error", "Не удалось заспавнить планету на позиции (" .. w .. ", " .. h .. "). Повтор...")
-	                task.wait(0.5) -- Ждем перед новой попыткой
+	                task.wait(0.6) -- Ждем перед новой попыткой
 	            end
 	        until success -- Повторяем до успеха
 	
 	        -- Если спавн удался, продолжаем
-		task.wait(0.5)
+		task.wait(0.6)
 	    end
 	end
 
