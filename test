@@ -1,4 +1,4 @@
-print("em7312")
+print("em8")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -12029,28 +12029,39 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
         spacing = minSpacing
     end
 
-    -- Функция для спавна и активации EarthOrb с неограниченным количеством попыток
-    local function spawnAndEquipEarthOrb()
-        local success = false
+	    -- Функция для спавна и активации EarthOrb с неограниченным количеством попыток
+	local function spawnAndEquipEarthOrb()
+	    local success = false
+	
+	    -- Ищем "EarthOrb" в инвентаре игрока
+	    local earthOrb = nil
+	    for _, item in pairs(player.Backpack:GetChildren()) do
+	        if item.Name == "EarthOrb" and item:IsA("Tool") then
+	            earthOrb = item
+	            break
+	        end
+	    end
+	
+	    -- Если "EarthOrb" найден
+	    if earthOrb then
+	        -- Перемещаем "EarthOrb" к персонажу
+	        earthOrb.Parent = speaker.Character
+	
+	        -- Активируем "EarthOrb"
+	        earthOrb:Activate()
+	
+	        -- Уничтожаем "EarthOrb" (если это нужно вашей логике)
+	        earthOrb:Destroy()
+	
+	        success = true
+	    else
+	        -- Если "EarthOrb" не найден, возвращаем false
+	        success = false
+	    end
+	
+	    return success
+	end
 
-            local earthOrb = nil
-            for _, item in pairs(player.Backpack:GetChildren()) do
-                if item.Name == "EarthOrb" and item:IsA('Tool') then
-                    earthOrb = item
-                    break
-                end
-            end
-            if not earthOrb then
-                success = false  -- Небольшая задержка перед новой попыткой
-            else
-                earthOrb.Parent = speaker.Character
-                earthOrb:Activate()
-		earthOrb:Destroy()
-                success = true
-            end
-
-        return success
-    end
 
     -- Начальная позиция для первого спавна (позиция игрока)
     local startPosition = speaker.Character.HumanoidRootPart.Position
