@@ -12097,7 +12097,6 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
 	        speaker.Character.HumanoidRootPart.CFrame = CFrame.new(newPosition)
 	    end
 	end
-    end
 
     -- Завершающее сообщение
     notify("Success", "Стена шириной " .. width .. " и высотой " .. height .. " создана по оси " .. axis .. ".")
