@@ -1,4 +1,4 @@
-print("em721")
+print("em73")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -12012,10 +12012,6 @@ end)
 
 addcmd('spawnWall', {'wall'}, function(args, speaker)
     local player = game.Players:GetPlayerFromCharacter(speaker.Character)
-    if not player or not speaker.Character then
-        notify("Error", "Игрок не найден.")
-        return
-    end
 
     -- Параметры: ширина, высота, плотность и ось стены
     local width = tonumber(args[1]) or 4  -- Ширина стены (по оси X или Z)
@@ -12036,9 +12032,7 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
     -- Функция для спавна и активации EarthOrb с неограниченным количеством попыток
     local function spawnAndEquipEarthOrb()
         local success = false
-
         while not success do
-            -- Поиск EarthOrb в инвентаре
             local earthOrb = nil
             for _, item in pairs(player.Backpack:GetChildren()) do
                 if item.Name == "EarthOrb" and item:IsA('Tool') then
@@ -12046,24 +12040,12 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
                     break
                 end
             end
-
-            -- Проверка наличия EarthOrb
             if not earthOrb then
-                task.wait(0.1)  -- Небольшая задержка перед новой попыткой
+                task.wait(0.5)  -- Небольшая задержка перед новой попыткой
             else
-                -- Экипировка EarthOrb
                 earthOrb.Parent = speaker.Character
-
-                -- Активируем EarthOrb
                 earthOrb:Activate()
 		earthOrb:Destroy()
-                -- Удаление EarthOrb после активации
-                --for _, v in pairs(speaker.Character:GetChildren()) do
-                    --if v:IsA('Tool') or v:IsA('HopperBin') then
-                        --v:Destroy()
-                    --end
-                --end
-
                 success = true
             end
         end
@@ -12077,18 +12059,25 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
     -- Цикл для создания стены
     for w = 0, width - 1 do
         for h = 0, height - 1 do
+		
             -- Рассчитываем смещение по X, Y, Z в зависимости от оси
             local offsetX = (axis == "X") and (w * spacing) or 0
             local offsetY = h * spacing
             local offsetZ = (axis == "Z") and (w * spacing) or 0
-
+		if w == width - 1 then
+			height = tonumber(args[2]) + 2
+		end
+		print(offsetY)
+		print(w)
+		print(h)
+		print('______')
             -- Спавним планету с неограниченными попытками
             local success = spawnAndEquipEarthOrb()
 
             -- Если планета заспавнена успешно, продолжаем
             if success then
                 -- Ждем появления новой планеты в инвентаре
-                task.wait(1.2)
+                task.wait(0.6)
 
                 -- Вычисляем новую позицию для следующей планеты
                 local newPosition = startPosition + Vector3.new(offsetX, offsetY, offsetZ)
