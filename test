@@ -1,4 +1,4 @@
-print("em731")
+print("em7312")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -12032,7 +12032,7 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
     -- Функция для спавна и активации EarthOrb с неограниченным количеством попыток
     local function spawnAndEquipEarthOrb()
         local success = false
-        while not success do
+
             local earthOrb = nil
             for _, item in pairs(player.Backpack:GetChildren()) do
                 if item.Name == "EarthOrb" and item:IsA('Tool') then
@@ -12041,14 +12041,13 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
                 end
             end
             if not earthOrb then
-                task.wait(0.5)  -- Небольшая задержка перед новой попыткой
+                success = false  -- Небольшая задержка перед новой попыткой
             else
                 earthOrb.Parent = speaker.Character
                 earthOrb:Activate()
 		earthOrb:Destroy()
                 success = true
             end
-        end
 
         return success
     end
@@ -12057,37 +12056,36 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
     local startPosition = speaker.Character.HumanoidRootPart.Position
 
     -- Цикл для создания стены
-    for w = 0, width - 1 do
-        for h = 0, height - 1 do
-		
-            -- Рассчитываем смещение по X, Y, Z в зависимости от оси
-            local offsetX = (axis == "X") and (w * spacing) or 0
-            local offsetY = h * spacing
-            local offsetZ = (axis == "Z") and (w * spacing) or 0
-		if w == width - 2 then
-			height = tonumber(args[2]) + 2
-		end
-		print(offsetY)
-		print(w)
-		print(h)
-		print('______')
-            -- Спавним планету с неограниченными попытками
-            local success = spawnAndEquipEarthOrb()
-
-            -- Если планета заспавнена успешно, продолжаем
-            if success then
-                -- Ждем появления новой планеты в инвентаре
-                task.wait(0.8)
-
-                -- Вычисляем новую позицию для следующей планеты
-                local newPosition = startPosition + Vector3.new(offsetX, offsetY, offsetZ)
-
-                -- Телепортируем игрока на новую позицию
-                speaker.Character.HumanoidRootPart.CFrame = CFrame.new(newPosition)
-            else
-                notify("Error", "Не удалось заспавнить планету на позиции (" .. w .. ", " .. h .. ")")
-            end
-        end
+	for w = 0, width - 1 do
+	    for h = 0, height - 1 do
+	        if w == 0 and (h == 0 or h == 1) then
+	            continue
+	        end
+	        
+	        local offsetX = (axis == "X") and (w * spacing) or 0
+	        local offsetY = h * spacing
+	        local offsetZ = (axis == "Z") and (w * spacing) or 0
+	
+	        if w == width - 2 then
+	            height = tonumber(args[2]) + 2
+	        end
+	        
+	        local success = false
+	        repeat
+	            -- Попробуем заспавнить планету
+	            success = spawnAndEquipEarthOrb()
+	            if not success then
+	                notify("Error", "Не удалось заспавнить планету на позиции (" .. w .. ", " .. h .. "). Повтор...")
+	                task.wait(0.5) -- Ждем перед новой попыткой
+	            end
+	        until success -- Повторяем до успеха
+	
+	        -- Если спавн удался, продолжаем
+	        task.wait(0.8) -- Задержка перед телепортацией
+	        local newPosition = startPosition + Vector3.new(offsetX, offsetY, offsetZ)
+	        speaker.Character.HumanoidRootPart.CFrame = CFrame.new(newPosition)
+	    end
+	end
     end
 
     -- Завершающее сообщение
