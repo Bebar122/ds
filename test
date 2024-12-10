@@ -1,4 +1,4 @@
-print("em73")
+print("em731")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -12064,7 +12064,7 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
             local offsetX = (axis == "X") and (w * spacing) or 0
             local offsetY = h * spacing
             local offsetZ = (axis == "Z") and (w * spacing) or 0
-		if w == width - 1 then
+		if w == width - 2 then
 			height = tonumber(args[2]) + 2
 		end
 		print(offsetY)
@@ -12077,7 +12077,7 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
             -- Если планета заспавнена успешно, продолжаем
             if success then
                 -- Ждем появления новой планеты в инвентаре
-                task.wait(0.6)
+                task.wait(0.8)
 
                 -- Вычисляем новую позицию для следующей планеты
                 local newPosition = startPosition + Vector3.new(offsetX, offsetY, offsetZ)
