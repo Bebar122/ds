@@ -1,4 +1,4 @@
-print("em832")
+print("em84")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -12028,17 +12028,17 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
     if spacing < minSpacing then
         spacing = minSpacing
     end
-
+	local earthOrb = player.Backpack:FindFirstChild("EarthOrb")
 	    -- Функция для спавна и активации EarthOrb с неограниченным количеством попыток
 	local function spawnAndEquipEarthOrb()
 	    local success = false
 	
-		local earthOrb = player.Backpack:FindFirstChild("EarthOrb")
+		
 	
 	    -- Если "EarthOrb" найден
 	    if earthOrb then
 	        -- Перемещаем "EarthOrb" к персонажу
-	        earthOrb.Parent = speaker.Character
+	        --earthOrb.Parent = speaker.Character
 	
 	        -- Активируем "EarthOrb"
 	        earthOrb:Activate()
@@ -12069,7 +12069,11 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
 	        local offsetZ = (axis == "Z") and (w * spacing) or 0
 	
 
-
+		earthOrb = player.Backpack:FindFirstChild("EarthOrb")
+		if earthOrb then
+	        -- Перемещаем "EarthOrb" к персонажу
+	        	earthOrb.Parent = speaker.Character
+		end
 
 	        local newPosition = startPosition + Vector3.new(offsetX, offsetY, offsetZ)
 	        speaker.Character.HumanoidRootPart.CFrame = CFrame.new(newPosition)
@@ -12080,6 +12084,11 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
 	            -- Попробуем заспавнить планету
 	            success = spawnAndEquipEarthOrb()
 	            if not success then
+			earthOrb = player.Backpack:FindFirstChild("EarthOrb")
+			if earthOrb then
+		        -- Перемещаем "EarthOrb" к персонажу
+		        	earthOrb.Parent = speaker.Character
+			end
 			--execCmd('giveblocks')
 	                notify("Error", "Не удалось заспавнить планету на позиции (" .. w .. ", " .. h .. "). Повтор...")
 	                task.wait(0.6) -- Ждем перед новой попыткой
