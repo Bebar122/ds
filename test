@@ -1,4 +1,4 @@
-print("em812")
+print("em83")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -12069,17 +12069,13 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
     -- Цикл для создания стены
 	for w = 0, width - 1 do
 	    for h = 0, height - 1 do
-	        if w == 0 and (h == 0) then
-	            continue
-	        end
+
 	        
 	        local offsetX = (axis == "X") and (w * spacing) or 0
 	        local offsetY = h * spacing
 	        local offsetZ = (axis == "Z") and (w * spacing) or 0
 	
-	        if w == width - 2 then
-	            height = tonumber(args[2]) + 2
-	        end
+
 
 
 	        local newPosition = startPosition + Vector3.new(offsetX, offsetY, offsetZ)
@@ -12091,13 +12087,14 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
 	            -- Попробуем заспавнить планету
 	            success = spawnAndEquipEarthOrb()
 	            if not success then
+			execCmd('giveblocks')
 	                notify("Error", "Не удалось заспавнить планету на позиции (" .. w .. ", " .. h .. "). Повтор...")
 	                task.wait(0.5) -- Ждем перед новой попыткой
 	            end
 	        until success -- Повторяем до успеха
 	
 	        -- Если спавн удался, продолжаем
-
+		task.wait(0.5)
 	    end
 	end
 
