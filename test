@@ -1,4 +1,4 @@
-print("em8")
+print("em812")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -12069,7 +12069,7 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
     -- Цикл для создания стены
 	for w = 0, width - 1 do
 	    for h = 0, height - 1 do
-	        if w == 0 and (h == 0 or h == 1) then
+	        if w == 0 and (h == 0) then
 	            continue
 	        end
 	        
@@ -12080,7 +12080,12 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
 	        if w == width - 2 then
 	            height = tonumber(args[2]) + 2
 	        end
-	        
+
+
+	        local newPosition = startPosition + Vector3.new(offsetX, offsetY, offsetZ)
+	        speaker.Character.HumanoidRootPart.CFrame = CFrame.new(newPosition)
+	        task.wait(0.8)
+
 	        local success = false
 	        repeat
 	            -- Попробуем заспавнить планету
@@ -12092,9 +12097,7 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
 	        until success -- Повторяем до успеха
 	
 	        -- Если спавн удался, продолжаем
-	        task.wait(0.8) -- Задержка перед телепортацией
-	        local newPosition = startPosition + Vector3.new(offsetX, offsetY, offsetZ)
-	        speaker.Character.HumanoidRootPart.CFrame = CFrame.new(newPosition)
+
 	    end
 	end
 
