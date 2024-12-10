@@ -1,4 +1,4 @@
-print("em84")
+print("em841")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -12077,7 +12077,7 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
 
 	        local newPosition = startPosition + Vector3.new(offsetX, offsetY, offsetZ)
 	        speaker.Character.HumanoidRootPart.CFrame = CFrame.new(newPosition)
-	        task.wait(0.9)
+	        task.wait(0.4)
 
 	        local success = false
 	        repeat
@@ -12096,7 +12096,7 @@ addcmd('spawnWall', {'wall'}, function(args, speaker)
 	        until success -- Повторяем до успеха
 	
 	        -- Если спавн удался, продолжаем
-		task.wait(0.6)
+		task.wait(0.2)
 	    end
 	end
 
