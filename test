@@ -1,4 +1,4 @@
-print("em852")
+print("em86")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16618,16 +16618,16 @@ end
 		line.Anchored = true
 		line.CanCollide = false
 		line.BrickColor = BrickColor.new("Bright blue")
-		line.Transparency = 0.7
+		line.Transparency = 0.4
 		
 		-- Создаем полупрозрачную плоскость на высоте characterY
 		local plane = Instance.new("Part", workspace)
-		plane.Size = Vector3.new(3, 0.1, 3) -- Размер плоскости
+		plane.Size = Vector3.new(6, 0.1, 6) -- Размер плоскости
 		plane.CFrame = CFrame.new(hitPosition.X, characterY, hitPosition.Z)
 		plane.Anchored = true
 		plane.CanCollide = false
-		plane.BrickColor = BrickColor.new("Bright green")
-		plane.Transparency = 0.8 -- Полупрозрачность
+		plane.BrickColor = BrickColor.new("Bright Red")
+		plane.Transparency = 0.3 -- Полупрозрачность
 		
 		table.insert(drawnLines, line)
 		table.insert(drawnLines, plane)
@@ -16681,9 +16681,26 @@ end)
 
 
 
-
-
-
+addcmd('spawnfish', {'fish'}, function(args, speaker)
+	local args = {
+	    [1] = "MouseClick",
+	    [2] = {
+	        ["Down"] = true
+	    }
+	}
+	
+	-- Получаем персонажа локального игрока
+	local character = game:GetService("Players").LocalPlayer.Character
+	
+	-- Проходим по всем объектам в персонаже
+	for _, tool in pairs(character:GetChildren()) do
+	    -- Проверяем, является ли объект инструментом и содержит ли метод ServerControl
+	    if tool:IsA("Tool") and tool:FindFirstChild("ServerControl") then
+	        -- Выполняем InvokeServer с заданными аргументами
+	        tool.ServerControl:InvokeServer(unpack(args))
+	    end
+	end
+end)
 
 
 
