@@ -1,4 +1,4 @@
-print("em851")
+print("em852")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16594,7 +16594,7 @@ end
 		-- Позиция персонажа
 		local myPosition = character.HumanoidRootPart.Position
 		
-		-- Высота персонажа + смещение
+		-- Настраиваем уровень плоскости, где должны двигаться объекты
 		local characterY = character.HumanoidRootPart.Position.Y + Yoffset
 		
 		-- Получаем луч от камеры через мышку
@@ -16603,7 +16603,7 @@ end
 		local rayDirection = unitRay.Direction
 		
 		-- Вычисляем точку пересечения луча с плоскостью Y = characterY
-		local t = (characterY - rayOrigin.Y) / rayDirection.Y
+		local t = (characterY - Yoffset - rayOrigin.Y) / rayDirection.Y
 		local hitPosition = rayOrigin + rayDirection * t -- Точка на плоскости, куда смотрит мышь
 		
 		-- Создаем перпендикулярную линию вверх и вниз
