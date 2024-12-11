@@ -1,4 +1,4 @@
-print("em85")
+print("em851")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16607,27 +16607,18 @@ end
 		local hitPosition = rayOrigin + rayDirection * t -- Точка на плоскости, куда смотрит мышь
 		
 		-- Создаем перпендикулярную линию вверх и вниз
-		local lineHeight = 10 -- Высота линии вверх и вниз
+		local lineHeight = 30 -- Высота линии вверх и вниз
 		local topPoint = hitPosition + Vector3.new(0, lineHeight, 0)
 		local bottomPoint = hitPosition - Vector3.new(0, lineHeight, 0)
 		
-		-- Создаем часть для линии вверх
-		local lineUp = Instance.new("Part", workspace)
-		lineUp.Size = Vector3.new(0.1, lineHeight, 0.1)
-		lineUp.CFrame = CFrame.new((hitPosition + topPoint) / 2, topPoint)
-		lineUp.Anchored = true
-		lineUp.CanCollide = false
-		lineUp.BrickColor = BrickColor.new("Bright blue")
-		lineUp.Transparency = 0.5
-		
-		-- Создаем часть для линии вниз
-		local lineDown = Instance.new("Part", workspace)
-		lineDown.Size = Vector3.new(0.1, lineHeight, 0.1)
-		lineDown.CFrame = CFrame.new((hitPosition + bottomPoint) / 2, bottomPoint)
-		lineDown.Anchored = true
-		lineDown.CanCollide = false
-		lineDown.BrickColor = BrickColor.new("Bright blue")
-		lineDown.Transparency = 0.5
+		-- Создаем часть для линии (одна непрерывная линия)
+		local line = Instance.new("Part", workspace)
+		line.Size = Vector3.new(0.1, lineHeight * 2, 0.1)
+		line.CFrame = CFrame.new((topPoint + bottomPoint) / 2)
+		line.Anchored = true
+		line.CanCollide = false
+		line.BrickColor = BrickColor.new("Bright blue")
+		line.Transparency = 0.7
 		
 		-- Создаем полупрозрачную плоскость на высоте characterY
 		local plane = Instance.new("Part", workspace)
@@ -16636,12 +16627,10 @@ end
 		plane.Anchored = true
 		plane.CanCollide = false
 		plane.BrickColor = BrickColor.new("Bright green")
-		plane.Transparency = 0.7 -- Полупрозрачность
+		plane.Transparency = 0.8 -- Полупрозрачность
 		
-		-- Сохраняем все созданные объекты в массив для последующего удаления
-		table.insert(drawnObjects, lineUp)
-		table.insert(drawnObjects, lineDown)
-		table.insert(drawnObjects, plane)
+		table.insert(drawnLines, line)
+		table.insert(drawnLines, plane)
 
 
 	    -- Отрисовка перпендикулярной линии для каждого игрока
