@@ -1,4 +1,4 @@
-print("em86")
+print("em861")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16535,52 +16535,65 @@ local function moveObjectsToMouse(speaker)
 	    execCmd('freezeanims')
 	end)
 
-local function updateMovement()
-    -- Настраиваем уровень плоскости, где должны двигаться объекты
-    local characterY = character.HumanoidRootPart.Position.Y + Yoffset
+	local function updateMovement()
+	    -- Настраиваем уровень плоскости, где должны двигаться объекты
+	    local characterY = character.HumanoidRootPart.Position.Y + Yoffset
+	
+	    -- Получаем луч от камеры через мышку
+	    local unitRay = workspace.CurrentCamera:ScreenPointToRay(mouse.X, mouse.Y)
+	    local rayOrigin = unitRay.Origin
+	    local rayDirection = unitRay.Direction
+	
+	    -- Вычисляем точку пересечения луча с плоскостью Y = characterY
+	    local t = (characterY - Yoffset - rayOrigin.Y) / rayDirection.Y
+	    local hitPosition = rayOrigin + rayDirection * t -- Точка на плоскости, куда смотрит мышь
+	
+	    -- Поворачиваем персонажа в направлении конечной точки
+	    local humanoidRootPart = character.HumanoidRootPart
+	    local lookDirection = (Vector3.new(hitPosition.X, humanoidRootPart.Position.Y, hitPosition.Z) - humanoidRootPart.Position).unit
+	    humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, humanoidRootPart.Position + lookDirection)
+	
+	    -- Обновляем движение объектов
+	    for _, handle in pairs(movingObjects) do
+	        -- Добавляем BodyGyro, если его нет
+	        if not handle:FindFirstChild("BodyGyro") then
+	            local gyro = Instance.new("BodyGyro", handle)
+	            gyro.MaxTorque = Vector3.new(4000, 4000, 4000)
+	            gyro.P = 3000
+	            gyro.CFrame = handle.CFrame
+	        end
+	
+	        -- Добавляем BodyVelocity, если его нет
+	        if not handle:FindFirstChild("BodyVelocity") then
+	            local velocity = Instance.new("BodyVelocity", handle)
+	            velocity.MaxForce = Vector3.new(4000, 4000, 4000)
+	            velocity.P = 1250
+	        end
+	
+	        -- Получаем существующие BodyGyro и BodyVelocity
+	        local velocity = handle:FindFirstChild("BodyVelocity")
+	        local gyro = handle:FindFirstChild("BodyGyro")
+	
+	        -- Расчет движения
+	        local rootPartPosition = handle.Position
+	        local targetPosition = Vector3.new(hitPosition.X, characterY, hitPosition.Z) -- Точка движения в плоскости
+	        local direction = (targetPosition - rootPartPosition)
+	        local distance = direction.Magnitude
+	
+	        if distance > 5 then
+	            -- Если объект далеко от цели, движемся к цели
+	            velocity.Velocity = direction.unit * 50 -- Задаем максимальную скорость
+	        else
+	            -- Если объект близок к цели, движемся по окружности
+	            local tangent = Vector3.new(-direction.Z, 0, direction.X).unit * 50
+	            velocity.Velocity = tangent -- Задаем скорость по касательной
+	        end
+	
+	        -- Обновляем поворот объекта
+	        gyro.CFrame = CFrame.new(rootPartPosition, targetPosition) -- Направляем объект к цели
+	    end
+	end
 
-    -- Получаем луч от камеры через мышку
-    local unitRay = workspace.CurrentCamera:ScreenPointToRay(mouse.X, mouse.Y)
-    local rayOrigin = unitRay.Origin
-    local rayDirection = unitRay.Direction
-
-    -- Вычисляем точку пересечения луча с плоскостью Y = characterY
-    local t = (characterY - Yoffset - rayOrigin.Y) / rayDirection.Y
-    local hitPosition = rayOrigin + rayDirection * t -- Точка на плоскости, куда смотрит мышь
-
-    -- Поворачиваем персонажа в направлении конечной точки
-    local humanoidRootPart = character.HumanoidRootPart
-    local lookDirection = (Vector3.new(hitPosition.X, humanoidRootPart.Position.Y, hitPosition.Z) - humanoidRootPart.Position).unit
-    humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, humanoidRootPart.Position + lookDirection)
-
-    -- Обновляем движение объектов
-    for _, handle in pairs(movingObjects) do
-        -- Добавляем BodyGyro, если его нет
-        if not handle:FindFirstChild("BodyGyro") then
-            local gyro = Instance.new("BodyGyro", handle)
-            gyro.MaxTorque = Vector3.new(4000, 4000, 4000)
-            gyro.P = 3000
-            gyro.CFrame = handle.CFrame
-        end
-
-        -- Добавляем BodyVelocity, если его нет
-        if not handle:FindFirstChild("BodyVelocity") then
-            local velocity = Instance.new("BodyVelocity", handle)
-            velocity.MaxForce = Vector3.new(4000, 4000, 4000)
-            velocity.P = 1250
-        end
-
-        -- Получаем существующие BodyGyro и BodyVelocity
-        local velocity = handle:FindFirstChild("BodyVelocity")
-        local gyro = handle:FindFirstChild("BodyGyro")
-
-        -- Расчет движения
-        local rootPartPosition = handle.Position
-        local targetPosition = Vector3.new(hitPosition.X, characterY, hitPosition.Z) -- Точка движения в плоскости
-        velocity.Velocity = (targetPosition - rootPartPosition).unit * 50 -- Задаем скорость
-        gyro.CFrame = CFrame.new(rootPartPosition, targetPosition) -- Направляем объект к цели
-    end
-end
 
 
 
