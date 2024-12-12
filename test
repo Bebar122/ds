@@ -1,4 +1,4 @@
-print("em861")
+print("em8612")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16535,6 +16535,10 @@ local function moveObjectsToMouse(speaker)
 	    execCmd('freezeanims')
 	end)
 
+	local circleRadius = 10 -- Радиус окружности
+	local angleStep = math.rad(5) -- Угол смещения для вращения объектов
+	local angles = {} -- Храним текущие углы для каждого объекта
+	
 	local function updateMovement()
 	    -- Настраиваем уровень плоскости, где должны двигаться объекты
 	    local characterY = character.HumanoidRootPart.Position.Y + Yoffset
@@ -16546,15 +16550,15 @@ local function moveObjectsToMouse(speaker)
 	
 	    -- Вычисляем точку пересечения луча с плоскостью Y = characterY
 	    local t = (characterY - Yoffset - rayOrigin.Y) / rayDirection.Y
-	    local hitPosition = rayOrigin + rayDirection * t -- Точка на плоскости, куда смотрит мышь
+	    local targetCenter = rayOrigin + rayDirection * t -- Точка на плоскости, куда смотрит мышь
 	
 	    -- Поворачиваем персонажа в направлении конечной точки
 	    local humanoidRootPart = character.HumanoidRootPart
-	    local lookDirection = (Vector3.new(hitPosition.X, humanoidRootPart.Position.Y, hitPosition.Z) - humanoidRootPart.Position).unit
+	    local lookDirection = (Vector3.new(targetCenter.X, humanoidRootPart.Position.Y, targetCenter.Z) - humanoidRootPart.Position).unit
 	    humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, humanoidRootPart.Position + lookDirection)
 	
 	    -- Обновляем движение объектов
-	    for _, handle in pairs(movingObjects) do
+	    for index, handle in pairs(movingObjects) do
 	        -- Добавляем BodyGyro, если его нет
 	        if not handle:FindFirstChild("BodyGyro") then
 	            local gyro = Instance.new("BodyGyro", handle)
@@ -16574,25 +16578,32 @@ local function moveObjectsToMouse(speaker)
 	        local velocity = handle:FindFirstChild("BodyVelocity")
 	        local gyro = handle:FindFirstChild("BodyGyro")
 	
-	        -- Расчет движения
-	        local rootPartPosition = handle.Position
-	        local targetPosition = Vector3.new(hitPosition.X, characterY, hitPosition.Z) -- Точка движения в плоскости
-	        local direction = (targetPosition - rootPartPosition)
-	        local distance = direction.Magnitude
-	
-	        if distance > 5 then
-	            -- Если объект далеко от цели, движемся к цели
-	            velocity.Velocity = direction.unit * 50 -- Задаем максимальную скорость
-	        else
-	            -- Если объект близок к цели, движемся по окружности
-	            local tangent = Vector3.new(-direction.Z, 0, direction.X).unit * 50
-	            velocity.Velocity = tangent -- Задаем скорость по касательной
+	        -- Инициализируем угол объекта, если он еще не задан
+	        if not angles[index] then
+	            angles[index] = math.random() * 2 * math.pi -- Случайный стартовый угол
 	        end
 	
+	        -- Смещаем угол объекта для движения по окружности
+	        angles[index] = angles[index] + angleStep
+	        if angles[index] > 2 * math.pi then
+	            angles[index] = angles[index] - 2 * math.pi
+	        end
+	
+	        -- Вычисляем новую цель на окружности
+	        local offsetX = math.cos(angles[index]) * circleRadius
+	        local offsetZ = math.sin(angles[index]) * circleRadius
+	        local circlePosition = Vector3.new(targetCenter.X + offsetX, characterY, targetCenter.Z + offsetZ)
+	
+	        -- Рассчитываем движение объекта к цели
+	        local rootPartPosition = handle.Position
+	        local direction = (circlePosition - rootPartPosition)
+	        velocity.Velocity = direction.unit * 50 -- Максимальная скорость
+	
 	        -- Обновляем поворот объекта
-	        gyro.CFrame = CFrame.new(rootPartPosition, targetPosition) -- Направляем объект к цели
+	        gyro.CFrame = CFrame.new(rootPartPosition, circlePosition) -- Направляем объект к текущей точке на окружности
 	    end
 	end
+
 
 
 
