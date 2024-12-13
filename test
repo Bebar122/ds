@@ -1,4 +1,4 @@
-print("em87")
+print("em871")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16571,7 +16571,7 @@ local function moveObjectsToMouse(speaker)
 	        if not handle:FindFirstChild("BodyVelocity") then
 	            local velocity = Instance.new("BodyVelocity", handle)
 	            velocity.MaxForce = Vector3.new(8000, 8000, 8000)
-	            velocity.P = 2500
+	            velocity.P = 1250
 	        end
 	
 	        -- Получаем существующие BodyGyro и BodyVelocity
