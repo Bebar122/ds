@@ -1,4 +1,4 @@
-print("em873")
+print("em88")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16538,6 +16538,7 @@ local function moveObjectsToMouse(speaker)
 	local circleRadius = 10 -- Радиус окружности
 	local angleStep = math.rad(5) -- Угол смещения для вращения объектов
 	local angles = {} -- Храним текущие углы для каждого объекта
+	local smoothingFactor = 0.1 -- Сглаживание поворота (чем меньше, тем плавнее)
 	
 	local function updateMovement()
 	    -- Настраиваем уровень плоскости, где должны двигаться объекты
@@ -16594,15 +16595,22 @@ local function moveObjectsToMouse(speaker)
 	        local offsetZ = math.sin(angles[index]) * circleRadius
 	        local circlePosition = Vector3.new(targetCenter.X + offsetX, characterY, targetCenter.Z + offsetZ)
 	
-	        -- Рассчитываем движение объекта к цели
+	        -- Рассчитываем новое направление движения
 	        local rootPartPosition = handle.Position
-	        local direction = (circlePosition - rootPartPosition)
-	        velocity.Velocity = direction.unit * 100 -- Максимальная скорость
+	        local targetDirection = (circlePosition - rootPartPosition).unit
+	
+	        -- Плавно изменяем направление движения
+	        local currentVelocity = velocity.Velocity.unit
+	        local smoothDirection = currentVelocity:Lerp(targetDirection, smoothingFactor)
+	
+	        -- Обновляем скорость
+	        velocity.Velocity = smoothDirection * 50 -- Постоянная скорость
 	
 	        -- Обновляем поворот объекта
-	        gyro.CFrame = CFrame.new(rootPartPosition, circlePosition) -- Направляем объект к текущей точке на окружности
+	        gyro.CFrame = CFrame.new(rootPartPosition, rootPartPosition + smoothDirection) -- Плавно направляем объект
 	    end
 	end
+
 
 
 
