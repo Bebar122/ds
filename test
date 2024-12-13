@@ -1,4 +1,4 @@
-print("em89")
+print("em892")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16404,7 +16404,6 @@ local active = false -- Флаг для отслеживания состоян�
 local connection -- Переменная для хранения подключения к RenderStepped
 local movingObjects = {} -- Список объектов для перемещения
 local drawnLines = {} -- Список нарисованных линий
-local Yoffset = 0
 
 -- Функция для обработки ввода с клавиатуры
 local UserInputService = game:GetService("UserInputService")
@@ -16435,6 +16434,37 @@ UserInputService.InputEnded:Connect(function(input, gameProcessedEvent)
         decrease = false
     end
 end)
+
+
+
+
+local increaseR = false -- Увеличение Yoffset
+local decreaseR = false -- Уменьшение Yoffset
+local changeRateR = 0.1 -- Скорость изменения
+
+UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+    if gameProcessedEvent then return end
+
+    if input.KeyCode == Enum.KeyCode.KeypadSix then
+        increaseR = true
+    elseif input.KeyCode == Enum.KeyCode.KeypadFour then
+        decreaseR = true
+    end
+end)
+
+-- Обработка завершения нажатия клавиш
+UserInputService.InputEnded:Connect(function(input, gameProcessedEvent)
+    if gameProcessedEvent then return end
+
+    if input.KeyCode == Enum.KeyCode.KeypadSix then
+        increaseR = false
+    elseif input.KeyCode == Enum.KeyCode.KeypadFour then
+        decreaseR = false
+    end
+end)
+
+
+
 
 local function moveObjectsToMouse(speaker)
     if active then
@@ -16536,8 +16566,12 @@ local function moveObjectsToMouse(speaker)
 	end)
 
 	local circleRadius = 10 -- Радиус окружности
+	local angleStep = math.rad(5) -- Угол смещения для вращения объектов
+	local angles = {} -- Храним текущие углы для каждого объекта
 	local smoothingFactor = 0.1 -- Сглаживание поворота (чем меньше, тем плавнее)
-	
+	local CircleMode = true
+	local speed = 50
+
 	local function updateMovement()
 	    -- Настраиваем уровень плоскости, где должны двигаться объекты
 	    local characterY = character.HumanoidRootPart.Position.Y + Yoffset
@@ -16555,10 +16589,6 @@ local function moveObjectsToMouse(speaker)
 	    local humanoidRootPart = character.HumanoidRootPart
 	    local lookDirection = (Vector3.new(targetCenter.X, humanoidRootPart.Position.Y, targetCenter.Z) - humanoidRootPart.Position).unit
 	    humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, humanoidRootPart.Position + lookDirection)
-	
-	    -- Вычисляем угловой интервал между объектами
-	    local objectCount = #movingObjects
-	    local angleStep = (2 * math.pi) / objectCount -- Угловой интервал для равномерного распределения
 	
 	    -- Обновляем движение объектов
 	    for index, handle in pairs(movingObjects) do
@@ -16580,28 +16610,45 @@ local function moveObjectsToMouse(speaker)
 	        -- Получаем существующие BodyGyro и BodyVelocity
 	        local velocity = handle:FindFirstChild("BodyVelocity")
 	        local gyro = handle:FindFirstChild("BodyGyro")
-	
-	        -- Вычисляем целевую позицию объекта на окружности
-	        local targetAngle = angleStep * (index - 1) -- Угол текущего объекта
-	        local offsetX = math.cos(targetAngle) * circleRadius
-	        local offsetZ = math.sin(targetAngle) * circleRadius
-	        local targetPosition = Vector3.new(targetCenter.X + offsetX, characterY, targetCenter.Z + offsetZ)
-	
-	        -- Рассчитываем новое направление движения
-	        local rootPartPosition = handle.Position
-	        local targetDirection = (targetPosition - rootPartPosition).unit
-	
-	        -- Плавно изменяем направление движения
-	        local currentVelocity = velocity.Velocity.unit
-	        local smoothDirection = currentVelocity:Lerp(targetDirection, smoothingFactor)
-	
-	        -- Обновляем скорость
-	        velocity.Velocity = smoothDirection * 50 -- Постоянная скорость
-	
-	        -- Обновляем поворот объекта
-	        gyro.CFrame = CFrame.new(rootPartPosition, rootPartPosition + smoothDirection) -- Плавно направляем объект
+		if CircleMode then
+		        -- Инициализируем угол объекта, если он еще не задан
+		        if not angles[index] then
+		            angles[index] = math.random() * 2 * math.pi -- Случайный стартовый угол
+		        end
+		
+		        -- Смещаем угол объекта для движения по окружности
+		        angles[index] = angles[index] + angleStep
+		        if angles[index] > 2 * math.pi then
+		            angles[index] = angles[index] - 2 * math.pi
+		        end
+		
+		        -- Вычисляем новую цель на окружности
+		        local offsetX = math.cos(angles[index]) * circleRadius
+		        local offsetZ = math.sin(angles[index]) * circleRadius
+		        local circlePosition = Vector3.new(targetCenter.X + offsetX, characterY, targetCenter.Z + offsetZ)
+		
+		        -- Рассчитываем новое направление движения
+		        local rootPartPosition = handle.Position
+		        local targetDirection = (circlePosition - rootPartPosition).unit
+		
+		        -- Плавно изменяем направление движения
+		        local currentVelocity = velocity.Velocity.unit
+		        local smoothDirection = currentVelocity:Lerp(targetDirection, smoothingFactor)
+		
+		        -- Обновляем скорость
+		        velocity.Velocity = smoothDirection * speed -- Постоянная скорость
+		
+		        -- Обновляем поворот объекта
+		        gyro.CFrame = CFrame.new(rootPartPosition, rootPartPosition + smoothDirection) -- Плавно направляем объект
+		else
+			local rootPartPosition = handle.Position
+			local targetPosition = Vector3.new(hitPosition.X, characterY, hitPosition.Z) -- Точка движения в плоскости
+			velocity.Velocity = (targetPosition - rootPartPosition).unit * speed -- Задаем скорость
+			gyro.CFrame = CFrame.new(rootPartPosition, targetPosition) -- Направляем объект к цели
+		end
 	    end
 	end
+
 
 
 
@@ -16687,11 +16734,16 @@ local function moveObjectsToMouse(speaker)
         drawPolygons()
 	    if increase then
 	        Yoffset = Yoffset + changeRate
-	        print("Yoffset увеличен:", Yoffset)
 	    end
 	    if decrease then
 	        Yoffset = Yoffset - changeRate
-	        print("Yoffset уменьшен:", Yoffset)
+	    end
+
+	    if increaseR then
+	        circleRadius = circleRadius + changeRateR
+	    end
+	    if decreaseR then
+	        circleRadius = circleRadius - changeRateR
 	    end
     end)
 end
