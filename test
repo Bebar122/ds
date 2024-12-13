@@ -1,4 +1,4 @@
-print("em892")
+print("em893")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16395,7 +16395,7 @@ end)
 
 
 
-
+local CircleMode = true
 
 
 local Players = game:GetService("Players")
@@ -16414,6 +16414,10 @@ local increase = false -- Увеличение Yoffset
 local decrease = false -- Уменьшение Yoffset
 local changeRate = 0.4 -- Скорость изменения
 
+local increaseR = false -- Увеличение Yoffset
+local decreaseR = false -- Уменьшение Yoffset
+local changeRateR = 0.1 -- Скорость изменения
+
 UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
     if gameProcessedEvent then return end
 
@@ -16421,6 +16425,10 @@ UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
         increase = true
     elseif input.KeyCode == Enum.KeyCode.Q then
         decrease = true
+    elseif input.KeyCode == Enum.KeyCode.KeypadSix then
+        increaseR = true
+    elseif input.KeyCode == Enum.KeyCode.KeypadFour then
+        decreaseR = true
     end
 end)
 
@@ -16432,36 +16440,17 @@ UserInputService.InputEnded:Connect(function(input, gameProcessedEvent)
         increase = false
     elseif input.KeyCode == Enum.KeyCode.Q then
         decrease = false
-    end
-end)
-
-
-
-
-local increaseR = false -- Увеличение Yoffset
-local decreaseR = false -- Уменьшение Yoffset
-local changeRateR = 0.1 -- Скорость изменения
-
-UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
-    if gameProcessedEvent then return end
-
-    if input.KeyCode == Enum.KeyCode.KeypadSix then
-        increaseR = true
-    elseif input.KeyCode == Enum.KeyCode.KeypadFour then
-        decreaseR = true
-    end
-end)
-
--- Обработка завершения нажатия клавиш
-UserInputService.InputEnded:Connect(function(input, gameProcessedEvent)
-    if gameProcessedEvent then return end
-
-    if input.KeyCode == Enum.KeyCode.KeypadSix then
+    elseif input.KeyCode == Enum.KeyCode.KeypadSix then
         increaseR = false
     elseif input.KeyCode == Enum.KeyCode.KeypadFour then
         decreaseR = false
     end
 end)
+
+
+
+
+
 
 
 
@@ -16568,8 +16557,8 @@ local function moveObjectsToMouse(speaker)
 	local circleRadius = 10 -- Радиус окружности
 	local angleStep = math.rad(5) -- Угол смещения для вращения объектов
 	local angles = {} -- Храним текущие углы для каждого объекта
-	local smoothingFactor = 0.1 -- Сглаживание поворота (чем меньше, тем плавнее)
-	local CircleMode = true
+	local smoothingFactor = 0.2 -- Сглаживание поворота (чем меньше, тем плавнее)
+	CircleMode = true
 	local speed = 50
 
 	local function updateMovement()
@@ -16741,6 +16730,7 @@ local function moveObjectsToMouse(speaker)
 
 	    if increaseR then
 	        circleRadius = circleRadius + changeRateR
+		print('radius incr')
 	    end
 	    if decreaseR then
 	        circleRadius = circleRadius - changeRateR
@@ -16755,6 +16745,11 @@ end)
 
 
 
+
+-- Команда для переключения значения CircleMode
+addcmd('togglecirclemode', {'tcm'}, function(args, speaker)
+    CircleMode = not CircleMode
+end)
 
 
 
