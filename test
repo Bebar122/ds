@@ -1,4 +1,4 @@
-print("em8612")
+print("em87")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16562,16 +16562,16 @@ local function moveObjectsToMouse(speaker)
 	        -- Добавляем BodyGyro, если его нет
 	        if not handle:FindFirstChild("BodyGyro") then
 	            local gyro = Instance.new("BodyGyro", handle)
-	            gyro.MaxTorque = Vector3.new(4000, 4000, 4000)
-	            gyro.P = 3000
+	            gyro.MaxTorque = Vector3.new(8000, 8000, 8000)
+	            gyro.P = 6000
 	            gyro.CFrame = handle.CFrame
 	        end
 	
 	        -- Добавляем BodyVelocity, если его нет
 	        if not handle:FindFirstChild("BodyVelocity") then
 	            local velocity = Instance.new("BodyVelocity", handle)
-	            velocity.MaxForce = Vector3.new(4000, 4000, 4000)
-	            velocity.P = 1250
+	            velocity.MaxForce = Vector3.new(8000, 8000, 8000)
+	            velocity.P = 2500
 	        end
 	
 	        -- Получаем существующие BodyGyro и BodyVelocity
@@ -16597,7 +16597,7 @@ local function moveObjectsToMouse(speaker)
 	        -- Рассчитываем движение объекта к цели
 	        local rootPartPosition = handle.Position
 	        local direction = (circlePosition - rootPartPosition)
-	        velocity.Velocity = direction.unit * 50 -- Максимальная скорость
+	        velocity.Velocity = direction.unit * 100 -- Максимальная скорость
 	
 	        -- Обновляем поворот объекта
 	        gyro.CFrame = CFrame.new(rootPartPosition, circlePosition) -- Направляем объект к текущей точке на окружности
