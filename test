@@ -16699,7 +16699,7 @@ local function moveObjectsToMouse(speaker)
 		    circle.BrickColor = BrickColor.new("Bright red")
 		    circle.Transparency = 0.3
 		    circle.Rotation = Vector3.new(90, 0, 0) -- Поворачиваем цилиндр, чтобы он лежал горизонтально
-		    return circle
+
 		table.insert(drawnLines, circle)
 		table.insert(drawnLines, line)
 		table.insert(drawnLines, plane)
