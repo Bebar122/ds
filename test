@@ -16700,7 +16700,7 @@ local function moveObjectsToMouse(speaker)
 		plane.Anchored = true
 		plane.CanCollide = false
 		plane.BrickColor = BrickColor.new("Bright red")
-		plane.Transparency = 0.3 -- Полупрозрачность
+		plane.Transparency = 0.5 -- Полупрозрачность
 
 		    local circle = Instance.new("Part", workspace)
 		circle.Size = Vector3.new(1, 0.1, 1)
@@ -16708,8 +16708,8 @@ local function moveObjectsToMouse(speaker)
 		    circle.Shape = Enum.PartType.Cylinder -- Устанавливаем форму как цилиндр
 		    circle.Anchored = true
 		    circle.CanCollide = false
-		    circle.BrickColor = BrickColor.new("Bright red")
-		    circle.Transparency = 0.9
+		    circle.BrickColor = BrickColor.new("Bright blue")
+		    circle.Transparency = 0.8
 		    local mesh = Instance.new("CylinderMesh", circle)
 		    mesh.Scale = Vector3.new(circleRadius * 2, 0.05, circleRadius * 2)
 		    -- circle.Rotation = Vector3.new(90, 0, 0) -- Поворачиваем цилиндр, чтобы он лежал горизонтально
