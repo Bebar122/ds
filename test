@@ -1,4 +1,4 @@
-print("em8941")
+print("em895")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16418,6 +16418,10 @@ local increaseR = false -- Увеличение Yoffset
 local decreaseR = false -- Уменьшение Yoffset
 local changeRateR = 0.1 -- Скорость изменения
 
+local increaseS = false -- Увеличение Yoffset
+local decreaseS = false -- Уменьшение Yoffset
+local changeRateS = 1.1 -- Скорость изменения
+
 UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
     if gameProcessedEvent then return end
 
@@ -16429,6 +16433,10 @@ UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
         increaseR = true
     elseif input.KeyCode == Enum.KeyCode.KeypadFour then
         decreaseR = true
+    elseif input.KeyCode == Enum.KeyCode.KeypadThree then
+        increaseS = true
+    elseif input.KeyCode == Enum.KeyCode.KeypadOne then
+        decreaseS = true
     end
 end)
 
@@ -16444,6 +16452,10 @@ UserInputService.InputEnded:Connect(function(input, gameProcessedEvent)
         increaseR = false
     elseif input.KeyCode == Enum.KeyCode.KeypadFour then
         decreaseR = false
+    elseif input.KeyCode == Enum.KeyCode.KeypadThree then
+        increaseS = false
+    elseif input.KeyCode == Enum.KeyCode.KeypadOne then
+        decreaseS = false
     end
 end)
 
@@ -16557,7 +16569,7 @@ local function moveObjectsToMouse(speaker)
 	circleRadius = 10 -- Радиус окружности
 	local angleStep = math.rad(5) -- Угол смещения для вращения объектов
 	local angles = {} -- Храним текущие углы для каждого объекта
-	local smoothingFactor = 0.2 -- Сглаживание поворота (чем меньше, тем плавнее)
+	local smoothingFactor = 0.15 -- Сглаживание поворота (чем меньше, тем плавнее)
 	CircleMode = true
 	speed = 50
 
@@ -16698,7 +16710,7 @@ local function moveObjectsToMouse(speaker)
 		    circle.CanCollide = false
 		    circle.BrickColor = BrickColor.new("Bright red")
 		    circle.Transparency = 0.3
-		    circle.Rotation = Vector3.new(90, 0, 0) -- Поворачиваем цилиндр, чтобы он лежал горизонтально
+		    -- circle.Rotation = Vector3.new(90, 0, 0) -- Поворачиваем цилиндр, чтобы он лежал горизонтально
 
 		table.insert(drawnLines, circle)
 		table.insert(drawnLines, line)
@@ -16741,10 +16753,16 @@ local function moveObjectsToMouse(speaker)
 
 	    if increaseR then
 	        circleRadius = circleRadius + changeRateR
-		print('radius incr')
 	    end
 	    if decreaseR then
 	        circleRadius = circleRadius - changeRateR
+	    end
+
+	    if increaseS then
+	        speed = speed + changeRateS
+	    end
+	    if decreaseS then
+	        speed = speed - changeRateS
 	    end
     end)
 end
