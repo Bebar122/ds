@@ -1,4 +1,4 @@
-print("em896")
+print("em897")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16709,7 +16709,7 @@ local function moveObjectsToMouse(speaker)
 		    circle.Anchored = true
 		    circle.CanCollide = false
 		    circle.BrickColor = BrickColor.new("Bright red")
-		    circle.Transparency = 0.3
+		    circle.Transparency = 0.9
 		    local mesh = Instance.new("CylinderMesh", circle)
 		    mesh.Scale = Vector3.new(circleRadius * 2, 0.05, circleRadius * 2)
 		    -- circle.Rotation = Vector3.new(90, 0, 0) -- Поворачиваем цилиндр, чтобы он лежал горизонтально
