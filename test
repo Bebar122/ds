@@ -1,4 +1,4 @@
-print("em88")
+print("em89")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16536,8 +16536,6 @@ local function moveObjectsToMouse(speaker)
 	end)
 
 	local circleRadius = 10 -- Радиус окружности
-	local angleStep = math.rad(5) -- Угол смещения для вращения объектов
-	local angles = {} -- Храним текущие углы для каждого объекта
 	local smoothingFactor = 0.1 -- Сглаживание поворота (чем меньше, тем плавнее)
 	
 	local function updateMovement()
@@ -16557,6 +16555,10 @@ local function moveObjectsToMouse(speaker)
 	    local humanoidRootPart = character.HumanoidRootPart
 	    local lookDirection = (Vector3.new(targetCenter.X, humanoidRootPart.Position.Y, targetCenter.Z) - humanoidRootPart.Position).unit
 	    humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, humanoidRootPart.Position + lookDirection)
+	
+	    -- Вычисляем угловой интервал между объектами
+	    local objectCount = #movingObjects
+	    local angleStep = (2 * math.pi) / objectCount -- Угловой интервал для равномерного распределения
 	
 	    -- Обновляем движение объектов
 	    for index, handle in pairs(movingObjects) do
@@ -16579,25 +16581,15 @@ local function moveObjectsToMouse(speaker)
 	        local velocity = handle:FindFirstChild("BodyVelocity")
 	        local gyro = handle:FindFirstChild("BodyGyro")
 	
-	        -- Инициализируем угол объекта, если он еще не задан
-	        if not angles[index] then
-	            angles[index] = math.random() * 2 * math.pi -- Случайный стартовый угол
-	        end
-	
-	        -- Смещаем угол объекта для движения по окружности
-	        angles[index] = angles[index] + angleStep
-	        if angles[index] > 2 * math.pi then
-	            angles[index] = angles[index] - 2 * math.pi
-	        end
-	
-	        -- Вычисляем новую цель на окружности
-	        local offsetX = math.cos(angles[index]) * circleRadius
-	        local offsetZ = math.sin(angles[index]) * circleRadius
-	        local circlePosition = Vector3.new(targetCenter.X + offsetX, characterY, targetCenter.Z + offsetZ)
+	        -- Вычисляем целевую позицию объекта на окружности
+	        local targetAngle = angleStep * (index - 1) -- Угол текущего объекта
+	        local offsetX = math.cos(targetAngle) * circleRadius
+	        local offsetZ = math.sin(targetAngle) * circleRadius
+	        local targetPosition = Vector3.new(targetCenter.X + offsetX, characterY, targetCenter.Z + offsetZ)
 	
 	        -- Рассчитываем новое направление движения
 	        local rootPartPosition = handle.Position
-	        local targetDirection = (circlePosition - rootPartPosition).unit
+	        local targetDirection = (targetPosition - rootPartPosition).unit
 	
 	        -- Плавно изменяем направление движения
 	        local currentVelocity = velocity.Velocity.unit
@@ -16610,6 +16602,7 @@ local function moveObjectsToMouse(speaker)
 	        gyro.CFrame = CFrame.new(rootPartPosition, rootPartPosition + smoothDirection) -- Плавно направляем объект
 	    end
 	end
+
 
 
 
