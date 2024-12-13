@@ -1,4 +1,4 @@
-print("em871")
+print("em872")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16563,7 +16563,7 @@ local function moveObjectsToMouse(speaker)
 	        if not handle:FindFirstChild("BodyGyro") then
 	            local gyro = Instance.new("BodyGyro", handle)
 	            gyro.MaxTorque = Vector3.new(8000, 8000, 8000)
-	            gyro.P = 6000
+	            gyro.P = 3000
 	            gyro.CFrame = handle.CFrame
 	        end
 	
