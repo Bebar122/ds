@@ -1,4 +1,4 @@
-print("em893")
+print("em894")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16394,9 +16394,9 @@ end)
 
 
 
-
+local speed = 50
 local CircleMode = true
-
+local circleRadius = 10
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -16554,12 +16554,12 @@ local function moveObjectsToMouse(speaker)
 	    execCmd('freezeanims')
 	end)
 
-	local circleRadius = 10 -- Радиус окружности
+	circleRadius = 10 -- Радиус окружности
 	local angleStep = math.rad(5) -- Угол смещения для вращения объектов
 	local angles = {} -- Храним текущие углы для каждого объекта
 	local smoothingFactor = 0.2 -- Сглаживание поворота (чем меньше, тем плавнее)
 	CircleMode = true
-	local speed = 50
+	speed = 50
 
 	local function updateMovement()
 	    -- Настраиваем уровень плоскости, где должны двигаться объекты
@@ -16631,7 +16631,7 @@ local function moveObjectsToMouse(speaker)
 		        gyro.CFrame = CFrame.new(rootPartPosition, rootPartPosition + smoothDirection) -- Плавно направляем объект
 		else
 			local rootPartPosition = handle.Position
-			local targetPosition = Vector3.new(hitPosition.X, characterY, hitPosition.Z) -- Точка движения в плоскости
+			local targetPosition = Vector3.new(targetCenter.X, characterY, targetCenter.Z) -- Точка движения в плоскости
 			velocity.Velocity = (targetPosition - rootPartPosition).unit * speed -- Задаем скорость
 			gyro.CFrame = CFrame.new(rootPartPosition, targetPosition) -- Направляем объект к цели
 		end
