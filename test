@@ -1,4 +1,4 @@
-print("em897")
+print("em90")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16393,7 +16393,7 @@ end)
 
 
 
-
+local smoothingFactor = 0.15
 local speed = 50
 local CircleMode = true
 local circleRadius = 10
@@ -16569,7 +16569,7 @@ local function moveObjectsToMouse(speaker)
 	circleRadius = 10 -- Радиус окружности
 	local angleStep = math.rad(5) -- Угол смещения для вращения объектов
 	local angles = {} -- Храним текущие углы для каждого объекта
-	local smoothingFactor = 0.15 -- Сглаживание поворота (чем меньше, тем плавнее)
+	smoothingFactor = 0.15 -- Сглаживание поворота (чем меньше, тем плавнее)
 	CircleMode = true
 	speed = 50
 
@@ -16783,6 +16783,13 @@ addcmd('togglecirclemode', {'tcm'}, function(args, speaker)
 end)
 
 
+addcmd('setsmoothing', {'ssf'}, function(args, speaker)
+    smoothingFactor = tonumber(args[1]) or 0.15
+end)
+
+addcmd('setdefspeed', {'sds'}, function(args, speaker)
+    speed = tonumber(args[1]) or 50
+end)
 
 addcmd('spawnfish', {'fish'}, function(args, speaker)
 	local args = {
