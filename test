@@ -16413,7 +16413,7 @@ local UserInputService = game:GetService("UserInputService")
 local Yoffset = 0
 local increase = false -- Увеличение Yoffset
 local decrease = false -- Уменьшение Yoffset
-local changeRate = 0.5 -- Скорость изменения
+local changeRate = 0.4 -- Скорость изменения
 
 UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
     if gameProcessedEvent then return end
@@ -16639,18 +16639,18 @@ local function moveObjectsToMouse(speaker)
 		local hitPosition = rayOrigin + rayDirection * t -- Точка на плоскости, куда смотрит мышь
 		
 		-- Создаем перпендикулярную линию вверх и вниз
-		local lineHeight = 30 -- Высота линии вверх и вниз
+		local lineHeight = 70 -- Высота линии вверх и вниз
 		local topPoint = hitPosition + Vector3.new(0, lineHeight, 0)
 		local bottomPoint = hitPosition - Vector3.new(0, lineHeight, 0)
 		
 		-- Создаем часть для линии (одна непрерывная линия)
 		local line = Instance.new("Part", workspace)
-		line.Size = Vector3.new(0.1, lineHeight * 2, 0.1)
+		line.Size = Vector3.new(0.2, lineHeight * 2, 0.2)
 		line.CFrame = CFrame.new((topPoint + bottomPoint) / 2)
 		line.Anchored = true
 		line.CanCollide = false
 		line.BrickColor = BrickColor.new("Bright blue")
-		line.Transparency = 0.4
+		line.Transparency = 0.3
 		
 		-- Создаем полупрозрачную плоскость на высоте characterY
 		local plane = Instance.new("Part", workspace)
@@ -16658,7 +16658,7 @@ local function moveObjectsToMouse(speaker)
 		plane.CFrame = CFrame.new(hitPosition.X, characterY, hitPosition.Z)
 		plane.Anchored = true
 		plane.CanCollide = false
-		plane.BrickColor = BrickColor.new("Bright Red")
+		plane.BrickColor = BrickColor.new("Bright red")
 		plane.Transparency = 0.3 -- Полупрозрачность
 		
 		table.insert(drawnLines, line)
