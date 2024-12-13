@@ -1,4 +1,4 @@
-print("em895")
+print("em896")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16703,13 +16703,15 @@ local function moveObjectsToMouse(speaker)
 		plane.Transparency = 0.3 -- Полупрозрачность
 
 		    local circle = Instance.new("Part", workspace)
-		    circle.Size = Vector3.new(circleRadius * 2, 0.1, circleRadius * 2) -- Диаметр круга по X и Z
+		circle.Size = Vector3.new(1, 0.1, 1)
 		    circle.CFrame = CFrame.new(hitPosition.X, characterY, hitPosition.Z)
 		    circle.Shape = Enum.PartType.Cylinder -- Устанавливаем форму как цилиндр
 		    circle.Anchored = true
 		    circle.CanCollide = false
 		    circle.BrickColor = BrickColor.new("Bright red")
 		    circle.Transparency = 0.3
+		    local mesh = Instance.new("CylinderMesh", circle)
+		    mesh.Scale = Vector3.new(circleRadius * 2, 0.05, circleRadius * 2)
 		    -- circle.Rotation = Vector3.new(90, 0, 0) -- Поворачиваем цилиндр, чтобы он лежал горизонтально
 
 		table.insert(drawnLines, circle)
