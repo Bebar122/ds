@@ -16658,7 +16658,7 @@ local function moveObjectsToMouse(speaker)
 			
 			local points = pathPoints[index]
 			local currentIndex = currentPathIndex[index]
-			local targetPoint = Vector3.new(points[currentIndex].X, characterY, points[currentIndex].Y)
+			local targetPoint = Vector3.new(targetCenter.X + points[currentIndex].X, characterY, targetCenter.Z + points[currentIndex].Y)
 			
 			-- Рассчитываем новое направление движения
 			local rootPartPosition = handle.Position
@@ -16824,18 +16824,18 @@ end)
 
 -- Команда для переключения значения CircleMode
 addcmd('changemovemode', {'сmm'}, function(args, speaker)
-	local flag = true
-	if moveMode == 1 and flag then
+	local flagmove = true
+	if moveMode == 1 and flagmove then
 		moveMode = 2
-		flag = false
+		flagmove = false
 		print('mode 2')
-	elseif moveMode == 2 and flag then
+	elseif moveMode == 2 and flagmove then
 		moveMode = 0
-		flag = false
+		flagmove = false
 		print('mode 0')
-	elseif modeMode == 0 and flag then
+	elseif modeMode == 0 and flagmove then
 		moveMode = 1
-		flag = false
+		flagmove = false
 		print('mode 1')
 	end
 	print('-------------')
