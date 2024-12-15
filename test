@@ -1,4 +1,4 @@
-print("em92")
+print("em921")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16664,9 +16664,9 @@ local function moveObjectsToMouse(speaker)
 					currentPathIndex[index] = 1
 					reversePath[index] = false
 				else
-					velocity.Velocity = 0
-					gyro.CFrame = CFrame.new(handle.Position, handle.Position)
-					return
+					pathPoints[index] = predefinedPaths[#predefinedPaths] -- Назначаем маршрут из массива
+					currentPathIndex[index] = 1
+					reversePath[index] = false
 				end
 			end
 			
