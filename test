@@ -1,4 +1,4 @@
-print("em916")
+print("em917")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16839,7 +16839,7 @@ addcmd('setlockpos', {'slp'}, function(args, speaker)
 end)
 
 addcmd('setmovemode', {'smm'}, function(args, speaker)
-    moveMode = (moveMode + 0) % 3
+    moveMode = (moveMode + 1) % 3
     notify("Move mode set to: " .. tostring(moveMode)) -- Для отображения текущего режима
 end)
 
