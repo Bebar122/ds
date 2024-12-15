@@ -1,4 +1,4 @@
-print("em90")
+print("em91")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16395,7 +16395,7 @@ end)
 
 local smoothingFactor = 0.15
 local speed = 50
-local CircleMode = true
+local moveMode = 1
 local circleRadius = 10
 
 local Players = game:GetService("Players")
@@ -16462,7 +16462,11 @@ end)
 
 
 
-
+local predefinedPaths = {
+    { {X = 0, Y = 0}, {X = 10, Y = 0}, {X = 10, Y = 10}, {X = 0, Y = 10} }, -- Маршрут 1
+    { {X = -5, Y = -5}, {X = -10, Y = -5}, {X = -10, Y = -10}, {X = -5, Y = -10} }, -- Маршрут 2
+    { {X = 20, Y = 20}, {X = 25, Y = 20}, {X = 25, Y = 25}, {X = 20, Y = 25} }, -- Маршрут 3
+}
 
 
 
@@ -16570,7 +16574,7 @@ local function moveObjectsToMouse(speaker)
 	local angleStep = math.rad(5) -- Угол смещения для вращения объектов
 	local angles = {} -- Храним текущие углы для каждого объекта
 	smoothingFactor = 0.15 -- Сглаживание поворота (чем меньше, тем плавнее)
-	CircleMode = true
+	moveMode = 1
 	speed = 50
 
 	local function updateMovement()
@@ -16611,7 +16615,7 @@ local function moveObjectsToMouse(speaker)
 	        -- Получаем существующие BodyGyro и BodyVelocity
 	        local velocity = handle:FindFirstChild("BodyVelocity")
 	        local gyro = handle:FindFirstChild("BodyGyro")
-		if CircleMode then
+		if moveMode == 1 then
 		        -- Инициализируем угол объекта, если он еще не задан
 		        if not angles[index] then
 		            angles[index] = math.random() * 2 * math.pi -- Случайный стартовый угол
@@ -16641,7 +16645,44 @@ local function moveObjectsToMouse(speaker)
 		
 		        -- Обновляем поворот объекта
 		        gyro.CFrame = CFrame.new(rootPartPosition, rootPartPosition + smoothDirection) -- Плавно направляем объект
-		else
+		elseif moveMode == 2 then
+			if not pathPoints[index] then
+			pathPoints[index] = predefinedPaths[(index - 1) % #predefinedPaths + 1] -- Назначаем маршрут из массива
+			currentPathIndex[index] = 1
+			reversePath[index] = false
+			end
+			
+			local points = pathPoints[index]
+			local currentIndex = currentPathIndex[index]
+			local targetPoint = Vector3.new(points[currentIndex].X, characterY, points[currentIndex].Y)
+			
+			-- Рассчитываем новое направление движения
+			local rootPartPosition = handle.Position
+			local targetDirection = (targetPoint - rootPartPosition).unit
+			
+			-- Обновляем скорость
+			velocity.Velocity = targetDirection * speed
+			
+			-- Обновляем поворот объекта
+			gyro.CFrame = CFrame.new(rootPartPosition, rootPartPosition + targetDirection)
+			
+			-- Проверяем достижение текущей точки
+			if (rootPartPosition - targetPoint).Magnitude < 1 then
+				if not reversePath[index] then
+				    currentPathIndex[index] = currentPathIndex[index] + 1
+				    if currentPathIndex[index] > #points then
+					reversePath[index] = true
+					currentPathIndex[index] = currentPathIndex[index] - 1
+				    end
+				else
+				    currentPathIndex[index] = currentPathIndex[index] - 1
+				    if currentPathIndex[index] < 1 then
+					reversePath[index] = false
+					currentPathIndex[index] = currentPathIndex[index] + 1
+				    end
+				end
+			end
+		elseif moveMode == 0 then
 			local rootPartPosition = handle.Position
 			local targetPosition = Vector3.new(targetCenter.X, characterY, targetCenter.Z) -- Точка движения в плоскости
 			velocity.Velocity = (targetPosition - rootPartPosition).unit * speed -- Задаем скорость
@@ -16779,7 +16820,14 @@ end)
 
 -- Команда для переключения значения CircleMode
 addcmd('togglecirclemode', {'tcm'}, function(args, speaker)
-    CircleMode = not CircleMode
+	if moveMode == 1 then
+		moveMode = 2
+	elseif moveMode == 2 then
+		moveMode = 0
+	elseif modeMode == 0 then
+		moveMode = 1
+	end
+
 end)
 
 
@@ -16790,6 +16838,11 @@ end)
 addcmd('setdefspeed', {'sds'}, function(args, speaker)
     speed = tonumber(args[1]) or 50
 end)
+
+addcmd('setdefradius', {'sdr'}, function(args, speaker)
+    circleRadius = tonumber(args[1]) or 10
+end)
+
 
 addcmd('spawnfish', {'fish'}, function(args, speaker)
 	local args = {
