@@ -1,4 +1,4 @@
-print("em915")
+print("em916")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16825,12 +16825,21 @@ addcmd('moveobjects', {'mvo'}, function(args, speaker)
 end)
 
 
+local skipNext = false -- Переменная для отслеживания пропусков
+
 addcmd('setlockpos', {'slp'}, function(args, speaker)
-    lockPos = not lockPos
+    if skipNext then
+        skipNext = false -- Сбрасываем, чтобы следующий вызов сработал
+        return -- Пропускаем выполнение команды
+    end
+    
+    skipNext = true -- Устанавливаем пропуск для следующего вызова
+    lockPos = not lockPos -- Меняем значение lockPos
+    notify("Lock position set to: " .. tostring(lockPos)) -- Отображаем текущее состояние
 end)
 
 addcmd('setmovemode', {'smm'}, function(args, speaker)
-    moveMode = (moveMode + 1) % 3
+    moveMode = (moveMode + 0) % 3
     notify("Move mode set to: " .. tostring(moveMode)) -- Для отображения текущего режима
 end)
 
