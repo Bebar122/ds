@@ -1,4 +1,4 @@
-print("em91")
+print("em913")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16820,14 +16820,22 @@ end)
 
 -- Команда для переключения значения CircleMode
 addcmd('togglecirclemode', {'tcm'}, function(args, speaker)
+	local flag = true
 	if moveMode == 1 then
 		moveMode = 2
-	elseif moveMode == 2 then
+		flag = false
+		print('mode 2')
+	elseif moveMode == 2 and flag then
 		moveMode = 0
-	elseif modeMode == 0 then
+		flag = false
+		print('mode 0')
+	elseif modeMode == 0 and flag then
 		moveMode = 1
+		flag = false
+		print('mode 1')
 	end
-
+	print('-------------')
+	print(moveMode)
 end)
 
 
