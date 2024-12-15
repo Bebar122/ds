@@ -1,4 +1,4 @@
-print("em918")
+print("em919")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16661,6 +16661,7 @@ local function moveObjectsToMouse(speaker)
 					currentPathIndex[index] = 1
 					reversePath[index] = false
 				else
+					velocity.Velocity = 0
 					return
 				end
 			end
@@ -16673,11 +16674,15 @@ local function moveObjectsToMouse(speaker)
 			local rootPartPosition = handle.Position
 			local targetDirection = (targetPoint - rootPartPosition).unit
 			
-			-- Обновляем скорость
-			velocity.Velocity = targetDirection * speed
-			
-			-- Обновляем поворот объекта
-			gyro.CFrame = CFrame.new(rootPartPosition, rootPartPosition + targetDirection)
+		        -- Плавно изменяем направление движения
+		        local currentVelocity = velocity.Velocity.unit
+		        local smoothDirection = currentVelocity:Lerp(targetDirection, smoothingFactor)
+		
+		        -- Обновляем скорость
+		        velocity.Velocity = smoothDirection * speed -- Постоянная скорость
+		
+		        -- Обновляем поворот объекта
+		        gyro.CFrame = CFrame.new(rootPartPosition, rootPartPosition + smoothDirection) -- Плавно направляем объект
 			
 			-- Проверяем достижение текущей точки
 			if (rootPartPosition - targetPoint).Magnitude < 1 then
