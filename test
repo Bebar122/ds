@@ -1,4 +1,4 @@
-print("em919")
+print("em92")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16575,10 +16575,11 @@ local function moveObjectsToMouse(speaker)
 	circleRadius = 10 -- Радиус окружности
 	local angleStep = math.rad(5) -- Угол смещения для вращения объектов
 	local angles = {} -- Храним текущие углы для каждого объекта
-	smoothingFactor = 0.15 -- Сглаживание поворота (чем меньше, тем плавнее)
+	--smoothingFactor = 0.15 -- Сглаживание поворота (чем меньше, тем плавнее)
 	moveMode = 1
 	speed = 50
 	local targetCenter
+	local characterY
 
 	pathPoints = {}             -- Маршруты для каждого объекта
 	currentPathIndex = {}       -- Индексы текущих точек маршрута для каждого объекта
@@ -16586,7 +16587,9 @@ local function moveObjectsToMouse(speaker)
 
 	local function updateMovement()
 	    -- Настраиваем уровень плоскости, где должны двигаться объекты
-	    local characterY = character.HumanoidRootPart.Position.Y + Yoffset
+		if not lockPos then
+			characterY = character.HumanoidRootPart.Position.Y + Yoffset
+		end
 	
 	    -- Получаем луч от камеры через мышку
 	    local unitRay = workspace.CurrentCamera:ScreenPointToRay(mouse.X, mouse.Y)
@@ -16662,7 +16665,7 @@ local function moveObjectsToMouse(speaker)
 					reversePath[index] = false
 				else
 					velocity.Velocity = 0
-					gyro.CFrame = CFrame.new(rootPartPosition, rootPartPosition)
+					gyro.CFrame = CFrame.new(handle.Position, handle.Position)
 					return
 				end
 			end
