@@ -1,4 +1,4 @@
-print("em913")
+print("em914")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16577,6 +16577,10 @@ local function moveObjectsToMouse(speaker)
 	moveMode = 1
 	speed = 50
 
+	pathPoints = {}             -- Маршруты для каждого объекта
+	currentPathIndex = {}       -- Индексы текущих точек маршрута для каждого объекта
+	reversePath = {}   
+
 	local function updateMovement()
 	    -- Настраиваем уровень плоскости, где должны двигаться объекты
 	    local characterY = character.HumanoidRootPart.Position.Y + Yoffset
@@ -16819,9 +16823,9 @@ end)
 
 
 -- Команда для переключения значения CircleMode
-addcmd('togglecirclemode', {'tcm'}, function(args, speaker)
+addcmd('changemovemode', {'сmm'}, function(args, speaker)
 	local flag = true
-	if moveMode == 1 then
+	if moveMode == 1 and flag then
 		moveMode = 2
 		flag = false
 		print('mode 2')
