@@ -1,4 +1,4 @@
-print("em928")
+print("em9281")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14195,6 +14195,23 @@ addcmd('attach',{},function(args, speaker)
 	for i,v in pairs(players) do
 		attach(speaker,Players[v])
 	end
+end)
+
+
+
+local function spawnRocket(targetPlayer)
+    if targetPlayer then
+        local targetPosition = targetPlayer.Character.HumanoidRootPart.Position -- Позиция немного выше, чтобы ракета не застряла в земле
+        local rocketSpawnPosition = targetPosition + Vector3.new(0, 5, 0) -- Позиция спавна ракеты
+	game:GetService("Players").LocalPlayer.Backpack.RocketJumper.FireRocket:FireServer(targetPosition, rocketSpawnPosition)
+    end
+end
+
+addcmd('firerocket', {}, function(args, speaker)
+    local targetPlayers = getPlayer(args[1], speaker) 
+    for _, player in ipairs(targetPlayers) do
+        spawnRocket(player) 
+    end
 end)
 
 
