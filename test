@@ -1,4 +1,4 @@
-print("em924")
+print("em925")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16392,7 +16392,7 @@ end)
 
 
 
-
+local PointScale = 1
 local smoothingFactor = 0.15
 local speed = 50
 local moveMode = 1
@@ -16603,12 +16603,13 @@ local function moveObjectsToMouse(speaker)
 	    local t = (characterY - Yoffset - rayOrigin.Y) / rayDirection.Y
 		if not lockPos then
 	    		targetCenter = rayOrigin + rayDirection * t -- Точка на плоскости, куда смотрит мышь
+			-- Поворачиваем персонажа в направлении конечной точки
+			local humanoidRootPart = character.HumanoidRootPart
+			local lookDirection = (Vector3.new(targetCenter.X, humanoidRootPart.Position.Y, targetCenter.Z) - humanoidRootPart.Position).unit
+			humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, humanoidRootPart.Position + lookDirection)
 		end
 	
-	    -- Поворачиваем персонажа в направлении конечной точки
-	    local humanoidRootPart = character.HumanoidRootPart
-	    local lookDirection = (Vector3.new(targetCenter.X, humanoidRootPart.Position.Y, targetCenter.Z) - humanoidRootPart.Position).unit
-	    humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, humanoidRootPart.Position + lookDirection)
+
 	
 	    -- Обновляем движение объектов
 	    for index, handle in pairs(movingObjects) do
@@ -16675,7 +16676,7 @@ local function moveObjectsToMouse(speaker)
 			
 			local points = pathPoints[index]
 			local currentIndex = currentPathIndex[index]
-			local targetPoint = Vector3.new(targetCenter.X + points[currentIndex].X, characterY + points[currentIndex].Y, targetCenter.Z)
+			local targetPoint = Vector3.new(targetCenter.X + points[currentIndex].X * PointScale, characterY + points[currentIndex].Y * PointScale, targetCenter.Z)
 			
 			-- Рассчитываем новое направление движения
 			local rootPartPosition = handle.Position
@@ -16848,7 +16849,9 @@ addcmd('setlockpos', {'slp'}, function(args, speaker)
         skipNext = false -- Сбрасываем, чтобы следующий вызов сработал
         return -- Пропускаем выполнение команды
     end
-    
+	execCmd('unfreezeanims')
+	execCmd('noanim')
+	execCmd('reanim')    
     skipNext = true -- Устанавливаем пропуск для следующего вызова
     lockPos = not lockPos -- Меняем значение lockPos
     notify("Lock position set to: " .. tostring(lockPos)) -- Отображаем текущее состояние
@@ -16856,16 +16859,16 @@ end)
 
 addcmd('setmovemode', {'smm'}, function(args, speaker)
     moveMode = (moveMode + 1) % 3
-	execCmd('unfreezeanims')
-	execCmd('noanim')
-	execCmd('reanim')
-
     notify("Move mode set to: " .. tostring(moveMode)) -- Для отображения текущего режима
 end)
 
 
 addcmd('setsmoothing', {'ssf'}, function(args, speaker)
     smoothingFactor = tonumber(args[1]) or 0.15
+end)
+
+addcmd('setpointscale', {'sps'}, function(args, speaker)
+    PointScale = tonumber(args[1]) or 1
 end)
 
 addcmd('setdefspeed', {'sds'}, function(args, speaker)
