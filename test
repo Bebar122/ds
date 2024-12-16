@@ -1,4 +1,4 @@
-print("em925")
+print("em926")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16676,7 +16676,7 @@ local function moveObjectsToMouse(speaker)
 			
 			local points = pathPoints[index]
 			local currentIndex = currentPathIndex[index]
-			local targetPoint = Vector3.new(targetCenter.X + points[currentIndex].X * PointScale, characterY + points[currentIndex].Y * PointScale, targetCenter.Z)
+			local targetPoint = Vector3.new(targetCenter.X + points[currentIndex].X * PointScale, characterY + points[currentIndex].Y * PointScale, targetCenter.Z + (index % 2 == 0) and 1 or -1)
 			
 			-- Рассчитываем новое направление движения
 			local rootPartPosition = handle.Position
