@@ -1,4 +1,4 @@
-print("em93")
+print("em931")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16475,7 +16475,7 @@ UserInputService.InputEnded:Connect(function(input, gameProcessedEvent)
     end
 end)
 
-
+pathPoints = {}
 
 
 local predefinedPaths = {
@@ -16513,7 +16513,7 @@ local wordsPaths = {
         { {X = -20, Y = 20}, {X = 0, Y = 20} }, -- Горизонтальная перекладина H
         { {X = 0, Y = 40}, {X = 0, Y = 0} },    -- Вертикальная правая линия H
         { {X = 10, Y = 40}, {X = 10, Y = 0} },  -- Вертикальная линия i
-        { {X = 10, Y = 45}, {X = 10, Y = 43} }, -- Точка над i
+        { {X = 10, Y = 47}, {X = 10, Y = 46} }, -- Точка над i
 	{ {X = -60, Y = -60}, {X = -70, Y = -70} }, -- Маршрут fkk
     },
 }
@@ -16524,6 +16524,7 @@ local function setWord(index)
     local word = words[index]
     if word and wordsPaths[word] then
         predefinedPaths = wordsPaths[word]
+	pathPoints = {}
         print("Текущее слово: " .. word)
     else
         print("Неверный номер слова. Доступные слова: 1-Azy, 2-Hi.")
@@ -16648,7 +16649,7 @@ local function moveObjectsToMouse(speaker)
 	local targetCenter
 	local characterY
 
-	pathPoints = {}             -- Маршруты для каждого объекта
+	             -- Маршруты для каждого объекта
 	currentPathIndex = {}       -- Индексы текущих точек маршрута для каждого объекта
 	reversePath = {}   
 
