@@ -1,4 +1,4 @@
-print("em942")
+print("em9421")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16930,10 +16930,10 @@ end)
 local skipNext = false -- Переменная для отслеживания пропусков
 
 addcmd('setlockpos', {'slp'}, function(args, speaker)
-    --if skipNext then
-        --skipNext = false -- Сбрасываем, чтобы следующий вызов сработал
-        --return -- Пропускаем выполнение команды
-    --end
+    if skipNext then
+        skipNext = false -- Сбрасываем, чтобы следующий вызов сработал
+        return -- Пропускаем выполнение команды
+    end
 	execCmd('unfreezeanims')
 	execCmd('noanim')
 	execCmd('reanim')    
