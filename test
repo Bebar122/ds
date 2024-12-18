@@ -1,4 +1,4 @@
-print("em9421")
+print("em95")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16962,6 +16962,33 @@ end)
 
 addcmd('setdefradius', {'sdr'}, function(args, speaker)
     circleRadius = tonumber(args[1]) or 10
+end)
+
+addcmd('removeobject', {'ro'}, function(args, speaker)
+	-- Скрипт для удаления объектов с именем 'Laser' из потомков каждого Tool в персонаже
+	
+	-- Получаем персонажа игрока
+	local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+	
+	if not character then
+	    warn("Character not found.")
+	    return
+	end
+	
+	-- Перебираем всех детей персонажа
+	for _, child in ipairs(character:GetChildren()) do
+	    if child:IsA("Tool") then -- Проверяем, что это инструмент (Tool)
+	        -- Перебираем всех потомков инструмента
+	        for _, descendant in ipairs(child:GetDescendants()) do
+	            if descendant.Name == args[1] then -- Если имя потомка 'Laser'
+	                descendant:Destroy() -- Удаляем объект
+	            end
+	        end
+	    end
+	end
+	
+	print("Все объекты с именем 'Laser' удалены из инструментов в персонаже.")
+
 end)
 
 addcmd('removetouch', {'rt'}, function(args, speaker)
