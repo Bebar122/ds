@@ -1,4 +1,4 @@
-print("em941")
+print("em942")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16930,10 +16930,10 @@ end)
 local skipNext = false -- Переменная для отслеживания пропусков
 
 addcmd('setlockpos', {'slp'}, function(args, speaker)
-    if skipNext then
-        skipNext = false -- Сбрасываем, чтобы следующий вызов сработал
-        return -- Пропускаем выполнение команды
-    end
+    --if skipNext then
+        --skipNext = false -- Сбрасываем, чтобы следующий вызов сработал
+        --return -- Пропускаем выполнение команды
+    --end
 	execCmd('unfreezeanims')
 	execCmd('noanim')
 	execCmd('reanim')    
@@ -16962,6 +16962,31 @@ end)
 
 addcmd('setdefradius', {'sdr'}, function(args, speaker)
     circleRadius = tonumber(args[1]) or 10
+end)
+
+addcmd('removetouch', {'rt'}, function(args, speaker)
+    local character = speaker.Character or speaker.CharacterAdded:Wait()
+    if not character then
+        notify("Character not found.")
+        return
+    end
+
+    local tools = character:GetChildren() -- Получаем все объекты в персонаже
+    for _, tool in ipairs(tools) do
+        if tool:IsA("Tool") then -- Проверяем, что это инструмент
+            local handle = tool:FindFirstChild("Handle") -- Ищем Handle
+            if handle and handle:IsA("BasePart") then
+                local touchInterests = handle:GetChildren()
+                for _, child in ipairs(touchInterests) do
+                    if child:IsA("TouchTransmitter") then -- Проверяем, является ли это TouchInterest
+                        child:Destroy() -- Удаляем TouchInterest
+                    end
+                end
+            end
+        end
+    end
+
+    notify("Removed all TouchInterest from tools in your character.")
 end)
 
 
