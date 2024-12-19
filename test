@@ -1,4 +1,4 @@
-print("em95")
+print("em951")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13928,6 +13928,8 @@ addcmd('usehandtools', {}, function(args, speaker)
 end)
 
 
+
+
 addcmd('logs',{},function(args, speaker)
 	logs:TweenPosition(UDim2.new(0, 0, 1, -265), "InOut", "Quart", 0.3, true, nil)
 end)
@@ -17299,6 +17301,34 @@ end)
 addcmd('removecmd',{'deletecmd'},function(args, speaker)
 	removecmd(args[1])
 end)
+
+
+
+local lockPos1 = false
+local unwantedNames = {"DecimateScript", "BoxSelection", "PointLight"}
+local connection
+
+addcmd('defend', {'def'}, function(args, speaker)
+    lockPos1 = not lockPos1
+    if lockPos then
+        connection = RunService.Heartbeat:Connect(function()
+            local character = speaker.Character
+            if character then
+                for _, child in ipairs(character:GetChildren()) do
+                    if table.find(unwantedNames, child.Name) then
+                        child:Destroy()
+                    end
+                end
+            end
+        end)
+    else
+        if connection then
+            connection:Disconnect()
+            connection = nil
+        end
+    end
+end)
+
 
 if IsOnMobile then
 	local QuickCapture = Instance.new("TextButton")
