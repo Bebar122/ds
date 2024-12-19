@@ -1,4 +1,4 @@
-print("em951")
+print("em952")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17310,13 +17310,16 @@ local connection
 
 addcmd('defend', {'def'}, function(args, speaker)
     lockPos1 = not lockPos1
-    if lockPos then
+    if lockPos1 then
+	print('started')
         connection = RunService.Heartbeat:Connect(function()
             local character = speaker.Character
+		--print('work')
             if character then
                 for _, child in ipairs(character:GetChildren()) do
                     if table.find(unwantedNames, child.Name) then
                         child:Destroy()
+			print('deleted')
                     end
                 end
             end
