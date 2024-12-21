@@ -1,4 +1,4 @@
-print("em9521")
+print("em9522")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16684,10 +16684,10 @@ local function moveObjectsToMouse(speaker)
 			local rayOrigin = unitRay.Origin
 			local rayDirection = unitRay.Direction
 			
-			-- Вычисляем точку пересечения луча с плоскостью Y = characterY
-			local t = (characterY - Yoffset - rayOrigin.Y) / rayDirection.Y
+
 		end
-	
+						-- Вычисляем точку пересечения луча с плоскостью Y = characterY
+		local t = (characterY - Yoffset - rayOrigin.Y) / rayDirection.Y
 
 		if not lockPos then
 	    		targetCenter = rayOrigin + rayDirection * t -- Точка на плоскости, куда смотрит мышь
