@@ -1,4 +1,4 @@
-print("em952")
+print("em9521")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16679,15 +16679,16 @@ local function moveObjectsToMouse(speaker)
 	    -- Настраиваем уровень плоскости, где должны двигаться объекты
 		if not lockPos then
 			characterY = character.HumanoidRootPart.Position.Y + Yoffset
+				    -- Получаем луч от камеры через мышку
+			local unitRay = workspace.CurrentCamera:ScreenPointToRay(mouse.X, mouse.Y)
+			local rayOrigin = unitRay.Origin
+			local rayDirection = unitRay.Direction
+			
+			-- Вычисляем точку пересечения луча с плоскостью Y = characterY
+			local t = (characterY - Yoffset - rayOrigin.Y) / rayDirection.Y
 		end
 	
-	    -- Получаем луч от камеры через мышку
-	    local unitRay = workspace.CurrentCamera:ScreenPointToRay(mouse.X, mouse.Y)
-	    local rayOrigin = unitRay.Origin
-	    local rayDirection = unitRay.Direction
-	
-	    -- Вычисляем точку пересечения луча с плоскостью Y = characterY
-	    local t = (characterY - Yoffset - rayOrigin.Y) / rayDirection.Y
+
 		if not lockPos then
 	    		targetCenter = rayOrigin + rayDirection * t -- Точка на плоскости, куда смотрит мышь
 			-- Поворачиваем персонажа в направлении конечной точки
