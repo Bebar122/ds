@@ -16679,14 +16679,14 @@ local function moveObjectsToMouse(speaker)
 	    -- Настраиваем уровень плоскости, где должны двигаться объекты
 		if not lockPos then
 			characterY = character.HumanoidRootPart.Position.Y + Yoffset
-				    -- Получаем луч от камеры через мышку
-			local unitRay = workspace.CurrentCamera:ScreenPointToRay(mouse.X, mouse.Y)
-			local rayOrigin = unitRay.Origin
-			local rayDirection = unitRay.Direction
-			
+
 
 		end
-						-- Вычисляем точку пересечения луча с плоскостью Y = characterY
+						    -- Получаем луч от камеры через мышку
+		local unitRay = workspace.CurrentCamera:ScreenPointToRay(mouse.X, mouse.Y)
+		local rayOrigin = unitRay.Origin
+		local rayDirection = unitRay.Direction
+							-- Вычисляем точку пересечения луча с плоскостью Y = characterY
 		local t = (characterY - Yoffset - rayOrigin.Y) / rayDirection.Y
 
 		if not lockPos then
