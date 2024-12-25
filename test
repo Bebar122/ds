@@ -1,4 +1,4 @@
-print("em953")
+print("em954")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16701,20 +16701,21 @@ local function moveObjectsToMouse(speaker)
 	
 	    -- Обновляем движение объектов
 	    for index, handle in pairs(movingObjects) do
-	        -- Добавляем BodyGyro, если его нет
-	        if not handle:FindFirstChild("BodyGyro") then
-	            local gyro = Instance.new("BodyGyro", handle)
-	            gyro.MaxTorque = Vector3.new(4000, 4000, 4000)
-	            gyro.P = 3000
-	            gyro.CFrame = handle.CFrame
-	        end
-	
-	        -- Добавляем BodyVelocity, если его нет
-	        if not handle:FindFirstChild("BodyVelocity") then
-	            local velocity = Instance.new("BodyVelocity", handle)
-	            velocity.MaxForce = Vector3.new(4000, 4000, 4000)
-	            velocity.P = 1250
-	        end
+		if not handle:FindFirstChild("BodyGyro") then
+		    local gyro = Instance.new("BodyGyro", handle)
+		    -- Увеличиваем MaxTorque, чтобы компенсировать большие массы
+		    gyro.MaxTorque = Vector3.new(1e7, 1e7, 1e7)  -- Увеличено
+		    gyro.P = 3000  -- Можно увеличить для более резкой стабилизации
+		    gyro.CFrame = handle.CFrame
+		end
+		
+		-- Добавляем BodyVelocity, если его нет
+		if not handle:FindFirstChild("BodyVelocity") then
+		    local velocity = Instance.new("BodyVelocity", handle)
+		    -- Увеличиваем MaxForce, чтобы поднимать тяжелые объекты
+		    velocity.MaxForce = Vector3.new(1e7, 1e7, 1e7)  -- Увеличено
+		    velocity.P = 5000  -- Усиливаем для более стабильного ускорения
+		end
 	
 	        -- Получаем существующие BodyGyro и BodyVelocity
 	        local velocity = handle:FindFirstChild("BodyVelocity")
