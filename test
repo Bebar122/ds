@@ -1,4 +1,4 @@
-print("em954")
+print("em955")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16704,8 +16704,8 @@ local function moveObjectsToMouse(speaker)
 		if not handle:FindFirstChild("BodyGyro") then
 		    local gyro = Instance.new("BodyGyro", handle)
 		    -- Увеличиваем MaxTorque, чтобы компенсировать большие массы
-		    gyro.MaxTorque = Vector3.new(1e7, 1e7, 1e7)  -- Увеличено
-		    gyro.P = 3000  -- Можно увеличить для более резкой стабилизации
+		    gyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)  -- Увеличено
+		    gyro.P = 9e4  -- Можно увеличить для более резкой стабилизации
 		    gyro.CFrame = handle.CFrame
 		end
 		
@@ -16713,7 +16713,7 @@ local function moveObjectsToMouse(speaker)
 		if not handle:FindFirstChild("BodyVelocity") then
 		    local velocity = Instance.new("BodyVelocity", handle)
 		    -- Увеличиваем MaxForce, чтобы поднимать тяжелые объекты
-		    velocity.MaxForce = Vector3.new(1e7, 1e7, 1e7)  -- Увеличено
+		    velocity.MaxForce = Vector3.new(9e9, 9e9, 9e9)  -- Увеличено
 		    velocity.P = 5000  -- Усиливаем для более стабильного ускорения
 		end
 	
@@ -16984,7 +16984,7 @@ addcmd('removeobject', {'ro'}, function(args, speaker)
 	    if child:IsA("Tool") then -- Проверяем, что это инструмент (Tool)
 	        -- Перебираем всех потомков инструмента
 	        for _, descendant in ipairs(child:GetDescendants()) do
-	            if descendant.Name == args[1] then -- Если имя потомка 'Laser'
+	            if descendant.Name:lower() == args[1]:lower() then -- Если имя потомка 'Laser'
 	                descendant:Destroy() -- Удаляем объект
 	            end
 	        end
