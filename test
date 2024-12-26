@@ -1,4 +1,4 @@
-print("em955")
+print("em96")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16408,7 +16408,7 @@ end)
 
 
 
-
+local SingleMode = false
 local PointScale = 1
 local smoothingFactor = 0.15
 local speed = 50
@@ -16635,19 +16635,21 @@ local function moveObjectsToMouse(speaker)
     local targetObjectPath = targetObject:GetFullName()
     local targetName = targetObject.Name
     print("Целевой объект: " .. targetObjectPath)  -- Отладка
-
-    -- Найти все объекты в Workspace с таким же именем и аналогичной структурой
-    for _, obj in pairs(workspace:GetChildren()) do
-        if obj.Name == targetName then
-		for _, child in pairs(obj:GetDescendants()) do
-			if child.Name == underM.Name then
-				table.insert(movingObjects, child)
-				--break
+	if SingleMode then
+		table.insert(movingObjects, targetObject)
+	else
+	    -- Найти все объекты в Workspace с таким же именем и аналогичной структурой
+	    for _, obj in pairs(workspace:GetChildren()) do
+	        if obj.Name == targetName then
+			for _, child in pairs(obj:GetDescendants()) do
+				if child.Name == underM.Name then
+					table.insert(movingObjects, child)
+					--break
+				end
 			end
-		end
-        end
-    end
-
+	        end
+	    end
+	end
     if #movingObjects == 0 then
         print("Похожие объекты не найдены.")
         return
@@ -16661,13 +16663,13 @@ local function moveObjectsToMouse(speaker)
 	    execCmd('freezeanims')
 	end)
 
-	lockPos = false
-	circleRadius = 10 -- Радиус окружности
+	--lockPos = false
+	--circleRadius = 10 -- Радиус окружности
 	local angleStep = math.rad(5) -- Угол смещения для вращения объектов
 	local angles = {} -- Храним текущие углы для каждого объекта
 	--smoothingFactor = 0.15 -- Сглаживание поворота (чем меньше, тем плавнее)
-	moveMode = 1
-	speed = 50
+	--moveMode = 1
+	--speed = 50
 	local targetCenter
 	local characterY
 
@@ -16951,6 +16953,10 @@ addcmd('setmovemode', {'smm'}, function(args, speaker)
     notify("Move mode set to: " .. tostring(moveMode)) -- Для отображения текущего режима
 end)
 
+addcmd('setsinglemode', {'ssm'}, function(args, speaker)
+    SingleMode = not SingleMode
+    notify("singlemode: " .. tostring(SingleMode)) -- Для отображения текущего режима
+end)
 
 addcmd('setsmoothing', {'ssf'}, function(args, speaker)
     smoothingFactor = tonumber(args[1]) or 0.15
