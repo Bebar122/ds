@@ -1,4 +1,4 @@
-print("em96")
+print("em961")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16636,7 +16636,7 @@ local function moveObjectsToMouse(speaker)
     local targetName = targetObject.Name
     print("Целевой объект: " .. targetObjectPath)  -- Отладка
 	if SingleMode then
-		table.insert(movingObjects, targetObject)
+		table.insert(movingObjects, underM)
 	else
 	    -- Найти все объекты в Workspace с таким же именем и аналогичной структурой
 	    for _, obj in pairs(workspace:GetChildren()) do
