@@ -1,4 +1,4 @@
-print("em965")
+print("em967")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14759,7 +14759,12 @@ local activeKills = {}
 local connections = {}
 
 addcmd('boneKill', {'bkill'}, function(args, speaker)
-	local partName = args[2] or "Torso"
+	local partName 
+	if args[2] and args[2] == '1' then
+		partName = "Right Arm"
+	else
+		partName = "Torso"
+	end
 	
     local function equipBoneSword()
         while true do
