@@ -1,4 +1,4 @@
-print("em963")
+print("em964")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14793,8 +14793,8 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
                     Tool = speaker.Character:FindFirstChild("BoneSword") or equipBoneSword()
                     Handle = Tool:FindFirstChild("Handle")
                     local targetCharacter = targetPlayer.Character
-                    if targetCharacter and targetCharacter.['Right Arm'] then
-			local part = targetCharacter.['Right Arm']
+                    if targetCharacter and targetCharacter['Right Arm'] then
+			local part = targetCharacter['Right Arm']
 			    firetouchinterest(Handle, part, 1)
 			    firetouchinterest(Handle, part, 0)
                     end
