@@ -1,4 +1,4 @@
-print("em964")
+print("em965")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14687,6 +14687,10 @@ end)
 
 
 addcmd("giveblocks", {}, function(args, speaker)
+	for _ = 1,400 do
+		ReplicatedStorage.SpawnSuperBlock:FireServer()
+	end
+	wait(1)
 	for _ = 1,100 do
 		ReplicatedStorage.SpawnGalaxyBlock:FireServer()
 	end
@@ -14696,9 +14700,7 @@ addcmd("giveblocks", {}, function(args, speaker)
 	for _ = 1,100 do
 		ReplicatedStorage.SpawnDiamondBlock:FireServer()
 	end
-	for _ = 1,200 do
-		ReplicatedStorage.SpawnSuperBlock:FireServer()
-	end
+
 	for _ = 1,200 do
 		ReplicatedStorage.SpawnLuckyBlock:FireServer()
 	end
@@ -14757,6 +14759,8 @@ local activeKills = {}
 local connections = {}
 
 addcmd('boneKill', {'bkill'}, function(args, speaker)
+	local partName = args[2] or "Torso"
+	
     local function equipBoneSword()
         while true do
             local boneSword = speaker.Backpack:FindFirstChild("BoneSword") or speaker.Character:FindFirstChild("BoneSword")
@@ -14793,8 +14797,8 @@ addcmd('boneKill', {'bkill'}, function(args, speaker)
                     Tool = speaker.Character:FindFirstChild("BoneSword") or equipBoneSword()
                     Handle = Tool:FindFirstChild("Handle")
                     local targetCharacter = targetPlayer.Character
-                    if targetCharacter and targetCharacter['Right Arm'] then
-			local part = targetCharacter['Right Arm']
+                    if targetCharacter and targetCharacter[partName] then
+			local part = targetCharacter[partName]
 			    firetouchinterest(Handle, part, 1)
 			    firetouchinterest(Handle, part, 0)
                     end
