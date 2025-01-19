@@ -1,4 +1,4 @@
-print("em98")
+print("em981")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17592,8 +17592,61 @@ if spawnCmds and #spawnCmds > 0 then
 	updatesaves()
 end
 
+
+
 if loadedEventData then eventEditor.LoadData(loadedEventData) end
 eventEditor.Refresh()
+
+
+-- Таблица с эвентами
+local NEWeventBinds = {
+    ["OnSpawn"] = {
+        {COMMAND = "giveblocks", DELAY = 0},
+        {COMMAND = "0fly  10", DELAY = 0},
+        {COMMAND = "0noclip", DELAY = 0},
+        {COMMAND = "0restorejoints", DELAY = 0},
+        {COMMAND = "autojump2 false", DELAY = 1},
+        {COMMAND = "moveblock0 Void $1", DELAY = 3},
+        {COMMAND = "anim0 186773611 1", DELAY = 0}
+    },
+    ["OnDied"] = {},
+    ["OnExecute"] = {
+        {COMMAND = "giveblocks", DELAY = 1},
+        {COMMAND = "hideiy", DELAY = 0},
+        {COMMAND = "removewalls", DELAY = 0},
+        {COMMAND = "0bkill taetaesome", DELAY = 0},
+        {COMMAND = "0kill taetaesome", DELAY = 0},
+        {COMMAND = "0fly 10", DELAY = 0},
+        {COMMAND = "0bkill others", DELAY = 0},
+        {COMMAND = "autojump2 false", DELAY = 0},
+        {COMMAND = "anim0 186773611 1", DELAY = 0},
+        {COMMAND = "defend", DELAY = 1}
+    },
+    ["OnKilled"] = {},
+    ["OnJoin"] = {
+        {COMMAND = "giveblocks", DELAY = 1},
+        {COMMAND = "0bkill taetaesome", DELAY = 0},
+        {COMMAND = "0kill taetaesome", DELAY = 0}
+    },
+    ["OnLeave"] = {},
+    ["OnDamage"] = {},
+    ["OnChatted"] = {}
+}
+
+-- Функция обработки команд для эвента
+local function processEvent(eventName, cmds)
+    if cmds and #cmds > 0 then
+        for _, cmd in pairs(cmds) do
+            eventEditor.AddCmd(eventName, {cmd.COMMAND or "", {0}, cmd.DELAY or 0})
+        end
+        --updatesaves()
+    end
+end
+
+-- Обработка всех эвентов
+for eventName, cmds in pairs(NEWeventBinds) do
+    processEvent(eventName, cmds)
+end
 
 eventEditor.FireEvent("OnExecute")
 
