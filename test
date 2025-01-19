@@ -1,4 +1,4 @@
-print("em967")
+print("em969")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -2816,7 +2816,7 @@ defaultsettings = {
 	logsEnabled = false;
 	jLogsEnabled = false;
 	aliases = {};
-	binds = {};
+	binds = {{"KEY":"Enum.KeyCode.F","ISKEYUP":false,"TOGGLE":"unfly","COMMAND":"fly 5"},{"KEY":"Enum.KeyCode.T","ISKEYUP":false,"TOGGLE":"noesp","COMMAND":"esp"},{"KEY":"Enum.KeyCode.P","ISKEYUP":false,"COMMAND":"killstop"},{"KEY":"Enum.KeyCode.V","ISKEYUP":false,"COMMAND":"clicktp"},{"KEY":"Enum.KeyCode.X","ISKEYUP":false,"COMMAND":"1kill cursor"},{"KEY":"Enum.KeyCode.K","ISKEYUP":false,"COMMAND":"copyname cursor"},{"KEY":"Enum.KeyCode.Comma","ISKEYUP":false,"COMMAND":"dst"},{"KEY":"Enum.KeyCode.LeftAlt","ISKEYUP":false,"COMMAND":"hkill cursor"},{"KEY":"Enum.KeyCode.Z","ISKEYUP":false,"COMMAND":"hkillstop"},{"KEY":"Enum.KeyCode.H","ISKEYUP":false,"COMMAND":"drc"},{"KEY":"Enum.KeyCode.M","ISKEYUP":false,"COMMAND":"permhold 1"},{"KEY":"Enum.KeyCode.RightBracket","ISKEYUP":false,"COMMAND":"ding"},{"KEY":"Enum.KeyCode.LeftBracket","ISKEYUP":false,"COMMAND":"copypos cursor"},{"KEY":"Enum.KeyCode.Y","ISKEYUP":false,"COMMAND":"htouch cursor"},{"KEY":"Enum.KeyCode.C","ISKEYUP":false,"COMMAND":"bkill cursor"},{"KEY":"Enum.KeyCode.KeypadPeriod","ISKEYUP":false,"COMMAND":"shop"},{"KEY":"Enum.KeyCode.L","ISKEYUP":false,"TOGGLE":"showiy","COMMAND":"hideiy"},{"KEY":"Enum.KeyCode.PageDown","ISKEYUP":false,"COMMAND":"playsounds"},{"KEY":"Enum.KeyCode.Z","ISKEYUP":false,"COMMAND":"stopbk"},{"KEY":"Enum.KeyCode.KeypadZero","ISKEYUP":false,"COMMAND":"rj"},{"KEY":"Enum.KeyCode.Down","ISKEYUP":false,"COMMAND":"jobid"},{"KEY":"Enum.KeyCode.J","ISKEYUP":false,"TOGGLE":"stopeffect","COMMAND":"toucheffect cursor"},{"KEY":"Enum.KeyCode.KeypadFive","ISKEYUP":false,"COMMAND":"rainbowtouch cursor"},{"KEY":"Enum.KeyCode.Home","ISKEYUP":false,"COMMAND":"usehandtools"},{"KEY":"Enum.KeyCode.Up","ISKEYUP":false,"COMMAND":"thirdp"},{"KEY":"Enum.KeyCode.Z","ISKEYUP":false,"COMMAND":"stopcbk"},{"KEY":"Enum.KeyCode.KeypadMinus","ISKEYUP":false,"COMMAND":"cbkill cursor"},{"KEY":"Enum.KeyCode.Quote","ISKEYUP":false,"COMMAND":"giveblocks"},{"KEY":"Enum.KeyCode.G","ISKEYUP":false,"COMMAND":"3kill cursor"},{"KEY":"Enum.KeyCode.PageUp","ISKEYUP":false,"COMMAND":"tomyspawn"},{"KEY":"Enum.KeyCode.F12","ISKEYUP":false,"COMMAND":"ivoryuse"},{"KEY":"Enum.KeyCode.F10","ISKEYUP":false,"COMMAND":"notifypos me"},{"KEY":"Enum.KeyCode.F3","ISKEYUP":false,"COMMAND":"tpclone"},{"KEY":"Enum.KeyCode.F4","ISKEYUP":false,"COMMAND":"togglerotate"},{"KEY":"Enum.KeyCode.F5","ISKEYUP":false,"COMMAND":"partname"},{"KEY":"Enum.KeyCode.Up","ISKEYUP":false,"TOGGLE":"stopblocktouch","COMMAND":"blocktouch 1"},{"KEY":"Enum.KeyCode.Space","ISKEYUP":false,"TOGGLE":"flyspeed 5","COMMAND":"flyspeed 1"},{"KEY":"Enum.KeyCode.KeypadSeven","ISKEYUP":false,"COMMAND":"moveX -2"},{"KEY":"Enum.KeyCode.KeypadSeven","ISKEYUP":true,"COMMAND":"stopall"},{"KEY":"Enum.KeyCode.KeypadNine","ISKEYUP":false,"COMMAND":"moveX 2"},{"KEY":"Enum.KeyCode.KeypadNine","ISKEYUP":true,"COMMAND":"stopall"},{"KEY":"Enum.KeyCode.KeypadFour","ISKEYUP":false,"COMMAND":"moveY -2"},{"KEY":"Enum.KeyCode.KeypadFour","ISKEYUP":true,"COMMAND":"stopall"},{"KEY":"Enum.KeyCode.KeypadSix","ISKEYUP":false,"COMMAND":"moveY 2"},{"KEY":"Enum.KeyCode.KeypadSix","ISKEYUP":true,"COMMAND":"stopall"},{"KEY":"Enum.KeyCode.KeypadOne","ISKEYUP":false,"COMMAND":"moveZ -2"},{"KEY":"Enum.KeyCode.KeypadOne","ISKEYUP":true,"COMMAND":"stopall"},{"KEY":"Enum.KeyCode.KeypadThree","ISKEYUP":false,"COMMAND":"moveZ 2"},{"KEY":"Enum.KeyCode.KeypadThree","ISKEYUP":true,"COMMAND":"stopall"},{"KEY":"Enum.KeyCode.KeypadEight","ISKEYUP":false,"COMMAND":"rotateX 1"},{"KEY":"Enum.KeyCode.KeypadEight","ISKEYUP":true,"COMMAND":"stopall"},{"KEY":"Enum.KeyCode.KeypadFive","ISKEYUP":false,"COMMAND":"rotateY 1"},{"KEY":"Enum.KeyCode.KeypadFive","ISKEYUP":true,"COMMAND":"stopall"},{"KEY":"Enum.KeyCode.KeypadTwo","ISKEYUP":true,"COMMAND":"stopall"},{"KEY":"Enum.KeyCode.KeypadTwo","ISKEYUP":false,"COMMAND":"rotateZ 1"},{"KEY":"Enum.KeyCode.KeypadPlus","ISKEYUP":false,"COMMAND":"clonemouse"},{"KEY":"Enum.KeyCode.KeypadPlus","ISKEYUP":true,"COMMAND":"stopclonemouse"},{"KEY":"Enum.KeyCode.KeypadMultiply","ISKEYUP":false,"COMMAND":"setbrot 0 0 0"},{"KEY":"Enum.KeyCode.F2","ISKEYUP":false,"COMMAND":"clset"},{"KEY":"Enum.KeyCode.F6","ISKEYUP":false,"COMMAND":"spawnhp"},{"KEY":"Enum.KeyCode.Slash","ISKEYUP":false,"COMMAND":"tpsclone"},{"KEY":"Enum.KeyCode.J","ISKEYUP":false,"TOGGLE":"stopprojectile","COMMAND":"touchprojectile cursor"},{"KEY":"Enum.KeyCode.U","ISKEYUP":false,"TOGGLE":"ungod","COMMAND":"godm"},{"KEY":"Enum.KeyCode.LeftShift","ISKEYUP":false,"COMMAND":"pushf"},{"KEY":"Enum.KeyCode.LeftShift","ISKEYUP":true,"COMMAND":"pushf"},{"KEY":"Enum.KeyCode.KeypadMultiply","ISKEYUP":false,"COMMAND":"tpsclone"},{"KEY":"Enum.KeyCode.B","ISKEYUP":false,"TOGGLE":"3k","COMMAND":"3k 0.06"},{"KEY":"Enum.KeyCode.End","ISKEYUP":false,"TOGGLE":"ws 25","COMMAND":"ws 55"},{"KEY":"Enum.KeyCode.F4","ISKEYUP":false,"COMMAND":"actcl"},{"KEY":"Enum.KeyCode.Semicolon","ISKEYUP":false,"COMMAND":"tc"},{"KEY":"Enum.KeyCode.RightBracket","ISKEYUP":false,"COMMAND":"kcl 0.4"},{"KEY":"Enum.KeyCode.F7","ISKEYUP":false,"COMMAND":"et SpectralSword"},{"KEY":"Enum.KeyCode.F10","ISKEYUP":false,"COMMAND":"et SpectralSword"},{"KEY":"Enum.KeyCode.F8","ISKEYUP":false,"COMMAND":"mc"},{"KEY":"Enum.KeyCode.MouseMiddleButton","ISKEYUP":false,"COMMAND":"mvo"},{"KEY":"Enum.KeyCode.F11","ISKEYUP":false,"TOGGLE":"clip","COMMAND":"noclip"}};
 	WayPoints = {};
 	PluginsTable = {};
 	currentShade1 = {currentShade1.R,currentShade1.G,currentShade1.B};
@@ -14303,7 +14303,7 @@ end
 
 -- Функция для активации касания объекта Effect
 local function touchEffect3(target)
-    local targetHRP = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+    local targetHRP = target.Character and target.Character:FindFirstChild("Torso")
     if not targetHRP then return end
 
     -- Проходим по всем объектам в Workspace
@@ -14315,8 +14315,9 @@ local function touchEffect3(target)
             if touchInterest then
                 -- Имитируем касание цели
                 firetouchinterest(obj, targetHRP, 0) -- 0 = начало касания
-                wait(0.1) -- небольшая задержка
+                --wait(0.1) -- небольшая задержка
                 firetouchinterest(obj, targetHRP, 1) -- 1 = конец касания
+		break
             end
         end
     end
@@ -14338,7 +14339,7 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
     local players = getPlayer(args[1], speaker)
 
     -- Находим позицию стрелка (вашу позицию)
-    local shooterHRP = speaker.Character:FindFirstChild("HumanoidRootPart")
+    local shooterHRP = speaker.Character:FindFirstChild("Torso")
 
     for _, playerName in pairs(players) do
         local target = Players[playerName]
@@ -14347,10 +14348,10 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
             moveRainbowPeriastronToTarget3(target)
             
             -- Находим HumanoidRootPart цели
-            local targetHRP = target.Character:FindFirstChild("HumanoidRootPart")
-            local humanoid = target.Character:FindFirstChildWhichIsA("Humanoid")
+            local targetHRP = target.Character:FindFirstChild("Torso")
+            --local humanoid = target.Character:FindFirstChildWhichIsA("Humanoid")
 
-            if targetHRP and humanoid and shooterHRP then
+            if targetHRP and shooterHRP then
                 -- Расстояние между стрелком и целью
                 local distance = (targetHRP.Position - shooterHRP.Position).Magnitude
                 
@@ -14368,8 +14369,14 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
                     [1] = predictedPosition
                 }
                 speaker.Character.TriLaserGun.Click:FireServer(unpack(args))
-                wait(0.6) -- Задержка после выстрела
-
+		touchEffect3(target)
+                wait(0.2) -- Задержка после выстрела
+		touchEffect3(target)
+                wait(0.2)
+		touchEffect3(target)
+                wait(0.2)
+		touchEffect3(target)
+                wait(0.4)
                 -- Активируем касание объекта Effect с целью
                 touchEffect3(target)
             end
