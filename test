@@ -1,4 +1,4 @@
-print("em975")
+print("em967")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14303,7 +14303,7 @@ end
 
 -- Функция для активации касания объекта Effect
 local function touchEffect3(target)
-    local targetHRP = target.Character and target.Character:FindFirstChild("Torso")
+    local targetHRP = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
     if not targetHRP then return end
 
     -- Проходим по всем объектам в Workspace
@@ -14315,9 +14315,8 @@ local function touchEffect3(target)
             if touchInterest then
                 -- Имитируем касание цели
                 firetouchinterest(obj, targetHRP, 0) -- 0 = начало касания
-                --wait(0.1) -- небольшая задержка
+                wait(0.1) -- небольшая задержка
                 firetouchinterest(obj, targetHRP, 1) -- 1 = конец касания
-		break
             end
         end
     end
@@ -14339,7 +14338,7 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
     local players = getPlayer(args[1], speaker)
 
     -- Находим позицию стрелка (вашу позицию)
-    local shooterHRP = speaker.Character:FindFirstChild("Torso")
+    local shooterHRP = speaker.Character:FindFirstChild("HumanoidRootPart")
 
     for _, playerName in pairs(players) do
         local target = Players[playerName]
@@ -14348,10 +14347,10 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
             moveRainbowPeriastronToTarget3(target)
             
             -- Находим HumanoidRootPart цели
-            local targetHRP = target.Character:FindFirstChild("Torso")
-            --local humanoid = target.Character:FindFirstChildWhichIsA("Humanoid")
+            local targetHRP = target.Character:FindFirstChild("HumanoidRootPart")
+            local humanoid = target.Character:FindFirstChildWhichIsA("Humanoid")
 
-            if targetHRP and shooterHRP then
+            if targetHRP and humanoid and shooterHRP then
                 -- Расстояние между стрелком и целью
                 local distance = (targetHRP.Position - shooterHRP.Position).Magnitude
                 
@@ -14369,14 +14368,8 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
                     [1] = predictedPosition
                 }
                 speaker.Character.TriLaserGun.Click:FireServer(unpack(args))
-		touchEffect3(target)
-                wait(0.2) -- Задержка после выстрела
-		touchEffect3(target)
-                wait(0.2)
-		touchEffect3(target)
-                wait(0.2)
-		touchEffect3(target)
-                wait(0.4)
+                wait(0.6) -- Задержка после выстрела
+
                 -- Активируем касание объекта Effect с целью
                 touchEffect3(target)
             end
@@ -17352,42 +17345,6 @@ addcmd('defend', {'def'}, function(args, speaker)
         end
     end
 end)
-
-
-
-
-
-
-
-
---[[local bindsConfig = {
-    {KEY = "Enum.KeyCode.F", ISKEYUP = false, TOGGLE = "unfly", COMMAND = "fly 5"},
-    {KEY = "Enum.KeyCode.T", ISKEYUP = false, TOGGLE = "noesp", COMMAND = "esp"},
-    {KEY = "Enum.KeyCode.P", ISKEYUP = false, COMMAND = "killstop"},
-    {KEY = "Enum.KeyCode.V", ISKEYUP = false, COMMAND = "clicktp"},
-    {KEY = "Enum.KeyCode.X", ISKEYUP = false, COMMAND = "1kill cursor"},
-    {KEY = "Enum.KeyCode.K", ISKEYUP = false, COMMAND = "copyname cursor"}
-}
-
--- Функция для добавления биндов из конфигурации
-for _, bind in ipairs(bindsConfig) do
-	if bind.TOGGLE then
-    		addbind(bind.COMMAND, bind.KEY, bind.ISKEYUP, bind.TOGGLE)
-	else
-		addbind(bind.COMMAND, bind.KEY, bind.ISKEYUP)
-	end
-end]]
-
-
-
-
-
-
-
-
-
-
-
 
 
 if IsOnMobile then
