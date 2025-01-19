@@ -1,4 +1,4 @@
-print("em971")
+print("em972")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17361,7 +17361,7 @@ end)
 
 
 
-local bindsConfig = {
+--[[local bindsConfig = {
     {KEY = "Enum.KeyCode.F", ISKEYUP = false, TOGGLE = "unfly", COMMAND = "fly 5"},
     {KEY = "Enum.KeyCode.T", ISKEYUP = false, TOGGLE = "noesp", COMMAND = "esp"},
     {KEY = "Enum.KeyCode.P", ISKEYUP = false, COMMAND = "killstop"},
@@ -17373,7 +17373,7 @@ local bindsConfig = {
 -- Функция для добавления биндов из конфигурации
 for _, bind in ipairs(bindsConfig) do
     addbind(bind.COMMAND, bind.KEY, bind.ISKEYUP, bind.TOGGLE)
-end
+end]]
 
 
 
