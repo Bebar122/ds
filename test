@@ -17378,7 +17378,6 @@ for _, bind in ipairs(bindsConfig) do
 	end
 end
 
-refreshbinds()
 
 
 
