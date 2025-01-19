@@ -1,4 +1,4 @@
-print("em967")
+print("em968")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14303,7 +14303,7 @@ end
 
 -- Функция для активации касания объекта Effect
 local function touchEffect3(target)
-    local targetHRP = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+    local targetHRP = target.Character and target.Character:FindFirstChild("Torso")
     if not targetHRP then return end
 
     -- Проходим по всем объектам в Workspace
@@ -14315,8 +14315,9 @@ local function touchEffect3(target)
             if touchInterest then
                 -- Имитируем касание цели
                 firetouchinterest(obj, targetHRP, 0) -- 0 = начало касания
-                wait(0.1) -- небольшая задержка
+                --wait(0.1) -- небольшая задержка
                 firetouchinterest(obj, targetHRP, 1) -- 1 = конец касания
+		break
             end
         end
     end
@@ -14338,7 +14339,7 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
     local players = getPlayer(args[1], speaker)
 
     -- Находим позицию стрелка (вашу позицию)
-    local shooterHRP = speaker.Character:FindFirstChild("HumanoidRootPart")
+    local shooterHRP = speaker.Character:FindFirstChild("Torso")
 
     for _, playerName in pairs(players) do
         local target = Players[playerName]
@@ -14347,10 +14348,10 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
             moveRainbowPeriastronToTarget3(target)
             
             -- Находим HumanoidRootPart цели
-            local targetHRP = target.Character:FindFirstChild("HumanoidRootPart")
-            local humanoid = target.Character:FindFirstChildWhichIsA("Humanoid")
+            local targetHRP = target.Character:FindFirstChild("Torso")
+            --local humanoid = target.Character:FindFirstChildWhichIsA("Humanoid")
 
-            if targetHRP and humanoid and shooterHRP then
+            if targetHRP and shooterHRP then
                 -- Расстояние между стрелком и целью
                 local distance = (targetHRP.Position - shooterHRP.Position).Magnitude
                 
@@ -14368,8 +14369,14 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
                     [1] = predictedPosition
                 }
                 speaker.Character.TriLaserGun.Click:FireServer(unpack(args))
-                wait(0.6) -- Задержка после выстрела
-
+		touchEffect3(target)
+                wait(0.2) -- Задержка после выстрела
+		touchEffect3(target)
+                wait(0.2)
+		touchEffect3(target)
+                wait(0.2)
+		touchEffect3(target)
+                wait(0.4)
                 -- Активируем касание объекта Effect с целью
                 touchEffect3(target)
             end
