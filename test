@@ -1,4 +1,4 @@
-print("em986")
+print("em988")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14314,7 +14314,8 @@ local function touchEffect3(target, tool, flag)
         if obj:IsA("BasePart") and obj.Name == "Effect" then
             -- Проверяем, есть ли у объекта TouchInterest
             local touchInterest = obj:FindFirstChildOfClass("TouchTransmitter")
-            if touchInterest then
+		local box = obj:FindFirstChild("SelectionBox")
+            if touchInterest and box then
                 -- Имитируем касание цели
                 firetouchinterest(obj, targetHRP, 0) -- 0 = начало касания
                 firetouchinterest(obj, targetHRP, 1) -- 1 = конец касания
@@ -14366,6 +14367,12 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
                     [1] = predictedPosition
                 }
 		toolEquipped = speaker.Character.TriLaserGun
+		if toolEquipped.Handle.Reload then
+			toolEquipped.Handle.Reload:Destroy()
+		end
+		if toolEquipped.Handle.Fire then
+			toolEquipped.Handle.Fire:Destroy()
+		end
                 toolEquipped.Click:FireServer(unpack(args))
 		touchEffect3(target, toolEquipped, flag)
                 wait(0.2) -- Задержка после выстрела
