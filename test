@@ -1,4 +1,4 @@
-print("em989")
+print("em99")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14320,7 +14320,7 @@ local function touchEffect3(target, tool, flag)
                 firetouchinterest(obj, targetHRP, 0) -- 0 = начало касания
                 firetouchinterest(obj, targetHRP, 1) -- 1 = конец касания
 		if flag then
-			wait(0.3)
+			wait(0.1)
 			tool:Destroy()
 		end
 		break
@@ -14375,7 +14375,7 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
 		end
                 toolEquipped.Click:FireServer(unpack(args))
 		touchEffect3(target, toolEquipped, flag)
-                wait(0.2) -- Задержка после выстрела
+                wait(0.1) -- Задержка после выстрела
 		touchEffect3(target, toolEquipped, flag)
                 wait(0.2)
 		touchEffect3(target, toolEquipped, flag)
@@ -14448,7 +14448,7 @@ addcmd('startfreeze', {'freezeEf'}, function(args, speaker)
 				wait(1)
 			end
 	        end
-		wait(0.1)
+		wait(0.05)
 	end
 end)
 
