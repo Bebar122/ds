@@ -1,4 +1,4 @@
-print("em981")
+print("em983")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14304,7 +14304,7 @@ local function moveRainbowPeriastronToTarget3(target)
 end
 
 -- Функция для активации касания объекта Effect
-local function touchEffect3(target)
+local function touchEffect3(target, tool, flag)
     local targetHRP = target.Character and target.Character:FindFirstChild("Torso")
     if not targetHRP then return end
 
@@ -14317,8 +14317,10 @@ local function touchEffect3(target)
             if touchInterest then
                 -- Имитируем касание цели
                 firetouchinterest(obj, targetHRP, 0) -- 0 = начало касания
-                --wait(0.1) -- небольшая задержка
                 firetouchinterest(obj, targetHRP, 1) -- 1 = конец касания
+		if flag then
+			tool:Destroy()
+		end
 		break
             end
         end
@@ -14328,8 +14330,11 @@ end
 -- Основная команда для выполнения всех действий
 addcmd('3kill', {'3laserkill'}, function(args, speaker)
     -- Установите скорость полета пули (можете настроить это значение под себя)
-    local bulletSpeed = tonumber(args[1]) or 120 -- Скорость пули в студии (измените на свою)
-
+    local bulletSpeed = 120 -- Скорость пули в студии (измените на свою)
+	local flag = false
+	if args[2] == '1' then
+		flag = true
+	end
     -- Проверяем наличие TriLaserGun в руках или экипируем его из инвентаря
     local toolEquipped = speaker.Character:FindFirstChild("TriLaserGun") or equipTool3(speaker, "TriLaserGun")
     if not toolEquipped then
@@ -14354,33 +14359,22 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
             --local humanoid = target.Character:FindFirstChildWhichIsA("Humanoid")
 
             if targetHRP and shooterHRP then
-                -- Расстояние между стрелком и целью
-                local distance = (targetHRP.Position - shooterHRP.Position).Magnitude
-                
-                -- Время полёта пули
-                local flightTime = distance / bulletSpeed
 
-                -- Рассчитываем скорость персонажа
-                local targetVelocity = targetHRP.Velocity
-                
-                -- Предсказанная позиция с учётом скорости цели и времени полёта пули
-                local predictedPosition = targetHRP.Position + (targetVelocity * flightTime)
-
-                -- Стреляем в предсказанную позицию цели
+                local predictedPosition = shooterHRP.Position + Vector3.new(0,-10,0)
                 local args = {
                     [1] = predictedPosition
                 }
-                speaker.Character.TriLaserGun.Click:FireServer(unpack(args))
-		touchEffect3(target)
+                toolEquipped.Click:FireServer(unpack(args))
+		touchEffect3(target, toolEquipped, flag)
                 wait(0.2) -- Задержка после выстрела
-		touchEffect3(target)
+		touchEffect3(target, toolEquipped, flag)
                 wait(0.2)
-		touchEffect3(target)
+		touchEffect3(target, toolEquipped, flag)
                 wait(0.2)
-		touchEffect3(target)
+		touchEffect3(target, toolEquipped, flag)
                 wait(0.4)
                 -- Активируем касание объекта Effect с целью
-                touchEffect3(target)
+                touchEffect3(target, toolEquipped, flag)
             end
         end
     end
@@ -14426,6 +14420,30 @@ end)
 -- Команда для остановки касаний объектов Effect
 addcmd('stopeffect', {}, function(args, speaker)
     if effectServ then effectServ:Disconnect() end -- Отключаем RenderStepped, чтобы остановить касания
+end)
+
+
+
+
+
+local feffectServ
+-- Команда для активации постоянного касания объектов Effect
+addcmd('startfreeze', {'freezeEf'}, function(args, speaker)
+    if feffectServ then feffectServ:Disconnect() end -- Отключаем предыдущее подключение, если оно было
+
+    feffectServ = RunService.RenderStepped:Connect(function()
+        local players = getPlayer(args[1], speaker)
+        for _, player in pairs(players) do
+		if player.Character.Torso.Anchored == false then
+			execCmd('3laserkill ' .. player.Name .. ' 1')
+		end
+        end
+    end)
+end)
+
+-- Команда для остановки касаний объектов Effect
+addcmd('stopfreeze', {}, function(args, speaker)
+    if feffectServ then feffectServ:Disconnect() end -- Отключаем RenderStepped, чтобы остановить касания
 end)
 
 
@@ -17443,6 +17461,8 @@ local bindsConfig = {
     {KEY="Enum.KeyCode.Q", ISKEYUP=false, COMMAND="actq"},
     {KEY="Enum.KeyCode.E", ISKEYUP=false, COMMAND="acte"},
     {KEY="LeftClick", ISKEYUP=false, COMMAND="usehandtools"},
+	{KEY="Enum.KeyCode.PageDown", ISKEYUP=false, COMMAND="startfreeze cursor"},
+	{KEY="Enum.KeyCode.Z", ISKEYUP=false, COMMAND="stopfreeze"},
     {KEY="Enum.KeyCode.KeypadSeven", ISKEYUP=false, TOGGLE="ungrabtools", COMMAND="grabtools"}
 }
 
@@ -17623,7 +17643,7 @@ local NEWeventBinds = {
         {COMMAND = "0bkill others", DELAY = 0},
         {COMMAND = "autojump2 false", DELAY = 0},
         {COMMAND = "anim0 186773611 1", DELAY = 0},
-	{COMMAND = "spawnhp", DELAY = 5},
+	{COMMAND = "spawnhp", DELAY = 7},
         {COMMAND = "defend", DELAY = 1}
     },
     ["OnKilled"] = {},
