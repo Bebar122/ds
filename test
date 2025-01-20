@@ -1,4 +1,4 @@
-print("em988")
+print("em989")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14367,10 +14367,10 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
                     [1] = predictedPosition
                 }
 		toolEquipped = speaker.Character.TriLaserGun
-		if toolEquipped.Handle.Reload then
+		if toolEquipped.Handle:FindFirstChild("Reload") then
 			toolEquipped.Handle.Reload:Destroy()
 		end
-		if toolEquipped.Handle.Fire then
+		if toolEquipped.Handle:FindFirstChild("Fire") then
 			toolEquipped.Handle.Fire:Destroy()
 		end
                 toolEquipped.Click:FireServer(unpack(args))
