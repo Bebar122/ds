@@ -1,4 +1,4 @@
-print("em983")
+print("em984")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14364,6 +14364,7 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
                 local args = {
                     [1] = predictedPosition
                 }
+		toolEquipped = speaker.Character.TriLaserGun
                 toolEquipped.Click:FireServer(unpack(args))
 		touchEffect3(target, toolEquipped, flag)
                 wait(0.2) -- Задержка после выстрела
@@ -14434,8 +14435,8 @@ addcmd('startfreeze', {'freezeEf'}, function(args, speaker)
     feffectServ = RunService.RenderStepped:Connect(function()
         local players = getPlayer(args[1], speaker)
         for _, player in pairs(players) do
-		if player.Character.Torso.Anchored == false then
-			execCmd('3laserkill ' .. player.Name .. ' 1')
+		if Players[player].Character.Torso.Anchored == false then
+			execCmd('3laserkill ' .. player .. ' 1')
 		end
         end
     end)
