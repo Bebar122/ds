@@ -1,4 +1,4 @@
-print("em2")
+print("em3")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14511,11 +14511,11 @@ addcmd('starttimestop', {'timestop'}, function(args, speaker)
 	        end
 		wait(0.05)
 	end
-end)
+end)]]
 
 addcmd('stoptimestop', {}, function(args, speaker)
     teffectServ = false 
-end)]]
+end)
 
 
 
