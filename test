@@ -1,4 +1,4 @@
-print("em99")
+print("em991")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14321,7 +14321,22 @@ local function touchEffect3(target, tool, flag)
                 firetouchinterest(obj, targetHRP, 1) -- 1 = конец касания
 		if flag then
 			wait(0.1)
-			tool:Destroy()
+			if targetHRP:FindFirstChild("SelectionBox") and tool then
+				tool:Destroy()
+			end
+			wait(0.1)
+			if targetHRP:FindFirstChild("SelectionBox") and tool then
+				tool:Destroy()
+			end
+			wait(0.1)
+			if targetHRP:FindFirstChild("SelectionBox") and tool then
+				tool:Destroy()
+			end
+			wait(0.3)
+			if targetHRP:FindFirstChild("SelectionBox") and tool then
+				tool:Destroy()
+			end
+			
 		end
 		break
             end
