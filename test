@@ -1,4 +1,4 @@
-print("em991")
+print("em992")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14303,6 +14303,13 @@ local function moveRainbowPeriastronToTarget3(target)
     end
 end
 
+
+local globalMultiPl = 1
+
+addcmd("setglobal", {'sgm'}, function(args, speaker)
+    globalMultiPl = tonumber(args[1]) or 1
+end)
+
 -- Функция для активации касания объекта Effect
 local function touchEffect3(target, tool, flag)
     local targetHRP = target.Character and target.Character:FindFirstChild("Torso")
@@ -14320,8 +14327,9 @@ local function touchEffect3(target, tool, flag)
                 firetouchinterest(obj, targetHRP, 0) -- 0 = начало касания
                 firetouchinterest(obj, targetHRP, 1) -- 1 = конец касания
 		if flag then
-			wait(0.1)
-			if targetHRP:FindFirstChild("SelectionBox") and tool then
+			wait(0.2 * globalMultiPl)
+			tool:Destroy()
+			--[[if targetHRP:FindFirstChild("SelectionBox") and tool then
 				tool:Destroy()
 			end
 			wait(0.1)
@@ -14335,7 +14343,7 @@ local function touchEffect3(target, tool, flag)
 			wait(0.3)
 			if targetHRP:FindFirstChild("SelectionBox") and tool then
 				tool:Destroy()
-			end
+			end]]
 			
 		end
 		break
