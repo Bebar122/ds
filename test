@@ -1,4 +1,4 @@
-print("em984")
+print("em985")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14319,6 +14319,7 @@ local function touchEffect3(target, tool, flag)
                 firetouchinterest(obj, targetHRP, 0) -- 0 = начало касания
                 firetouchinterest(obj, targetHRP, 1) -- 1 = конец касания
 		if flag then
+			wait(0.3)
 			tool:Destroy()
 		end
 		break
@@ -14436,7 +14437,10 @@ addcmd('startfreeze', {'freezeEf'}, function(args, speaker)
         local players = getPlayer(args[1], speaker)
         for _, player in pairs(players) do
 		if Players[player].Character.Torso.Anchored == false then
+			feffectServ:Pause()
 			execCmd('3laserkill ' .. player .. ' 1')
+			wait(1)
+			feffectServ:Run()
 		end
         end
     end)
