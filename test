@@ -1,4 +1,4 @@
-print("em992")
+print("em993")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17494,6 +17494,8 @@ local bindsConfig = {
     {KEY="Enum.KeyCode.KeypadNine", ISKEYUP=false, COMMAND="setlockpos"},
     {KEY="Enum.KeyCode.Q", ISKEYUP=false, COMMAND="actq"},
     {KEY="Enum.KeyCode.E", ISKEYUP=false, COMMAND="acte"},
+	{KEY="Enum.KeyCode.LeftShift", ISKEYUP=false, COMMAND="pushf"},
+	{KEY="Enum.KeyCode.LeftShift", ISKEYUP=true, COMMAND="pushf"},
     {KEY="LeftClick", ISKEYUP=false, COMMAND="usehandtools"},
 	{KEY="Enum.KeyCode.PageDown", ISKEYUP=false, COMMAND="startfreeze cursor"},
 	{KEY="Enum.KeyCode.Z", ISKEYUP=false, COMMAND="stopfreeze"},
