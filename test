@@ -1,4 +1,4 @@
-print("em994")
+print("em995")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14488,7 +14488,7 @@ local function touchTime(target)
     for _, obj in pairs(workspace:GetChildren()) do
         if obj:FindFirstChild("TimeStop") then
             local touchInterest = obj:FindFirstChildOfClass("TouchTransmitter")
-            if touchInterest and box then
+            if touchInterest then
                 firetouchinterest(obj, targetHRP, 0)
                 firetouchinterest(obj, targetHRP, 1) 
 		print('touched')
