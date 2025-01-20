@@ -17775,7 +17775,7 @@ end
 
 eventEditor.FireEvent("OnExecute")
 
-if aliases and #aliases > 0 then
+--[[if aliases and #aliases > 0 then
 	local cmdMap = {}
 	for i,v in pairs(cmds) do
 		cmdMap[v.NAME:lower()] = v
@@ -17791,7 +17791,7 @@ if aliases and #aliases > 0 then
 		end
 	end
 	refreshaliases()
-end
+end]]
 
 IYMouse.Move:Connect(checkTT)
 
