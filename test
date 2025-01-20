@@ -1,4 +1,4 @@
-print("em993")
+print("em994")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14481,6 +14481,49 @@ addcmd('stopfreeze', {}, function(args, speaker)
 end)
 
 
+local function touchTime(target)
+    local targetHRP = target.Character and target.Character:FindFirstChild("Torso")
+    if not targetHRP then return end
+
+    for _, obj in pairs(workspace:GetChildren()) do
+        if obj:FindFirstChild("TimeStop") then
+            local touchInterest = obj:FindFirstChildOfClass("TouchTransmitter")
+            if touchInterest and box then
+                firetouchinterest(obj, targetHRP, 0)
+                firetouchinterest(obj, targetHRP, 1) 
+		print('touched')
+		break
+            end
+        end
+    end
+end
+
+
+local teffectServ = false
+-- Команда для активации постоянного касания объектов Effect
+addcmd('starttimestop', {'timestop'}, function(args, speaker)
+    teffectServ = true
+	local players = getPlayer(args[1], speaker)
+	while teffectServ do
+	        
+	        for _, player in pairs(players) do
+			if Players[player].Character.Torso.Anchored == false then
+				touchTime(Players[player])
+				wait(1)
+			end
+	        end
+		wait(0.05)
+	end
+end)
+
+-- Команда для остановки касаний объектов Effect
+addcmd('stoptimestop', {}, function(args, speaker)
+    teffectServ = false -- Отключаем RenderStepped, чтобы остановить касания
+end)
+
+
+
+
 local projectileServ -- Переменная для хранения подключения RenderStepped
 
 -- Функция для касания объектов Projectile с целью
@@ -17043,6 +17086,16 @@ end)
 
 addcmd('removeobject', {'ro'}, function(args, speaker)
 	-- Скрипт для удаления объектов с именем 'Laser' из потомков каждого Tool в персонаже
+	local target = args[1]
+
+	if target == "1" then 
+		target = "EnableBackpack"
+	end
+
+	if target == "2" then 
+		target = "BodyGyro"
+		execCmd('ro BodyPosition')
+	end
 	
 	-- Получаем персонажа игрока
 	local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
@@ -17057,7 +17110,7 @@ addcmd('removeobject', {'ro'}, function(args, speaker)
 	    if child:IsA("Tool") then -- Проверяем, что это инструмент (Tool)
 	        -- Перебираем всех потомков инструмента
 	        for _, descendant in ipairs(child:GetDescendants()) do
-	            if descendant.Name:lower() == args[1]:lower() then -- Если имя потомка 'Laser'
+	            if descendant.Name:lower() == target:lower() then -- Если имя потомка 'Laser'
 	                descendant:Destroy() -- Удаляем объект
 	            end
 	        end
@@ -17499,6 +17552,7 @@ local bindsConfig = {
     {KEY="LeftClick", ISKEYUP=false, COMMAND="usehandtools"},
 	{KEY="Enum.KeyCode.PageDown", ISKEYUP=false, COMMAND="startfreeze cursor"},
 	{KEY="Enum.KeyCode.Z", ISKEYUP=false, COMMAND="stopfreeze"},
+	{KEY="Enum.KeyCode.Z", ISKEYUP=false, COMMAND="stoptimestop"},
     {KEY="Enum.KeyCode.KeypadSeven", ISKEYUP=false, TOGGLE="ungrabtools", COMMAND="grabtools"}
 }
 
