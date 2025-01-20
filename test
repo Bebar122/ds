@@ -1,4 +1,4 @@
-print("em998")
+print("em999")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14481,44 +14481,56 @@ addcmd('stopfreeze', {}, function(args, speaker)
 end)
 
 
---[[local function touchTime(target)
-    local targetHRP = target.Character and target.Character:FindFirstChild("Torso")
+local function touchTime(target)
+    local targetHRP = target.Character and (target.Character:FindFirstChild("Torso") or target.Character:FindFirstChild("UpperTorso") or target.Character:FindFirstChild("HumanoidRootPart"))
     if not targetHRP then return end
 
     for _, obj in pairs(workspace:GetChildren()) do
         if obj:FindFirstChild("TimeStop") then
             local touchInterest = obj:FindFirstChildOfClass("TouchTransmitter")
             if touchInterest then
+                print("Touching object:", obj.Name, "with target:", targetHRP.Name)
                 firetouchinterest(obj, targetHRP, 0)
-                firetouchinterest(obj, targetHRP, 1) 
-		print('touched')
-		break
+                firetouchinterest(obj, targetHRP, 1)
+                print('touched')
+                break
+            else
+                print("No TouchTransmitter found in object:", obj.Name)
             end
         end
     end
 end
 
-
 local teffectServ = false
--- Команда для активации постоянного касания объектов Effect
+
 addcmd('starttimestop', {'timestop'}, function(args, speaker)
     teffectServ = true
-	local players = getPlayer(args[1], speaker)
-	while teffectServ do	        
-	        for _, player in pairs(players) do
-			if Players[player].Character.Torso.Anchored == false then
-				touchTime(Players[player])
-				wait(1)
-			end
-	        end
-		wait(0.05)
-	end
+    local players = getPlayer(args[1], speaker)
+    while teffectServ do
+        if #players == 0 then
+            print("No players found")
+            break
+        end
+
+        for _, player in pairs(players) do
+            local targetPlayer = Players:FindFirstChild(player)
+            if targetPlayer and targetPlayer.Character then
+                local torso = targetPlayer.Character:FindFirstChild("Torso")
+                if torso and not torso.Anchored then
+                    touchTime(targetPlayer)
+                    wait(1)
+                end
+            else
+                print("Player not found or invalid:", player)
+            end
+        end
+        wait(0.05)
+    end
 end)
 
--- Команда для остановки касаний объектов Effect
 addcmd('stoptimestop', {}, function(args, speaker)
-    teffectServ = false -- Отключаем RenderStepped, чтобы остановить касания
-end)]]
+    teffectServ = false
+end)
 
 
 
