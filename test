@@ -1,4 +1,4 @@
-print("em3")
+print("em4")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14497,21 +14497,21 @@ local function touchmime(target)
 end
 
 
---[[local teffectServ = false
+local teffectServ = false
 
-addcmd('starttimestop', {'timestop'}, function(args, speaker)
-    teffectServ = true
+addcmd('starttims', {'tims'}, function(args, speaker)
+	teffectServ = true
 	local players = getPlayer(args[1], speaker)
 	while teffectServ do	        
-	        for _, player in pairs(players) do
+		for _, player in pairs(players) do
 			if Players[player].Character.Torso.Anchored == false then
 				touchmime(Players[player])
 				wait(1)
 			end
-	        end
+		end
 		wait(0.05)
 	end
-end)]]
+end)
 
 addcmd('stoptimestop', {}, function(args, speaker)
     teffectServ = false 
