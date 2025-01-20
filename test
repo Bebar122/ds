@@ -1,4 +1,4 @@
-print("em1")
+print("em2")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14497,7 +14497,7 @@ local function touchmime(target)
 end
 
 
-local teffectServ = false
+--[[local teffectServ = false
 
 addcmd('starttimestop', {'timestop'}, function(args, speaker)
     teffectServ = true
@@ -14515,7 +14515,7 @@ end)
 
 addcmd('stoptimestop', {}, function(args, speaker)
     teffectServ = false 
-end)
+end)]]
 
 
 
