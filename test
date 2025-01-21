@@ -1,4 +1,4 @@
-print("em6")
+print("em7")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14497,8 +14497,8 @@ local function touchmime(target)
 end
 
 
-local teffectServ = false
---[[
+--[[local teffectServ = false
+
 addcmd('starttims', {'tims'}, function(args, speaker)
 	teffectServ = true
 	local players = getPlayer(args[1], speaker)
