@@ -1,4 +1,4 @@
-print("em8")
+print("em9")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17533,7 +17533,7 @@ local bindsConfig = {
     {KEY="Enum.KeyCode.RightBracket", ISKEYUP=false, COMMAND="kcl 0.4"},
     {KEY="Enum.KeyCode.F7", ISKEYUP=false, COMMAND="et SpectralSword"},
 	{KEY="Enum.KeyCode.F10", ISKEYUP=false, COMMAND="et SpectralSword"},
-    {KEY="Enum.KeyCode.F8", ISKEYUP=false, COMMAND="mc"},
+    {KEY="Enum.KeyCode.F8", ISKEYUP=false, COMMAND="setsinglemode"},
     {KEY="Enum.KeyCode.F11", ISKEYUP=false, TOGGLE="clip", COMMAND="noclip"},
     {KEY="Enum.KeyCode.V", ISKEYUP=false, COMMAND="mvo"},
     {KEY="RightClick", ISKEYUP=false, COMMAND="fish"},
