@@ -1,4 +1,4 @@
-print("em9")
+print("em10")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -10922,15 +10922,18 @@ end)
 
 
 addcmd("spawnhp", {"spawnhp"}, function(args, speaker)
-	execCmd('et Carrot')
-	wait(0.3)
 	game:GetService("Players").LocalPlayer.Backpack.OverseerwrathSword.Parent = speaker.Character
 	for i=1, 11 do
 		task.wait(0.25)
 		execCmd('permhold 1')
 	end
-	--hum = speaker.Character:FindFirstChild("Humanoid")
-	--hum:UnequipTools()
+	wait(0.1)
+	hum = speaker.Character:FindFirstChild("Humanoid")
+	hum:UnequipTools()
+	wait(0.1)
+	execCmd('et Carrot')
+	wait(0.1)
+	speaker.Character.Carrot:Activate()
 end)
 
 addcmd("clsetup", {"clset"}, function(args, speaker)
