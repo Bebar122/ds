@@ -1,4 +1,4 @@
-print("em14")
+print("em15")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13538,7 +13538,7 @@ addcmd('lagswitch',{},function(args, speaker)
 				end
 			    end
 			end
-			--wait(0.5)
+			wait(2.5)
 		end
 	end
 end)
