@@ -1,4 +1,4 @@
-print("em15")
+print("em16")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13512,7 +13512,7 @@ addcmd('lagswitch',{},function(args, speaker)
 
 	local stool
 	local LOOP_NUM = 1
-	local firstBlocks = 100	
+	local firstBlocks = 170	
 
 	if currentlag then
 		while currentlag do
@@ -13521,7 +13521,7 @@ addcmd('lagswitch',{},function(args, speaker)
 			    if v.Name == "Void" or v.Name == "Lucky" or v.Name == "Galaxy" or v.Name == "Super" or v.Name == "Diamond" then
 				count = count + 1
 				v.Parent = speaker.Character
-				if count >= firstBlocks then
+				if count >= firstBlocks or not currentlag then
 					break
 				end
 			    end
@@ -13532,13 +13532,13 @@ addcmd('lagswitch',{},function(args, speaker)
 				v.Parent = speaker.Character
 				count = count + 1
 				wait(0.1)
-				if count >= 100 then
+				if count >= 100 or not currentlag then
 					speaker.Character:FindFirstChildOfClass("Humanoid"):UnequipTools()
 					break
 				end
 			    end
 			end
-			wait(2.5)
+			wait(0.5)
 		end
 	end
 end)
