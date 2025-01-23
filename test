@@ -1,4 +1,4 @@
-print("em12")
+print("em14")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -15169,6 +15169,18 @@ end)
 addcmd('stopTouching', {'stopblocktouch'}, function(args, speaker)
     isTouching = false -- Останавливаем процесс касания
     print("Касание блоков остановлено.")
+end)
+
+
+addcmd('getblocks', {'gb'}, function(args, speaker)
+	local delay = tonumber(args[1]) or 10
+	execCmd('blocktouch 1')
+	execCmd('blocktouch 2')
+	execCmd('blocktouch 3')
+	execCmd('blocktouch 4')
+	execCmd('blocktouch 5')
+	wait(delay)
+	execCmd('stopblocktouch')
 end)
 
 
