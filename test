@@ -1,3 +1,4 @@
+
 print("em11")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
@@ -13506,47 +13507,6 @@ addcmd('permhold',{},function(args, speaker)
 	    end
 end)
 
-
-local currentlag
-currentlag = false
-addcmd('lagswitch',{},function(args, speaker)
-	currentlag = not currentlag
-
-	local stool
-	local LOOP_NUM = 1
-	local firstBlocks = 200	
-
-	if currentlag then
-		while currentlag do
-			local count = 0
-			for i, v in pairs(speaker:FindFirstChildOfClass("Backpack"):GetChildren()) do
-			    if v.Name == "Void" or v.Name == "Lucky" or v.Name == "Galaxy" or v.Name == "Super" or v.Name == "Diamond" then
-				count = count + 1
-				v.Parent = speaker.Character
-				if count >= firstBlocks then
-					break
-				end
-			    end
-			end			
-			count = 0
-			for i, v in pairs(speaker:FindFirstChildOfClass("Backpack"):GetChildren()) do
-			    if  v.Name == "Void" or v.Name == "Lucky" or v.Name == "Galaxy" or v.Name == "Super" or v.Name == "Diamond"  then
-				v.Parent = speaker.Character
-				count = count + 1
-				wait(0.1)
-				if count >= 100 then
-					speaker.Character:FindFirstChildOfClass("Humanoid"):UnequipTools()
-					break
-				end
-			    end
-			end
-			--wait(0.5)
-		end
-	end
-end)
-
-
-
 addcmd('unequiptools',{},function(args, speaker)
 	speaker.Character:FindFirstChildOfClass('Humanoid'):UnequipTools()
 end)
@@ -15114,19 +15074,13 @@ local function startTouchingBlocks(spawn, blockType)
     elseif blockType == 3 then
         block1 = spawn.Givers.BlockGiverDiamond1.ColoredParts.TouchMe
         block2 = spawn.Givers.BlockGiverDiamond2.ColoredParts.TouchMe
-	elseif blockType == 4 then
-	        block1 = spawn.Givers.BlockGiverGalaxy1.ColoredParts.TouchMe
-	        block2 = spawn.Givers.BlockGiverGalaxy2.ColoredParts.TouchMe
-	elseif blockType == 5 then
-	        block1 = spawn.Givers.BlockGiverLucky1.ColoredParts.TouchMe
-	        block2 = spawn.Givers.BlockGiverLucky2.ColoredParts.TouchMe
     else
         print("Неверный тип блока. Используйте 1 (Void), 2 (Super) или 3 (Diamond).")
         return
     end
 
     local player = game.Players.LocalPlayer
-    local leftArm = player.Character:FindFirstChild("Left Arm") or player.Character:FindFirstChild("Torso")
+    local leftArm = player.Character:FindFirstChild("Left Arm") or player.Character:FindFirstChild("LeftHand")
     if not leftArm then
         print("Left Arm не найден.")
         return
@@ -15145,7 +15099,7 @@ local function startTouchingBlocks(spawn, blockType)
         firetouchinterest(leftArm, block2, 0)
 
         -- Делаем небольшую паузу между циклами
-        task.wait()
+        task.wait(0.1)
     end
 end
 
