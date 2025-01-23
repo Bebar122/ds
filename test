@@ -1,4 +1,4 @@
-print("em16")
+print("em17")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13512,7 +13512,7 @@ addcmd('lagswitch',{},function(args, speaker)
 
 	local stool
 	local LOOP_NUM = 1
-	local firstBlocks = 170	
+	local firstBlocks = 300	
 
 	if currentlag then
 		while currentlag do
