@@ -1,4 +1,4 @@
-print("em10")
+print("em11")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -10934,6 +10934,8 @@ addcmd("spawnhp", {"spawnhp"}, function(args, speaker)
 	execCmd('et Carrot')
 	wait(0.1)
 	speaker.Character.Carrot:Activate()
+	wait(0.5)
+	execCmd('giveblocks')
 end)
 
 addcmd("clsetup", {"clset"}, function(args, speaker)
@@ -17732,7 +17734,7 @@ local NEWeventBinds = {
         {COMMAND = "0bkill others", DELAY = 0},
         {COMMAND = "autojump2 false", DELAY = 0},
         {COMMAND = "anim0 186773611 1", DELAY = 0},
-	{COMMAND = "spawnhp", DELAY = 7},
+	{COMMAND = "spawnhp", DELAY = 5},
         {COMMAND = "defend", DELAY = 1}
     },
     ["OnKilled"] = {},
