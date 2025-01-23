@@ -13512,7 +13512,7 @@ addcmd('lagswitch',{},function(args, speaker)
 
 	local stool
 	local LOOP_NUM = 1
-	local firstBlocks = 200	
+	local firstBlocks = 100	
 
 	if currentlag then
 		while currentlag do
@@ -17539,7 +17539,7 @@ local bindsConfig = {
     {KEY="Enum.KeyCode.KeypadFive", ISKEYUP=false, COMMAND="rainbowtouch cursor"},
     {KEY="Enum.KeyCode.Up", ISKEYUP=false, COMMAND="thirdp"},
     {KEY="Enum.KeyCode.Z", ISKEYUP=false, COMMAND="stopcbk"},
-    {KEY="Enum.KeyCode.KeypadMinus", ISKEYUP=false, COMMAND="cbkill cursor"},
+    {KEY="Enum.KeyCode.KeypadMinus", ISKEYUP=false, COMMAND="lagswitch"},
     {KEY="Enum.KeyCode.Quote", ISKEYUP=false, COMMAND="giveblocks"},
     {KEY="Enum.KeyCode.G", ISKEYUP=false, COMMAND="3kill cursor"},
     {KEY="Enum.KeyCode.PageUp", ISKEYUP=false, COMMAND="tomyspawn"},
