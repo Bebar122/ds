@@ -1,4 +1,4 @@
-print("em21")
+print("em22")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13599,7 +13599,7 @@ addcmd('lagswitch',{},function(args, speaker)
 			    if  v.Name == "Void" or v.Name == "Lucky" or v.Name == "Galaxy" or v.Name == "Super" or v.Name == "Diamond"  then
 				v.Parent = speaker.Character
 				count = count + 1
-				wait(0.1)
+				wait(0.05)
 				if count >= 100 or not currentlag then
 					speaker.Character:FindFirstChildOfClass("Humanoid"):UnequipTools()
 					break
