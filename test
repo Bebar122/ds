@@ -1,4 +1,4 @@
-print("em18")
+print("em19")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13507,12 +13507,17 @@ addcmd('permhold',{},function(args, speaker)
 end)
 
 
+addcmd("setfirstblocks", {'sfb'}, function(args, speaker)
+   firstBlocks = tonumber(args[1]) or 400
+end)
+
+
 addcmd('lagswitch',{},function(args, speaker)
 	currentlag = not currentlag
 
 	local stool
 	local LOOP_NUM = 1
-	local firstBlocks = 400	
+	firstBlocks = 400	
 
 	if currentlag then
 		while currentlag do
