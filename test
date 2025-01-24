@@ -1,4 +1,4 @@
-print("em17")
+print("em18")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -2809,12 +2809,12 @@ currentText2 = Color3.new(0, 0, 0)
 currentScroll = Color3.fromRGB(78,78,79)
 
 defaultsettings = {
-	prefix = ';';
+	prefix = '';
 	StayOpen = false;
 	espTransparency = 0.3;
 	keepIY = true;
-	logsEnabled = false;
-	jLogsEnabled = false;
+	logsEnabled = true;
+	jLogsEnabled = true;
 	aliases = {};
 	binds = {};
 	WayPoints = {};
@@ -13512,7 +13512,7 @@ addcmd('lagswitch',{},function(args, speaker)
 
 	local stool
 	local LOOP_NUM = 1
-	local firstBlocks = 300	
+	local firstBlocks = 400	
 
 	if currentlag then
 		while currentlag do
@@ -13538,7 +13538,7 @@ addcmd('lagswitch',{},function(args, speaker)
 				end
 			    end
 			end
-			wait(0.5)
+			wait(0.2)
 		end
 	end
 end)
