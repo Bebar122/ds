@@ -13517,7 +13517,7 @@ addcmd('lagswitch',{},function(args, speaker)
 
 	local stool
 	local LOOP_NUM = 1
-	firstBlocks = 400	
+	--firstBlocks = 400	
 
 	if currentlag then
 		while currentlag do
@@ -17795,7 +17795,7 @@ local NEWeventBinds = {
         {COMMAND = "0fly 10", DELAY = 0},
         {COMMAND = "0bkill others", DELAY = 0},
         {COMMAND = "autojump2 false", DELAY = 0},
-        {COMMAND = "anim0 186773611 1", DELAY = 0},
+        {COMMAND = "sfb", DELAY = 0},
 	{COMMAND = "spawnhp", DELAY = 5},
         {COMMAND = "defend", DELAY = 1}
     },
