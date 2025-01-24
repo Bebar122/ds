@@ -13196,17 +13196,19 @@ addcmd('ding',{},function(args, speaker)
 	end
 end)
 
-
-local soundModeEnabled = false
-local soundKeybinds = {
-    F = 1,
-    G = 2,
-    H = 3,
-    J = 4
-}
-
--- Сохранение звуковых объектов
-local sounds = {}
+local function globalvars()
+	soundModeEnabled = false
+	soundKeybinds = {
+	    F = 1,
+	    G = 2,
+	    H = 3,
+	    J = 4
+	}
+	
+	-- Сохранение звуковых объектов
+	sounds = {}
+end
+globalvars()
 
 -- Функция для переключения режима
 addcmd('togglesoundmode', {'tsm'}, function(args, speaker)
