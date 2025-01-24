@@ -1,4 +1,4 @@
-print("em20")
+print("em21")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13208,10 +13208,10 @@ end)
 
 
 -- Функция для переключения режима
-addcmd('togglesoundmode', {'tsm'}, function(args, speaker)
+addcmd('togglesoundmode', {'pls'}, function(args, speaker)
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
-    local harmonica = character:FindFirstChild('Harmonica')
+    local harmonica = character:FindFirstChild('Harmonica') or character:FindFirstChild('WitchesBrewHat')
     
     if not harmonica then
         notify('Harmonica accessory not found.')
@@ -13236,7 +13236,7 @@ addcmd('togglesoundmode', {'tsm'}, function(args, speaker)
         notify('No sounds found in Harmonica.')
         return
     end
-
+	execCmd('rebinds')
     -- Переключение режима
     soundModeEnabled = not soundModeEnabled
     if soundModeEnabled then
