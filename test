@@ -1,4 +1,4 @@
-print("em19")
+print("em20")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13195,6 +13195,70 @@ addcmd('ding',{},function(args, speaker)
 		workspace.Ding.Playing=true
 	end
 end)
+
+
+local soundModeEnabled = false
+local soundKeybinds = {
+    F = 1,
+    G = 2,
+    H = 3,
+    J = 4
+}
+
+-- Сохранение звуковых объектов
+local sounds = {}
+
+-- Функция для переключения режима
+addcmd('togglesoundmode', {'tsm'}, function(args, speaker)
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local harmonica = character:FindFirstChild('Harmonica')
+    
+    if not harmonica then
+        notify('Harmonica accessory not found.')
+        return
+    end
+
+    local handle = harmonica:FindFirstChild('Handle')
+    if not handle then
+        notify('Handle not found in Harmonica.')
+        return
+    end
+
+    -- Обновление списка звуков
+    sounds = {}
+    for _, obj in pairs(handle:GetChildren()) do
+        if obj:IsA('Sound') then
+            table.insert(sounds, obj)
+        end
+    end
+
+    if #sounds == 0 then
+        notify('No sounds found in Harmonica.')
+        return
+    end
+
+    -- Переключение режима
+    soundModeEnabled = not soundModeEnabled
+    if soundModeEnabled then
+        notify('Sound mode enabled. Found ' .. #sounds .. ' sounds.')
+    else
+        notify('Sound mode disabled.')
+    end
+end)
+
+-- Функция для обработки нажатий клавиш
+game:GetService('UserInputService').InputBegan:Connect(function(input, isProcessed)
+    if isProcessed or not soundModeEnabled then return end
+    local key = input.KeyCode.Name
+    local soundIndex = soundKeybinds[key]
+    if soundIndex and sounds[soundIndex] then
+        local sound = sounds[soundIndex]
+        sound.Playing = not sound.Playing
+    end
+end)
+
+
 
 addcmd('playAllSounds', {'playsounds'}, function(args, speaker)
     -- Функция для включения/выключения звука, если это объект Sound
