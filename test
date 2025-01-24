@@ -13194,9 +13194,6 @@ addcmd('ding',{},function(args, speaker)
 	else
 		workspace.Ding.Playing=true
 	end
-end)
-
-local function globalvars()
 	soundModeEnabled = false
 	soundKeybinds = {
 	    F = 1,
@@ -13207,8 +13204,8 @@ local function globalvars()
 	
 	-- Сохранение звуковых объектов
 	sounds = {}
-end
-globalvars()
+end)
+
 
 -- Функция для переключения режима
 addcmd('togglesoundmode', {'tsm'}, function(args, speaker)
@@ -17858,7 +17855,7 @@ local NEWeventBinds = {
         {COMMAND = "removewalls", DELAY = 0},
         {COMMAND = "0bkill taetaesome", DELAY = 0},
         {COMMAND = "0kill taetaesome", DELAY = 0},
-        {COMMAND = "0fly 10", DELAY = 0},
+        {COMMAND = "ding", DELAY = 1},
         {COMMAND = "0bkill others", DELAY = 0},
         {COMMAND = "autojump2 false", DELAY = 0},
         {COMMAND = "sfb", DELAY = 0},
