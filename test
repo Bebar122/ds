@@ -1,4 +1,4 @@
-print("em271")
+print("em273")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13283,8 +13283,8 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
     -- Ищем объект Part с Mesh и звуком Deploy
     local part = speaker.Character:WaitForChild("Part", 1)
     if part then
-        local mesh = part:FindFirstChildWhichIsA("Mesh")
-        local deploySound = part:FindFirstChild("Deploy")
+        local mesh = part:WaitForChild("Mesh", 0.5)
+        local deploySound = part:WaitForChild("Deploy", 0.5)
         
         if mesh and deploySound then
             -- Удаляем Mesh
