@@ -1,4 +1,4 @@
-print("em279")
+print("em28")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13273,6 +13273,7 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 	    local periastron = speaker.Backpack:FindFirstChild("ChartreusePeriastron")
 	    
 	    if periastron then
+		periastron.Handle:Destroy()
 		-- Берем инструмент в руки
 		periastron.Server.ShieldScript.Reflect:Destroy()
 		periastron.Parent = speaker.Character
@@ -13280,7 +13281,7 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 		execCmd('actq')
 		--wait()
 		--periastron.Parent = speaker.Backpack
-		task.delay(0.1, function()
+		task.delay(0.8, function()
 			periastron:Destroy()
 		end)     
 	    else
