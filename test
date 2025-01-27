@@ -1,4 +1,4 @@
-print("em273")
+print("em274")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13271,12 +13271,16 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
     
     if periastron then
         -- Берем инструмент в руки
+	periastron.Server.ShieldScript.Reflect
         periastron.Parent = speaker.Character
 	wait()
         execCmd('actq')
 	wait()
-        -- Удаляем инструмент
-        periastron:Destroy()
+	periastron.Parent = speaker.Backpack
+        task.delay(2, function()
+		periastron:Destroy()
+        end)
+        
     else
         return notify('Error', 'ChartreusePeriastron not found')
     end
@@ -13287,6 +13291,7 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
         local deploySound = part:WaitForChild("Deploy", 0.5)
         
         if mesh and deploySound then
+		deploySound:Destroy()
             -- Удаляем Mesh
             mesh:Destroy()
             notify('Success', 'Mesh removed from Part')
