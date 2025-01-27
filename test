@@ -1,4 +1,4 @@
-print("em26")
+print("em27")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13265,7 +13265,39 @@ game:GetService('UserInputService').InputBegan:Connect(function(input, isProcess
     end
 end)
 
-
+addcmd('handleperiastron', {'shield'}, function(args, speaker)
+    -- Получаем инструмент ChartreusePeriastron
+    local periastron = speaker.Backpack:FindFirstChild("ChartreusePeriastron")
+    
+    if periastron then
+        -- Берем инструмент в руки
+        periastron.Parent = speaker.Character
+	wait()
+        execCmd('actq')
+	wait()
+        -- Удаляем инструмент
+        periastron:Destroy()
+    else
+        return notify('Error', 'ChartreusePeriastron not found')
+    end
+    
+    -- Ищем объект Part с Mesh и звуком Deploy
+    local part = speaker.Character:FindFirstChild("Part")
+    if part then
+        local mesh = part:FindFirstChildWhichIsA("Mesh")
+        local deploySound = part:FindFirstChild("Deploy")
+        
+        if mesh and deploySound then
+            -- Удаляем Mesh
+            mesh:Destroy()
+            notify('Success', 'Mesh removed from Part')
+        else
+            return notify('Error', 'Part does not contain Mesh or Deploy sound')
+        end
+    else
+        return notify('Error', 'Part not found in workspace')
+    end
+end)
 
 addcmd('playAllSounds', {'playsounds'}, function(args, speaker)
     -- Функция для включения/выключения звука, если это объект Sound
@@ -17693,6 +17725,7 @@ local bindsConfig = {
 	{KEY="Enum.KeyCode.PageDown", ISKEYUP=false, COMMAND="startfreeze cursor"},
 	{KEY="Enum.KeyCode.Z", ISKEYUP=false, COMMAND="stopfreeze"},
 	{KEY="Enum.KeyCode.Z", ISKEYUP=false, COMMAND="stoptimestop"},
+	{KEY="Enum.KeyCode.N", ISKEYUP=false, COMMAND="shield"},
     {KEY="Enum.KeyCode.KeypadSeven", ISKEYUP=false, TOGGLE="ungrabtools", COMMAND="grabtools"}
 }
 
