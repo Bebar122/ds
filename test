@@ -1,4 +1,4 @@
-print("em274")
+print("em275")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13266,41 +13266,49 @@ game:GetService('UserInputService').InputBegan:Connect(function(input, isProcess
 end)
 
 addcmd('handleperiastron', {'shield'}, function(args, speaker)
-    -- Получаем инструмент ChartreusePeriastron
-    local periastron = speaker.Backpack:FindFirstChild("ChartreusePeriastron")
-    
-    if periastron then
-        -- Берем инструмент в руки
-	periastron.Server.ShieldScript.Reflect:Destroy()
-        periastron.Parent = speaker.Character
-	wait()
-        execCmd('actq')
-	wait()
-	periastron.Parent = speaker.Backpack
-        task.delay(2, function()
-		periastron:Destroy()
-        end)
-        
-    else
-        return notify('Error', 'ChartreusePeriastron not found')
-    end
-    -- Ищем объект Part с Mesh и звуком Deploy
-    local part = speaker.Character:WaitForChild("Part", 1)
-    if part then
-        local mesh = part:WaitForChild("Mesh", 0.5)
-        local deploySound = part:WaitForChild("Deploy", 0.5)
-        
-        if mesh and deploySound then
-		deploySound:Destroy()
-            -- Удаляем Mesh
-            mesh:Destroy()
-            notify('Success', 'Mesh removed from Part')
-        else
-            return notify('Error', 'Part does not contain Mesh or Deploy sound')
-        end
-    else
-        return notify('Error', 'Part not found in workspace')
-    end
+	shieldbool = true
+	local delay = tonumber(args[1]) or 10
+	while shieldbool do
+	    -- Получаем инструмент ChartreusePeriastron
+	    local periastron = speaker.Backpack:FindFirstChild("ChartreusePeriastron")
+	    
+	    if periastron then
+		-- Берем инструмент в руки
+		periastron.Server.ShieldScript.Reflect:Destroy()
+		periastron.Parent = speaker.Character
+		wait()
+		execCmd('actq')
+		--wait()
+		--periastron.Parent = speaker.Backpack
+		task.delay(0.1, function()
+			periastron:Destroy()
+		end)     
+	    else
+		return notify('Error', 'ChartreusePeriastron not found')
+	    end
+	    -- Ищем объект Part с Mesh и звуком Deploy
+	    local part = speaker.Character:WaitForChild("Part", 1)
+	    if part then
+		local mesh = part:WaitForChild("Mesh", 0.5)
+		local deploySound = part:WaitForChild("Deploy", 0.5)
+		
+		if mesh and deploySound then
+			deploySound:Destroy()
+		    -- Удаляем Mesh
+		    mesh:Destroy()
+		    notify('Success', 'Mesh removed from Part')
+		else
+		    return notify('Error', 'Part does not contain Mesh or Deploy sound')
+		end
+	    else
+		return notify('Error', 'Part not found in workspace')
+	    end
+		wait(delay)
+	end
+end)
+
+addcmd('stophandleperiastron', {'stopshield'}, function(args, speaker)
+	shieldbool = false
 end)
 
 addcmd('playAllSounds', {'playsounds'}, function(args, speaker)
@@ -17729,7 +17737,7 @@ local bindsConfig = {
 	{KEY="Enum.KeyCode.PageDown", ISKEYUP=false, COMMAND="startfreeze cursor"},
 	{KEY="Enum.KeyCode.Z", ISKEYUP=false, COMMAND="stopfreeze"},
 	{KEY="Enum.KeyCode.Z", ISKEYUP=false, COMMAND="stoptimestop"},
-	{KEY="Enum.KeyCode.N", ISKEYUP=false, COMMAND="shield"},
+	{KEY="Enum.KeyCode.N", ISKEYUP=false, TOGGLE="stopshield", COMMAND="shield"},
     {KEY="Enum.KeyCode.KeypadSeven", ISKEYUP=false, TOGGLE="ungrabtools", COMMAND="grabtools"}
 }
 
