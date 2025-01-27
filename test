@@ -1,4 +1,4 @@
-print("em23")
+print("em24")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13562,7 +13562,7 @@ addcmd('permhold',{},function(args, speaker)
 	        for i, v in pairs(speaker:FindFirstChildOfClass("Backpack"):GetChildren()) do
 	            if v.Name:lower() == stool then
 	                v.Parent = speaker.Character
-	                wait()
+	                --wait()
 	            end
 	        end
 	        wait(0.5)
@@ -17220,8 +17220,13 @@ addcmd('removeobject', {'ro'}, function(args, speaker)
 	end
 
 	if target == "2" then 
+		target = "Script"
+	end
+
+	if target == "3" then 
 		target = "BodyGyro"
 		execCmd('ro BodyPosition')
+		execCmd('ro Script')
 	end
 	
 	-- Получаем персонажа игрока
