@@ -13271,7 +13271,7 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
     
     if periastron then
         -- Берем инструмент в руки
-	periastron.Server.ShieldScript.Reflect
+	periastron.Server.ShieldScript.Reflect:Destroy()
         periastron.Parent = speaker.Character
 	wait()
         execCmd('actq')
