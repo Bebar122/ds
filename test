@@ -17865,7 +17865,7 @@ local NEWeventBinds = {
         {COMMAND = "0bkill others", DELAY = 0},
         {COMMAND = "autojump2 false", DELAY = 0},
         {COMMAND = "sfb", DELAY = 0},
-	{COMMAND = "spawnhp", DELAY = 5},
+	{COMMAND = "spawnhp", DELAY = 7},
         {COMMAND = "defend", DELAY = 1}
     },
     ["OnKilled"] = {},
