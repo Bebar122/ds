@@ -1,4 +1,4 @@
-print("em25")
+print("em26")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -11729,29 +11729,30 @@ addcmd('copyposition', {'copypos'}, function(args, speaker)
         local char = Players[v].Character
         local root = char and (getRoot(char) or char:FindFirstChildWhichIsA("BasePart"))
         local pos = root and root.Position
+        local cframe = root and root.CFrame
         
-        if not pos then
-            return notify('Getposition Error', 'Missing character')
+        if not pos or not cframe then
+            return notify('Getposition Error', 'Missing character or CFrame')
         end
         
         -- Получаем направление, в котором смотрит целевой игрок
-        local targetCFrame = root.CFrame
-        local offset = targetCFrame.lookVector * -3 -- 3 - это расстояние за спиной
+        local lookVector = cframe.lookVector
+        local offset = lookVector * -3 -- 3 - это расстояние за спиной
         
         -- Вычисляем новую позицию за спиной целевого игрока
         local newPos = pos + offset
         
-        -- Округляем координаты позиции
-        local roundedPos = Vector3.new(math.round(newPos.X), math.round(newPos.Y), math.round(newPos.Z))
+        -- Создаем CFrame для новой позиции, развернутый лицом к спине цели
+        local newCFrame = CFrame.new(newPos, pos) -- Смотрим на позицию цели
         
         -- Получаем главную часть тела игрока, вызвавшего команду
         local speakerChar = speaker.Character
         if speakerChar and getRoot(speakerChar) then
-            -- Перемещаем игрока на новую позицию
-            getRoot(speakerChar).CFrame = CFrame.new(roundedPos)
+            -- Перемещаем игрока на новую позицию с правильной ротацией
+            getRoot(speakerChar).CFrame = newCFrame
         end
-        
-        -- Копируем позицию в буфер обмена в виде строки
+	local roundedPos = Vector3.new(math.round(newPos.X), math.round(newPos.Y), math.round(newPos.Z))
+                -- Копируем позицию в буфер обмена в виде строки
         toClipboard(roundedPos.X .. ", " .. roundedPos.Y .. ", " .. roundedPos.Z)
     end
 end)
