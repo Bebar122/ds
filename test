@@ -1,4 +1,4 @@
-print("em298")
+print("em299")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13275,43 +13275,43 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 	while shieldbool do
 		local periastron
 	    -- Получаем инструмент ChartreusePeriastron
-		if #greenshields > 10 then 
+		if #greenshields > 5 then 
 			periastron = greenshields[shieldindex]
 			if not periastron then
 				table.remove(greenshields, shieldindex)
 				execCmd('et ChartreusePeriastron')
-				wait(0.3)
+				wait()
 				execCmd('permhold 1')
-				wait(0.5)
+				wait()
 				periastron = speaker.Backpack:WaitForChild("ChartreusePeriastron", 6)
 				table.insert(greenshields, periastron)
-				wait(0.1)
+				--wait(0.1)
 				speaker.Character.Humanoid:UnequipTools()
-				wait(0.1)
+				wait()
 			end
 			shieldindex = shieldindex + 1
-			if shieldindex > 9 then
+			if shieldindex > 4 then
 				shieldindex = 1
 			end
 		else
 				execCmd('et ChartreusePeriastron')
-				wait(0.3)
+				wait()
 				execCmd('permhold 1')
-				wait(0.5)
+				wait()
 				periastron = speaker.Backpack:WaitForChild("ChartreusePeriastron", 6)
 				table.insert(greenshields, periastron)
-				wait(0.1)
+				--wait(0.1)
 				speaker.Character.Humanoid:UnequipTools()
-				wait(0.1)
+				wait()
 		end
 		print(#greenshields)
 	    if periastron then
 		periastron.Parent = speaker.Character
 		wait()
-		if periastron.Handle then 
+		if periastron:FindFirstChild("Handle") then 
 			periastron.Handle:Destroy()
 		end
-		if periastron.Server.ShieldScript.Reflect then
+		if periastron.Server.ShieldScript:FindFirstChild("Reflect") then
 			periastron.Server.ShieldScript.Reflect:Destroy()
 		end
 		
