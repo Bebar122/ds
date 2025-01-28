@@ -1,4 +1,4 @@
-print("em296")
+print("em297")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13285,6 +13285,9 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 				wait(0.5)
 				periastron = speaker.Backpack:WaitForChild("ChartreusePeriastron", 6)
 				table.insert(greenshields, periastron)
+				wait(0.1)
+				speaker.Character.Humanoid:UnequipTools()
+				wait(0.1)
 			end
 			shieldindex = shieldindex + 1
 			if shieldindex > 9 then
@@ -13297,11 +13300,12 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 				wait(0.5)
 				periastron = speaker.Backpack:WaitForChild("ChartreusePeriastron", 6)
 				table.insert(greenshields, periastron)
+				wait(0.1)
+				speaker.Character.Humanoid:UnequipTools()
+				wait(0.1)
 		end
 		print(#greenshields)
 	    if periastron then
-		speaker.Character.Humanoid:UnequipTools()
-		wait()
 		if periastron.Handle then 
 			periastron.Handle:Destroy()
 		end
@@ -13315,8 +13319,8 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 		--periastron.Parent = speaker.Backpack
 		task.delay(1, function()
 			--periastron:Destroy()
-			--periastron.Parent = speaker.Backpack
-			speaker.Character.Humanoid:UnequipTools()
+			periastron.Parent = speaker.Backpack
+			--speaker.Character.Humanoid:UnequipTools()
 		end)     
 	    else
 		return notify('Error', 'ChartreusePeriastron not found')
