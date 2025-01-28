@@ -13277,7 +13277,7 @@ addcmd('handleperiastron', {''}, function(args, speaker)
 	    -- Получаем инструмент ChartreusePeriastron
 		if #greenshields > 5 then 
 			
-			if not greenshields[shieldindex] periastron then
+			if not greenshields[shieldindex] then
 				table.remove(greenshields, shieldindex)
 				execCmd('et ChartreusePeriastron')
 				wait()
