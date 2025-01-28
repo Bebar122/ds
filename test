@@ -1,4 +1,4 @@
-print("em33")
+print("em331")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13271,7 +13271,7 @@ end)
 
 addcmd('handleperiastron', {'shield'}, function(args, speaker)
 	shieldbool = true
-	local delay = tonumber(args[1]) or 10
+	local delay = tonumber(args[1]) or 9
 	while shieldbool do
 		local periastron
 	    -- Получаем инструмент ChartreusePeriastron
@@ -13339,7 +13339,7 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 		local deploySound = part:FindFirstChild("Deploy")
 		
 		if not mesh or not deploySound then
-		    part:Destroy()
+		    part.Name = "PPartT"
 		end
 	    end
 		local part = speaker.Character:WaitForChild("Part", 1)
@@ -13355,10 +13355,10 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 			--local reflect = speaker.Character:WaitForChild("ShieldScript", 0.1)
 			--reflect.Reflect:Destroy()
 		else
-		    return notify('Error', 'Part does not contain Mesh or Deploy sound')
+		    notify('Error', 'Part does not contain Mesh or Deploy sound')
 		end
 	    else
-		return notify('Error', 'Part not found in workspace')
+		notify('Error', 'Part not found in workspace')
 	    end
 		wait(delay)
 	end
