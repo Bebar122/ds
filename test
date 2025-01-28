@@ -1,4 +1,4 @@
-print("em292")
+print("em294")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13281,7 +13281,7 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 				table.remove(greenshields, shieldindex)
 				execCmd('et ChartreusePeriastron')
 				execCmd('permhold 1')
-				wait(0.2)
+				wait(0.5)
 				periastron = speaker.Backpack:WaitForChild("ChartreusePeriastron", 1)
 				table.insert(greenshields, periastron)
 			end
@@ -13292,10 +13292,11 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 		else
 				execCmd('et ChartreusePeriastron')
 				execCmd('permhold 1')
-				wait(0.2)
+				wait(0.5)
 				periastron = speaker.Backpack:WaitForChild("ChartreusePeriastron", 1)
 				table.insert(greenshields, periastron)
 		end
+		print(#greenshields)
 	    if periastron then
 		speaker.Character.Humanoid:UnequipTools()
 		wait()
