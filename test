@@ -1,4 +1,4 @@
-print("em28")
+print("em29")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13212,6 +13212,10 @@ addcmd('ding',{},function(args, speaker)
 	
 	-- Сохранение звуковых объектов
 	sounds = {}
+
+	greenshields = {}
+
+	shieldindex = 1
 end)
 
 
@@ -13269,20 +13273,42 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 	shieldbool = true
 	local delay = tonumber(args[1]) or 10
 	while shieldbool do
+		local periastron
 	    -- Получаем инструмент ChartreusePeriastron
-	    local periastron = speaker.Backpack:FindFirstChild("ChartreusePeriastron")
-	    
+		if #greenshields > 10 then 
+			periastron = greenshields[shieldindex]
+			if not periastron then
+				table.remove(greenshields, shieldindex)
+				execCmd('et ChartreusePeriastron')
+				execCmd('permhold 1')
+				wait()
+				periastron = speaker.Backpack:WaitForChild("ChartreusePeriastron", 1)
+				table.insert(greenshields, periastron)
+			end
+			shieldindex = shieldindex + 1
+			if shieldindex > 9 then
+				shieldindex = 1
+			end
+		else
+				execCmd('et ChartreusePeriastron')
+				execCmd('permhold 1')
+				wait()
+				periastron = speaker.Backpack:WaitForChild("ChartreusePeriastron", 1)
+				table.insert(greenshields, periastron)
+		end
 	    if periastron then
+		speaker.Character.Humanoid:UnequipTools()
+		wait()
 		periastron.Handle:Destroy()
-		-- Берем инструмент в руки
 		periastron.Server.ShieldScript.Reflect:Destroy()
 		periastron.Parent = speaker.Character
 		wait()
 		execCmd('actq')
 		--wait()
 		--periastron.Parent = speaker.Backpack
-		task.delay(0.8, function()
-			periastron:Destroy()
+		task.delay(1, function()
+			--periastron:Destroy()
+			periastron.Parent = speaker.Backpack
 		end)     
 	    else
 		return notify('Error', 'ChartreusePeriastron not found')
@@ -17676,7 +17702,7 @@ local bindsConfig = {
     {KEY="Enum.KeyCode.Z", ISKEYUP=false, COMMAND="hkillstop"},
     {KEY="Enum.KeyCode.H", ISKEYUP=false, COMMAND="drc"},
     {KEY="Enum.KeyCode.M", ISKEYUP=false, COMMAND="permhold 1"},
-    {KEY="Enum.KeyCode.RightBracket", ISKEYUP=false, COMMAND="ding"},
+    --{KEY="Enum.KeyCode.RightBracket", ISKEYUP=false, COMMAND="ding"},
     {KEY="Enum.KeyCode.LeftBracket", ISKEYUP=false, COMMAND="copypos cursor"},
     {KEY="Enum.KeyCode.Y", ISKEYUP=false, COMMAND="htouch cursor"},
     {KEY="Enum.KeyCode.C", ISKEYUP=false, COMMAND="bkill cursor"},
