@@ -1,4 +1,4 @@
-print("em30")
+print("em31")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13276,8 +13276,9 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 		local periastron
 	    -- Получаем инструмент ChartreusePeriastron
 		if #greenshields > 4 then 
-			
+			print(shieldindex)
 			if not greenshields[shieldindex] then
+				print('false')
 				table.remove(greenshields, shieldindex)
 				execCmd('et ChartreusePeriastron')
 				wait()
@@ -13289,6 +13290,7 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 				speaker.Character.Humanoid:UnequipTools()
 				wait()
 			else
+				print('true')
 				periastron = greenshields[shieldindex]
 			end
 			shieldindex = shieldindex + 1
