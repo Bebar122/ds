@@ -5686,10 +5686,10 @@ addcmd('godmode', {'godm'}, function(args, speaker)
 
     -- 2. Активируем щит
     wait(0.1)  -- Ждем немного, чтобы убедиться, что меч экипирован
-    local Args = {
+    local shieldArgs = {
         [1] = Enum.KeyCode.Q
     }
-    player.Character.ChartreusePeriastron.Remote:FireServer(unpack(Args))
+    player.Character.ChartreusePeriastron.Remote:FireServer(unpack(shieldArgs))
 
     -- 3. Убираем ChartreusePeriastron из рук
     wait(0.5)
@@ -13213,9 +13213,9 @@ addcmd('ding',{},function(args, speaker)
 	-- Сохранение звуковых объектов
 	sounds = {}
 
-	greens = {}
+	greenshields = {}
 
-	index = 1
+	shieldindex = 1
 end)
 
 
@@ -13269,13 +13269,13 @@ game:GetService('UserInputService').InputBegan:Connect(function(input, isProcess
     end
 end)
 
-addcmd('handleperiastron', {''}, function(args, speaker)
+addcmd('handleperiastron', {'shield'}, function(args, speaker)
 	shieldbool = true
 	local delay = tonumber(args[1]) or 10
 	while shieldbool do
 		local periastron
 	    -- Получаем инструмент ChartreusePeriastron
-		if #greenshields > 5 then 
+		if #greenshields > 4 then 
 			
 			if not greenshields[shieldindex] then
 				table.remove(greenshields, shieldindex)
@@ -13291,7 +13291,6 @@ addcmd('handleperiastron', {''}, function(args, speaker)
 			else
 				periastron = greenshields[shieldindex]
 			end
-			
 			shieldindex = shieldindex + 1
 			if shieldindex > 4 then
 				shieldindex = 1
