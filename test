@@ -1,4 +1,4 @@
-print("em297")
+print("em298")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13306,14 +13306,16 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 		end
 		print(#greenshields)
 	    if periastron then
+		periastron.Parent = speaker.Character
+		wait()
 		if periastron.Handle then 
 			periastron.Handle:Destroy()
 		end
 		if periastron.Server.ShieldScript.Reflect then
 			periastron.Server.ShieldScript.Reflect:Destroy()
 		end
-		periastron.Parent = speaker.Character
-		wait()
+		
+		--wait()
 		execCmd('actq')
 		--wait()
 		--periastron.Parent = speaker.Backpack
