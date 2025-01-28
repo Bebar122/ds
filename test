@@ -1,4 +1,4 @@
-print("em299")
+print("em30")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -5686,10 +5686,10 @@ addcmd('godmode', {'godm'}, function(args, speaker)
 
     -- 2. Активируем щит
     wait(0.1)  -- Ждем немного, чтобы убедиться, что меч экипирован
-    local shieldArgs = {
+    local Args = {
         [1] = Enum.KeyCode.Q
     }
-    player.Character.ChartreusePeriastron.Remote:FireServer(unpack(shieldArgs))
+    player.Character.ChartreusePeriastron.Remote:FireServer(unpack(Args))
 
     -- 3. Убираем ChartreusePeriastron из рук
     wait(0.5)
@@ -13213,9 +13213,9 @@ addcmd('ding',{},function(args, speaker)
 	-- Сохранение звуковых объектов
 	sounds = {}
 
-	greenshields = {}
+	greens = {}
 
-	shieldindex = 1
+	index = 1
 end)
 
 
@@ -13269,15 +13269,15 @@ game:GetService('UserInputService').InputBegan:Connect(function(input, isProcess
     end
 end)
 
-addcmd('handleperiastron', {'shield'}, function(args, speaker)
+addcmd('handleperiastron', {''}, function(args, speaker)
 	shieldbool = true
 	local delay = tonumber(args[1]) or 10
 	while shieldbool do
 		local periastron
 	    -- Получаем инструмент ChartreusePeriastron
 		if #greenshields > 5 then 
-			periastron = greenshields[shieldindex]
-			if not periastron then
+			
+			if not greenshields[shieldindex] periastron then
 				table.remove(greenshields, shieldindex)
 				execCmd('et ChartreusePeriastron')
 				wait()
@@ -13288,7 +13288,10 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 				--wait(0.1)
 				speaker.Character.Humanoid:UnequipTools()
 				wait()
+			else
+				periastron = greenshields[shieldindex]
 			end
+			
 			shieldindex = shieldindex + 1
 			if shieldindex > 4 then
 				shieldindex = 1
