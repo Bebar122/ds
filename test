@@ -1,4 +1,4 @@
-print("em43")
+print("em44")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16374,39 +16374,31 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	                end
 	            end
 	        end
-	        task.wait(0.2) -- Ожидание 1 секунду перед следующей проверкой
+	        task.wait(0.1) -- Ожидание 1 секунду перед следующей проверкой
 	    end
 	
 	    notify("CheckRainbow finished scanning workspace")
 	end
 
 	
-	local function CheckCrimson()
-		task.wait(2)
-	    notify("CheckCrimson started scanning workspace")
+	local function CheckCrimson(player)
+	    local myCharacter = game.Players.LocalPlayer.Character
+	    if not myCharacter or not player.Character then return end
 	
-	    for i = 1, 20 do
-	        for _, obj in pairs(workspace:GetChildren()) do
-	            if obj:IsA("Model") and obj.Name:match("Pillar Scatter$") then
-	                for _, part in pairs(obj:GetChildren()) do
-	                    if part:IsA("BasePart") then
-				part.CanTouch = false
-	                        local touchInterest = part:FindFirstChildOfClass("TouchTransmitter")
-	                        
-	                        if touchInterest then
-	                            touchInterest:Destroy() -- Удаляем TouchInterest
-	                            -- Отключаем касания
-	                            notify("Removed TouchInterest and disabled touch for: " .. part:GetFullName())
-	                        end
-	                    end
-	                end
-	            end
-	        end
-	        task.wait(0.2) -- Ожидание 1 секунды перед следующей проверкой
-	    end
+	    local myHRP = myCharacter:FindFirstChild("HumanoidRootPart")
+	    local targetHRP = player.Character:FindFirstChild("HumanoidRootPart")
+	    if not myHRP or not targetHRP then return end
 	
+	    local distance = (myHRP.Position - targetHRP.Position).Magnitude
+	    if distance > 70 then return end -- Проверяем дистанцию
+	
+	    execCmd('tc') -- Выполняем команду, если игрок близко
+		task.wait(12)
+		execCmd('tc')
+		
 	    notify("CheckCrimson finished scanning workspace")
 	end
+
 
 	
 	-- Функция для проверки мечей у игроков
@@ -16454,8 +16446,9 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	                end
 	            else
 	                if crimsonPlayers[target] then
+				CheckCrimson(target)
 	                    crimsonPlayers[target] = nil -- Удаляем из таблицы
-	                    CheckCrimson()
+	                    
 	                end
 	            end
 	        end
