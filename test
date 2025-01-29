@@ -1,4 +1,4 @@
-print("em4")
+print("em41")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -3893,34 +3893,6 @@ Players.PlayerRemoving:Connect(function(player)
 			viewChanged:Disconnect()
 		end
 		notify('Spectate','View turned off (player left)')
-	end
-	if player == Players.LocalPlayer then
-		if writefileExploit() then
-			if #scroll_2:GetChildren() > 0 then
-				notify("Loading",'Hold on a sec')
-				local placeName = CleanFileName(MarketplaceService:GetProductInfo(PlaceId).Name)
-				local writelogs = '-- Infinite Yield Chat logs for "'..placeName..'"\n'
-				for _, child in pairs(scroll_2:GetChildren()) do
-					writelogs = writelogs..'\n'..child.Text
-				end
-				local writelogsFile = tostring(writelogs)
-				local fileext = 0
-				local function nameFile()
-					local file
-					pcall(function() file = readfile(placeName..' Chat Logs ('..fileext..').txt') end)
-					if file then
-						fileext = fileext+1
-						nameFile()
-					else
-						writefileCooldown(placeName..' Chat Logs ('..fileext..').txt', writelogsFile)
-					end
-				end
-				nameFile()
-				notify('Chat Logs','Saved chat logs to the workspace folder within your exploit folder.')
-			end
-		else
-			notify('Chat Logs','Your exploit does not support write file. You cannot save chat logs.')
-		end
 	end
 	eventEditor.FireEvent("OnLeave", player.Name)
 end)
@@ -16380,6 +16352,101 @@ addcmd('activateQ',{'actq'},function(args, speaker)
 
 end)
 
+
+addcmd('perisdefend',{'peridef'},function(args, speaker)
+	local player = game.Players.LocalPlayer
+	local rainbowPlayers = {}
+	local crimsonPlayers = {}
+	
+	local function CheckRainbow()
+	    notify("CheckRainbow started scanning workspace")
+	
+	    for i = 1, 10 do
+	        for _, obj in pairs(workspace:GetChildren()) do
+	            if obj:IsA("BasePart") and obj.Name == "Part" then
+	                local touchInterest = obj:FindFirstChildOfClass("TouchTransmitter")
+	                
+	                if touchInterest then
+	                    touchInterest:Destroy() -- Удаляем TouchInterest
+	                    obj.CanTouch = false -- Отключаем касания
+	                    notify("Removed TouchInterest and disabled touch for: " .. obj:GetFullName())
+	                end
+	            end
+	        end
+	        task.wait(1) -- Ожидание 1 секунду перед следующей проверкой
+	    end
+	
+	    notify("CheckRainbow finished scanning workspace")
+	end
+
+	
+	local function CheckCrimson()
+	    notify("CheckCrimson executed")
+	end
+	
+	-- Функция для проверки мечей у игроков
+	local function scanPlayers()
+	    for _, target in pairs(game.Players:GetPlayers()) do
+	        if target == player then continue end -- Пропускаем себя
+	
+	        local character = target.Character
+	        if not character then continue end
+	
+	        local tool = character:FindFirstChildOfClass("Tool")
+	        if not tool then
+	            -- Удаляем игрока из таблицы, если меч исчез
+	            rainbowPlayers[target] = nil
+	            crimsonPlayers[target] = nil
+	            continue
+	        end
+	
+	        local toolName = tool.Name
+	        local handle = tool:FindFirstChild("Handle")
+	        if not handle then continue end
+	
+	        local sparkles = handle:FindFirstChild("Sparkles")
+	        if not sparkles or not sparkles:IsA("Sparkles") then continue end
+	
+	        -- Проверка RainbowPeriastron
+	        if toolName == "RainbowPeriastron" then
+	            if sparkles.Enabled then
+	                if not rainbowPlayers[target] then
+	                    rainbowPlayers[target] = true -- Добавляем в таблицу
+	                end
+	            else
+	                if rainbowPlayers[target] then
+	                    rainbowPlayers[target] = nil -- Удаляем из таблицы
+	                    CheckRainbow()
+	                end
+	            end
+	        end
+	
+	        -- Проверка CrimsonPeriastron
+	        if toolName == "CrimsonPeriastron" then
+	            if sparkles.Enabled then
+	                if not crimsonPlayers[target] then
+	                    crimsonPlayers[target] = true -- Добавляем в таблицу
+	                end
+	            else
+	                if crimsonPlayers[target] then
+	                    crimsonPlayers[target] = nil -- Удаляем из таблицы
+	                    CheckCrimson()
+	                end
+	            end
+	        end
+	    end
+	end
+	
+	-- Запуск сканирования каждые 0.5 секунды
+	task.spawn(function()
+	    while true do
+	        scanPlayers()
+	        task.wait(0.5)
+	    end
+	end)
+end)
+
+
 addcmd('activateClone',{'actcl'},function(args, speaker)
 	-- Получаем персонажа игрока
 	local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
@@ -18013,6 +18080,7 @@ local NEWeventBinds = {
 	{COMMAND = "spawnhp", DELAY = 9},
 	{COMMAND = "clogs", DELAY = 10},
 	{COMMAND = "antiafk", DELAY = 10},
+	{COMMAND = "peridef", DELAY = 10},
         {COMMAND = "defend", DELAY = 1}
     },
     ["OnKilled"] = {},
