@@ -1,4 +1,4 @@
-print("em333")
+print("em4")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -3893,6 +3893,34 @@ Players.PlayerRemoving:Connect(function(player)
 			viewChanged:Disconnect()
 		end
 		notify('Spectate','View turned off (player left)')
+	end
+	if player == Players.LocalPlayer then
+		if writefileExploit() then
+			if #scroll_2:GetChildren() > 0 then
+				notify("Loading",'Hold on a sec')
+				local placeName = CleanFileName(MarketplaceService:GetProductInfo(PlaceId).Name)
+				local writelogs = '-- Infinite Yield Chat logs for "'..placeName..'"\n'
+				for _, child in pairs(scroll_2:GetChildren()) do
+					writelogs = writelogs..'\n'..child.Text
+				end
+				local writelogsFile = tostring(writelogs)
+				local fileext = 0
+				local function nameFile()
+					local file
+					pcall(function() file = readfile(placeName..' Chat Logs ('..fileext..').txt') end)
+					if file then
+						fileext = fileext+1
+						nameFile()
+					else
+						writefileCooldown(placeName..' Chat Logs ('..fileext..').txt', writelogsFile)
+					end
+				end
+				nameFile()
+				notify('Chat Logs','Saved chat logs to the workspace folder within your exploit folder.')
+			end
+		else
+			notify('Chat Logs','Your exploit does not support write file. You cannot save chat logs.')
+		end
 	end
 	eventEditor.FireEvent("OnLeave", player.Name)
 end)
@@ -16763,7 +16791,7 @@ end)
 
 local SingleMode = false
 local PointScale = 1
-local smoothingFactor = 0.15
+local smoothingFactor = 0.1
 local speed = 50
 local moveMode = 1
 local circleRadius = 10
@@ -17982,7 +18010,9 @@ local NEWeventBinds = {
         {COMMAND = "0bkill others", DELAY = 0},
         {COMMAND = "autojump2 false", DELAY = 0},
         {COMMAND = "sfb", DELAY = 0},
-	{COMMAND = "spawnhp", DELAY = 7},
+	{COMMAND = "spawnhp", DELAY = 9},
+	{COMMAND = "clogs", DELAY = 10},
+	{COMMAND = "antiafk", DELAY = 10},
         {COMMAND = "defend", DELAY = 1}
     },
     ["OnKilled"] = {},
