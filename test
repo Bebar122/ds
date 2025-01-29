@@ -1,4 +1,4 @@
-print("em41")
+print("em43")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16359,9 +16359,10 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	local crimsonPlayers = {}
 	
 	local function CheckRainbow()
+		task.wait(3)
 	    notify("CheckRainbow started scanning workspace")
 	
-	    for i = 1, 10 do
+	    for i = 1, 20 do
 	        for _, obj in pairs(workspace:GetChildren()) do
 	            if obj:IsA("BasePart") and obj.Name == "Part" then
 	                local touchInterest = obj:FindFirstChildOfClass("TouchTransmitter")
@@ -16373,7 +16374,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	                end
 	            end
 	        end
-	        task.wait(1) -- Ожидание 1 секунду перед следующей проверкой
+	        task.wait(0.2) -- Ожидание 1 секунду перед следующей проверкой
 	    end
 	
 	    notify("CheckRainbow finished scanning workspace")
@@ -16381,8 +16382,32 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 
 	
 	local function CheckCrimson()
-	    notify("CheckCrimson executed")
+		task.wait(2)
+	    notify("CheckCrimson started scanning workspace")
+	
+	    for i = 1, 20 do
+	        for _, obj in pairs(workspace:GetChildren()) do
+	            if obj:IsA("Model") and obj.Name:match("Pillar Scatter$") then
+	                for _, part in pairs(obj:GetChildren()) do
+	                    if part:IsA("BasePart") then
+				part.CanTouch = false
+	                        local touchInterest = part:FindFirstChildOfClass("TouchTransmitter")
+	                        
+	                        if touchInterest then
+	                            touchInterest:Destroy() -- Удаляем TouchInterest
+	                            -- Отключаем касания
+	                            notify("Removed TouchInterest and disabled touch for: " .. part:GetFullName())
+	                        end
+	                    end
+	                end
+	            end
+	        end
+	        task.wait(0.2) -- Ожидание 1 секунды перед следующей проверкой
+	    end
+	
+	    notify("CheckCrimson finished scanning workspace")
 	end
+
 	
 	-- Функция для проверки мечей у игроков
 	local function scanPlayers()
