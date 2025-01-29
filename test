@@ -1,4 +1,4 @@
-print("em442")
+print("em443")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16383,11 +16383,18 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	
 	local function CheckCrimson(player)
 	    local myCharacter = game.Players.LocalPlayer.Character
-		local vap = myCharacter:WaitForChild("Vaporize", 12)
+		local vap = myCharacter:WaitForChild("Vaporize", 15)
 		while vap do
 			vap:Destroy()
-			vap = myCharacter:WaitForChild("Vaporize", 12)
+			vap = myCharacter:WaitForChild("Vaporize", 15)
 		end
+		task.spawn(function()
+			local vapp = myCharacter:WaitForChild("VaporizePart", 15)
+			while vapp do
+				vapp:Destroy()
+				vapp = myCharacter:WaitForChild("VaporizePart", 15)
+			end
+		end)
 	    if not myCharacter or not player.Character then return end
 		
 	    local myHRP = myCharacter:FindFirstChild("HumanoidRootPart")
