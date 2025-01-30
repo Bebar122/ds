@@ -1,4 +1,4 @@
-print("em521")
+print("em522")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16639,8 +16639,8 @@ local firstUse = true -- Флаг для отслеживания первого
 addcmd('togglecape', {'tc'}, function(args, speaker)
 	local toolName = "TrololoCapeOfInvisibility"
 	if firstUse then
-		--toolName = "TrololoCapeOfInvisibility"
-		toolName = "GhostInvisibilityElixir"
+		toolName = "TrololoCapeOfInvisibility"
+		--toolName = "GhostInvisibilityElixir"
 	else
 		toolName = "ScytheOfSingularity"
 	end
@@ -16668,12 +16668,22 @@ addcmd('togglecape', {'tc'}, function(args, speaker)
     if firstUse then
         -- При первом запуске удаляем тулз через 1 секунду
         task.delay(3, function()
-		local invs = character:WaitForChild("InvisibilityScript", 4)
-		if invs then
-			invs:Destroy()
-			tool:Destroy()
-		end
-		
+		--local invs = character:WaitForChild("InvisibilityScript", 4)
+		--if invs then
+			--invs:Destroy()
+			--tool:Destroy()
+		--end
+			local timeout = 9 -- Максимальное время ожидания в секундах
+			local elapsedTime = 0 -- Прошедшее время
+			local waitInterval = 0.1 -- Интервал проверки (можно изменить)
+			
+			while myCharacter.Torso.Transparency ~= 1 and elapsedTime < timeout do
+			    task.wait(waitInterval) -- Ждём небольшой интервал
+			    elapsedTime = elapsedTime + waitInterval -- Увеличиваем таймер
+			end
+			if myCharacter.Torso.Transparency == 1 then
+				tool:Destroy()
+			end
             --if tool and tool.Parent == character then
                 --tool:Destroy()
             --end
