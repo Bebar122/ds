@@ -1,4 +1,4 @@
-print("em449")
+print("em5")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16459,7 +16459,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 		    local myHRP = myCharacter:FindFirstChild("HumanoidRootPart")
 		    local targetHRP = player.Character:FindFirstChild("HumanoidRootPart")
 		    if not myHRP or not targetHRP then return end
-			local nlocation = targetHRP.Position + Vector3.new(0, 80, 0)
+			local nlocation = targetHRP.Position + Vector3.new(0, 120, 0)
 
 		    execCmd('tc') 
 			task.spawn(function()
@@ -16471,6 +16471,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 			task.wait(11)
 			if myCharacter.Torso.Transparency == 1 then
 				myHRP.CFrame = CFrame.new(nlocation)
+				task.wait(0.5)
 				myHRP.Anchored = true
 			end
 		else
