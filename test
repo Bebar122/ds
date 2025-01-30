@@ -1,4 +1,4 @@
-print("em522")
+print("em523")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16677,11 +16677,11 @@ addcmd('togglecape', {'tc'}, function(args, speaker)
 			local elapsedTime = 0 -- Прошедшее время
 			local waitInterval = 0.1 -- Интервал проверки (можно изменить)
 			
-			while myCharacter.Torso.Transparency ~= 1 and elapsedTime < timeout do
+			while character.Torso.Transparency ~= 1 and elapsedTime < timeout do
 			    task.wait(waitInterval) -- Ждём небольшой интервал
 			    elapsedTime = elapsedTime + waitInterval -- Увеличиваем таймер
 			end
-			if myCharacter.Torso.Transparency == 1 then
+			if character.Torso.Transparency == 1 then
 				tool:Destroy()
 			end
             --if tool and tool.Parent == character then
