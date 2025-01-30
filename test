@@ -1,4 +1,4 @@
-print("em5")
+print("em52")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13366,7 +13366,16 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 		    -- Удаляем Mesh
 		    mesh:Destroy()
 		    notify('Success', 'Mesh removed from Part')
-			wait(delay)
+			local elapsedTime = 0
+			
+			while elapsedTime < delay do
+			    if not shieldbool then
+			        print("Ожидание прервано!")
+			        break
+			    end
+			    task.wait(0.5) -- Ждём маленький интервал
+			    elapsedTime = elapsedTime + 0.5
+			end
 			--local reflect = speaker.Character:WaitForChild("ShieldScript", 0.1)
 			--reflect.Reflect:Destroy()
 		else
@@ -16372,6 +16381,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	local rainbowPlayers = {}
 	local crimsonPlayers = {}
 	local ivoryPlayers = {}
+	scanbool = true
 	
 	local function CheckRainbow()
 		task.wait(3)
@@ -16467,6 +16477,8 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 				myHRP.Anchored = false
 				execCmd('tc')
 				execCmd('ungod')
+				execCmd('noanim')
+				execCmd('reanim')  
 			end)
 			task.wait(11)
 			if myCharacter.Torso.Transparency == 1 then
@@ -16478,6 +16490,8 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 			task.wait(15)
 			--execCmd('tc')
 			execCmd('ungod')
+			execCmd('noanim')
+			execCmd('reanim')  
 		end
 		
 	    notify("CheckCrimson finished scanning workspace")
@@ -16559,10 +16573,16 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	-- Запуск сканирования каждые 0.5 секунды
 	task.spawn(function()
 	    while true do
-	        scanPlayers()
+		if scanbool then
+	        	scanPlayers()
+		end
 	        task.wait(0.2)
 	    end
 	end)
+end)
+
+addcmd('stopscan',{'stops'},function(args, speaker)
+	scanbool = not scanbool
 end)
 
 
