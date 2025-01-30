@@ -1,4 +1,4 @@
-print("em52")
+print("em521")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13216,6 +13216,7 @@ addcmd('ding',{},function(args, speaker)
 	else
 		workspace.Ding.Playing=true
 	end
+	workspace.FallenPartsDestroyHeight = -50000
 	soundModeEnabled = false
 	soundKeybinds = {
 	    F = 1,
@@ -16638,7 +16639,8 @@ local firstUse = true -- Флаг для отслеживания первого
 addcmd('togglecape', {'tc'}, function(args, speaker)
 	local toolName = "TrololoCapeOfInvisibility"
 	if firstUse then
-		toolName = "TrololoCapeOfInvisibility"
+		--toolName = "TrololoCapeOfInvisibility"
+		toolName = "GhostInvisibilityElixir"
 	else
 		toolName = "ScytheOfSingularity"
 	end
@@ -16666,9 +16668,15 @@ addcmd('togglecape', {'tc'}, function(args, speaker)
     if firstUse then
         -- При первом запуске удаляем тулз через 1 секунду
         task.delay(3, function()
-            if tool and tool.Parent == character then
-                tool:Destroy()
-            end
+		local invs = character:WaitForChild("InvisibilityScript", 4)
+		if invs then
+			invs:Destroy()
+			tool:Destroy()
+		end
+		
+            --if tool and tool.Parent == character then
+                --tool:Destroy()
+            --end
         end)
         firstUse = false
     else
