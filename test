@@ -1,4 +1,4 @@
-print("em443")
+print("em445")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16383,18 +16383,13 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	
 	local function CheckCrimson(player)
 	    local myCharacter = game.Players.LocalPlayer.Character
-		local vap = myCharacter:WaitForChild("Vaporize", 15)
-		while vap do
-			vap:Destroy()
-			vap = myCharacter:WaitForChild("Vaporize", 15)
-		end
-		task.spawn(function()
+		--[[task.spawn(function()
 			local vapp = myCharacter:WaitForChild("VaporizePart", 15)
 			while vapp do
 				vapp:Destroy()
 				vapp = myCharacter:WaitForChild("VaporizePart", 15)
 			end
-		end)
+		end)]]
 	    if not myCharacter or not player.Character then return end
 		
 	    local myHRP = myCharacter:FindFirstChild("HumanoidRootPart")
@@ -16402,11 +16397,11 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	    if not myHRP or not targetHRP then return end
 	
 	    local distance = (myHRP.Position - targetHRP.Position).Magnitude
-	    --if distance > 70 then return end -- Проверяем дистанцию
+	    if distance > 70 then return end -- Проверяем дистанцию
 	
-	    --execCmd('tc') -- Выполняем команду, если игрок близко
-		--task.wait(12)
-		--execCmd('tc')
+	    execCmd('tc') -- Выполняем команду, если игрок близко
+		task.wait(12)
+		execCmd('tc')
 		
 	    notify("CheckCrimson finished scanning workspace")
 	end
