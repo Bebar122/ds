@@ -1,4 +1,4 @@
-print("em447")
+print("em449")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16464,12 +16464,14 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 		    execCmd('tc') 
 			task.spawn(function()
 				task.wait(15)
+				myHRP.Anchored = false
 				execCmd('tc')
 				execCmd('ungod')
 			end)
 			task.wait(11)
 			if myCharacter.Torso.Transparency == 1 then
 				myHRP.CFrame = CFrame.new(nlocation)
+				myHRP.Anchored = true
 			end
 		else
 			task.wait(15)
