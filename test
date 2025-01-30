@@ -1,4 +1,4 @@
-print("em446")
+print("em447")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -5668,13 +5668,14 @@ addcmd('godmode', {'godm'}, function(args, speaker)
     local backpack = player.Backpack
     local humanoid = player.Character:FindFirstChildOfClass('Humanoid')
 
-
-	tigerskin = backpack:FindFirstChild("TigerSkin")
-
-	tigerskin.Parent = player.Character
-	wait()
-	tigerskin:Activate()
-	wait()
+	if not tigerskin or not tigerskin.Parent then
+		tigerskin = backpack:FindFirstChild("TigerSkin")	
+		tigerskin.Parent = player.Character
+		wait()
+		tigerskin:Activate()
+		wait()
+    		--humanoid:UnequipTools()
+	end
 
 
     -- 1. Берем ChartreusePeriastron в руки
@@ -10934,6 +10935,19 @@ addcmd("spawnhp", {"spawnhp"}, function(args, speaker)
 	execCmd('et Carrot')
 	wait(0.1)
 	speaker.Character.Carrot:Activate()
+
+	local player = game:GetService("Players").LocalPlayer
+    	local backpack = player.Backpack
+    	local humanoid = player.Character:FindFirstChildOfClass('Humanoid')
+
+	if not tigerskin or not tigerskin.Parent then
+		tigerskin = backpack:FindFirstChild("TigerSkin")	
+		tigerskin.Parent = player.Character
+		wait()
+		tigerskin:Activate()
+		wait()
+    		humanoid:UnequipTools()
+	end
 	wait(0.5)
 	execCmd('giveblocks')
 end)
@@ -16357,6 +16371,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	local player = game.Players.LocalPlayer
 	local rainbowPlayers = {}
 	local crimsonPlayers = {}
+	local ivoryPlayers = {}
 	
 	local function CheckRainbow()
 		task.wait(3)
@@ -16382,6 +16397,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 
 	
 	local function CheckCrimson(player)
+		notify("CheckCrimson started scanning workspace")
 		local myCharacter = game.Players.LocalPlayer.Character
 		local vap = myCharacter:FindFirstChild("Vaporize")
 							--[[task.spawn(function()
@@ -16426,6 +16442,44 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	    notify("CheckCrimson finished scanning workspace")
 	end
 
+	local function CheckIvory(player)
+		notify("CheckCrimson started scanning workspace")
+		local myCharacter = game.Players.LocalPlayer.Character
+		local vap = myCharacter:FindFirstChild("Stardust")
+		if not tigerskin or not tigerskin.Parent then
+			tigerskin = backpack:FindFirstChild("TigerSkin")	
+			tigerskin.Parent = player.Character
+			wait()
+			tigerskin:Activate()
+			wait()
+	    		humanoid:UnequipTools()
+		end
+		if not vap then 			
+		    if not myCharacter or not player.Character then return end		
+		    local myHRP = myCharacter:FindFirstChild("HumanoidRootPart")
+		    local targetHRP = player.Character:FindFirstChild("HumanoidRootPart")
+		    if not myHRP or not targetHRP then return end
+			local nlocation = targetHRP.Position + Vector3.new(0, 80, 0)
+
+		    execCmd('tc') 
+			task.spawn(function()
+				task.wait(15)
+				execCmd('tc')
+				execCmd('ungod')
+			end)
+			task.wait(11)
+			if myCharacter.Torso.Transparency == 1 then
+				myHRP.CFrame = CFrame.new(nlocation)
+			end
+		else
+			task.wait(15)
+			--execCmd('tc')
+			execCmd('ungod')
+		end
+		
+	    notify("CheckCrimson finished scanning workspace")
+	end
+
 
 	
 	-- Функция для проверки мечей у игроков
@@ -16441,6 +16495,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	            -- Удаляем игрока из таблицы, если меч исчез
 	            rainbowPlayers[target] = nil
 	            crimsonPlayers[target] = nil
+			ivoryPlayers[target] = nil
 	            continue
 	        end
 	
@@ -16479,6 +16534,22 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	                end
 	            end
 	        end
+
+	        -- Проверка CrimsonPeriastron
+	        if toolName == "IvoryPeriastron" then
+	            if sparkles.Enabled then
+	                if not ivoryPlayers[target] then
+	                    ivoryPlayers[target] = true -- Добавляем в таблицу
+	                end
+	            else
+	                if ivoryPlayers[target] then
+				CheckIvory(target)
+	                    ivoryPlayers[target] = nil -- Удаляем из таблицы
+	                    
+	                end
+	            end
+	        end
+
 	    end
 	end
 	
@@ -16486,7 +16557,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	task.spawn(function()
 	    while true do
 	        scanPlayers()
-	        task.wait(0.5)
+	        task.wait(0.2)
 	    end
 	end)
 end)
