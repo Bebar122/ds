@@ -1,4 +1,4 @@
-print("em445")
+print("em446")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16382,26 +16382,46 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 
 	
 	local function CheckCrimson(player)
-	    local myCharacter = game.Players.LocalPlayer.Character
-		--[[task.spawn(function()
-			local vapp = myCharacter:WaitForChild("VaporizePart", 15)
-			while vapp do
-				vapp:Destroy()
-				vapp = myCharacter:WaitForChild("VaporizePart", 15)
-			end
-		end)]]
-	    if not myCharacter or not player.Character then return end
+		local myCharacter = game.Players.LocalPlayer.Character
+		local vap = myCharacter:FindFirstChild("Vaporize")
+							--[[task.spawn(function()
+								local vapp = myCharacter:WaitForChild("VaporizePart", 15)
+								while vapp do
+									vapp:Destroy()
+									vapp = myCharacter:WaitForChild("VaporizePart", 15)
+								end
+							end)]]
+		if not vap then 			
+		    if not myCharacter or not player.Character then return end		
+		    local myHRP = myCharacter:FindFirstChild("HumanoidRootPart")
+		    local targetHRP = player.Character:FindFirstChild("HumanoidRootPart")
+		    if not myHRP or not targetHRP then return end
+			local nlocation = targetHRP.Position
+		    --local distance = (myHRP.Position - targetHRP.Position).Magnitude
+		    --if distance > 70 then return end -- Проверяем дистанцию
 		
-	    local myHRP = myCharacter:FindFirstChild("HumanoidRootPart")
-	    local targetHRP = player.Character:FindFirstChild("HumanoidRootPart")
-	    if not myHRP or not targetHRP then return end
-	
-	    local distance = (myHRP.Position - targetHRP.Position).Magnitude
-	    if distance > 70 then return end -- Проверяем дистанцию
-	
-	    execCmd('tc') -- Выполняем команду, если игрок близко
-		task.wait(12)
-		execCmd('tc')
+		    execCmd('tc') -- Выполняем команду, если игрок близко
+			task.spawn(function()
+				task.wait(12)
+				execCmd('tc')
+			end)
+			local timeout = 9 -- Максимальное время ожидания в секундах
+			local elapsedTime = 0 -- Прошедшее время
+			local waitInterval = 0.1 -- Интервал проверки (можно изменить)
+			--local targetVariable = myCharacter.Torso.Transparency -- Исходное значение (замени на свою переменную)
+			
+			while myCharacter.Torso.Transparency ~= 1 and elapsedTime < timeout do
+			    task.wait(waitInterval) -- Ждём небольшой интервал
+			    elapsedTime = elapsedTime + waitInterval -- Увеличиваем таймер
+			end
+			if myCharacter.Torso.Transparency == 1 then
+				myHRP.CFrame = CFrame.new(nlocation)
+			end
+			
+
+			--task.wait(12)
+			--execCmd('tc')
+		end
 		
 	    notify("CheckCrimson finished scanning workspace")
 	end
