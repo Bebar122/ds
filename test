@@ -1,4 +1,4 @@
-print("em523")
+print("em524")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13630,7 +13630,9 @@ end)
 
 
 
-
+addcmd('setpushfvel',{'spv'},function(args, speaker)
+	maxVelocity = tonumber(args[1]) or 500
+end)
 
 
 
