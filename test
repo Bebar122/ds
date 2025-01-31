@@ -13630,9 +13630,9 @@ end)
 
 
 
-addcmd('setpushfvel',{'spv'},function(args, speaker)
-	maxVelocity = tonumber(args[1]) or 500
-end)
+--addcmd('setpushfvel',{'spv'},function(args, speaker)
+	--maxVelocity = tonumber(args[1]) or 500
+--end)
 
 
 
