@@ -1,4 +1,4 @@
-print("em525")
+print("em5251")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17935,7 +17935,7 @@ end)
 
 
 local lockPos1 = false
-local unwantedNames = {"DecimateScript", "BoxSelection", "PointLight"}
+local unwantedNames = {"DecimateScript", "SelectionBox", "PointLight"}
 
 
 addcmd('defend', {'def'}, function(args, speaker)
