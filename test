@@ -1,4 +1,4 @@
-print("em53")
+print("em54")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17953,11 +17953,63 @@ addcmd('defend', {'def'}, function(args, speaker)
             end
 		wait(0.1)
 	end
+
 end)
 
 
 
-
+addcmd('updateinv', {''}, function(args, speaker)
+	local grid = game:GetService("CoreGui").RobloxGui.Backpack.Inventory.ScrollingFrame.UIGridFrame.UIGridLayout -- Укажи путь к UIGridLayout
+	
+	local container = grid.Parent -- Укажи путь к UIGridFrame
+	local scrollingFrame = container.Parent
+	local gridLayout = container:FindFirstChildOfClass("UIGridLayout")
+	
+	local function renameItems(savedPosition)
+	    -- Сохраняем текущую позицию скролла
+	    
+	
+	    for _, item in ipairs(container:GetChildren()) do
+	        if item:FindFirstChild("ToolName") then
+	            item.Name = item.ToolName.Text
+	        end
+	    end
+		local count = 0
+		while count <5 do
+			count = count + 1
+	    		scrollingFrame.CanvasPosition = Vector2.new(0, savedPosition)
+			wait()
+		end
+	
+	    for _, item in ipairs(container:GetChildren()) do
+	        if item:FindFirstChild("ToolName") then
+	            item.Name = item.ToolName.Text
+	        end
+	    end
+	end
+	
+	-- Устанавливаем сортировку по имени при первом запуске
+	if gridLayout and gridLayout.SortOrder ~= Enum.SortOrder.Name then
+	    gridLayout.SortOrder = Enum.SortOrder.Name
+	end
+	
+	-- Запускаем при старте
+	renameItems()
+	
+	-- Автоматический вызов при добавлении нового объекта
+	container.ChildAdded:Connect(function(child)
+		local savedPosition = scrollingFrame.CanvasPosition.Y
+		print(savedPosition)
+	        --task.wait(0.1) -- Ждём, пока ToolName появится
+	        renameItems(savedPosition)
+	
+	end)
+	
+	-- Автоматический вызов при удалении объекта
+	container.ChildRemoved:Connect(function()
+	    renameItems()
+	end)
+end)
 
 
 
@@ -18231,6 +18283,7 @@ local NEWeventBinds = {
         {COMMAND = "sfb", DELAY = 0},
 	{COMMAND = "spawnhp", DELAY = 9},
 	{COMMAND = "clogs", DELAY = 10},
+	{COMMAND = "updateinv", DELAY = 2},
 	{COMMAND = "antiafk", DELAY = 10},
 	{COMMAND = "peridef", DELAY = 10},
         {COMMAND = "defend", DELAY = 1}
