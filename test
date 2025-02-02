@@ -1,4 +1,4 @@
-print("em5251")
+print("em53")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14436,6 +14436,7 @@ function attach(speaker,target)
 		newHum.DisplayDistanceType = "None"
 		local tool = speaker:FindFirstChildOfClass("Backpack"):FindFirstChildOfClass("Tool") or speaker.Character:FindFirstChildOfClass("Tool")
 		tool.Parent = char
+		
 		hrp.CFrame = hrp2.CFrame * CFrame.new(0, 0, 0) * CFrame.new(math.random(-100, 100)/200,math.random(-100, 100)/200,math.random(-100, 100)/200)
 		local n = 0
 		repeat
@@ -18023,7 +18024,7 @@ local bindsConfig = {
     {KEY="Enum.KeyCode.F6", ISKEYUP=false, COMMAND="spawnhp"},
     {KEY="Enum.KeyCode.KeypadMultiply", ISKEYUP=false, COMMAND="tpsclone"},
     {KEY="Enum.KeyCode.J", ISKEYUP=false, TOGGLE="stopprojectile", COMMAND="touchprojectile cursor"},
-    {KEY="Enum.KeyCode.U", ISKEYUP=false, TOGGLE="ungod", COMMAND="godm"},
+    {KEY="Enum.KeyCode.U", ISKEYUP=false, COMMAND="attach cursor"},
     {KEY="Enum.KeyCode.B", ISKEYUP=false, TOGGLE="3k", COMMAND="3k 0.06"},
     {KEY="Enum.KeyCode.End", ISKEYUP=false, TOGGLE="ws 25", COMMAND="ws 55"},
     {KEY="Enum.KeyCode.F4", ISKEYUP=false, COMMAND="actcl"},
