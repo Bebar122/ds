@@ -1,4 +1,4 @@
-print("em524")
+print("em525")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17936,30 +17936,22 @@ end)
 
 local lockPos1 = false
 local unwantedNames = {"DecimateScript", "BoxSelection", "PointLight"}
-local connection
+
 
 addcmd('defend', {'def'}, function(args, speaker)
-    lockPos1 = not lockPos1
-    if lockPos1 then
-	print('started')
-        connection = RunService.Heartbeat:Connect(function()
+	while true do
             local character = speaker.Character
-		--print('work')
             if character then
-                for _, child in ipairs(character:GetChildren()) do
+                for _, child in ipairs(character:GetDescendants()) do
                     if table.find(unwantedNames, child.Name) then
                         child:Destroy()
+			character:FindFirstChildOfClass('Humanoid').WalkSpeed = 25
 			print('deleted')
                     end
                 end
             end
-        end)
-    else
-        if connection then
-            connection:Disconnect()
-            connection = nil
-        end
-    end
+		wait(0.1)
+	end
 end)
 
 
