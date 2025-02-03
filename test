@@ -1,4 +1,4 @@
-print("em548")
+print("em549")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17965,17 +17965,22 @@ addcmd('updateinv', {''}, function(args, speaker)
 	local scrollingFrame = container.Parent
 	local gridLayout = container:FindFirstChildOfClass("UIGridLayout")
 
-
+	local busy = true
 	local function renameAll()
-	    for _, item in ipairs(container:GetChildren()) do
-	        if item:FindFirstChild("ToolName") then
-	            item.Name = item.ToolName.Text
-			item.ToolName.Visible = true
-			item.ToolName.BackgroundTransparency = 0.5
-			local textLabel = item.ToolName
-			textLabel.Size = UDim2.new(textLabel.Size.X.Scale, textLabel.Size.X.Offset, 0.25, textLabel.Size.Y.Offset)						
-	        end
-	    end	
+		if busy then 
+			busy = false
+		    for _, item in ipairs(container:GetChildren()) do
+		        if item:FindFirstChild("ToolName") then
+		            item.Name = item.ToolName.Text
+				item.ToolName.Visible = true
+				item.ToolName.BackgroundTransparency = 0.5
+				local textLabel = item.ToolName
+				textLabel.Size = UDim2.new(textLabel.Size.X.Scale, textLabel.Size.X.Offset, 0.25, textLabel.Size.Y.Offset)						
+		        end
+		    end	
+			wait()
+			busy = true
+		end
 	end
 
 
