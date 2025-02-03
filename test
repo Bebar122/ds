@@ -1,4 +1,4 @@
-print("em546")
+print("em547")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17970,9 +17970,9 @@ addcmd('updateinv', {''}, function(args, speaker)
 	    for _, item in ipairs(container:GetChildren()) do
 	        if item:FindFirstChild("ToolName") then
 	            item.Name = item.ToolName.Text
-			item.ToolName.Size.Y.Scale = 0.25
-			item.ToolName.BackgroundTransparency = 0.5
 			item.ToolName.Visible = true
+			item.ToolName.BackgroundTransparency = 0.5
+			item.ToolName.Size.Y.Scale = 0.25			
 	        end
 	    end	
 	end
@@ -17990,7 +17990,7 @@ addcmd('updateinv', {''}, function(args, speaker)
 	end
 
 	local function renameItems()
-		--renameAll()
+		renameAll()
 		setPos()	
 	end
 	
