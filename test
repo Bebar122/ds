@@ -17991,6 +17991,7 @@ addcmd('updateinv', {''}, function(args, speaker)
 	    ["SnowAndArrow"] = "7",
 	    ["RainbowMagicCarpet"] = "5",
 	    ["RidableRaptor"] = "6",
+	    ["TigerSkin"] = "5",
 	    ["Void"] = "zz",
 	    ["OverseerwrathSword"] = "zz"
 	}
