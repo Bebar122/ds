@@ -1,4 +1,4 @@
-print("em55")
+print("em56")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17965,13 +17965,36 @@ addcmd('updateinv', {''}, function(args, speaker)
 	local scrollingFrame = container.Parent
 	local gridLayout = container:FindFirstChildOfClass("UIGridLayout")
 
+	local namePrefixes = {
+	    ["BoneSword"] = "7",
+	    ["Carrot"] = "7",
+	    ["CrimsonPeriastron"] = "7",
+	    ["DaggerOfShatteredDimensions"] = "7",
+	    ["CrescendoTheSoulStealer"] = "5",
+	    ["BigRocketLauncher"] = "7",
+	    ["EasterPeriastron"] = "6",
+	    ["ElixirOfDreams"] = "6",
+	    ["EnergySword"] = "6",
+	    ["HyperlaserGun"] = "6",
+	    ["IvoryPeriastron"] = "7",
+	    ["LeprechaunPotion"] = "7",
+	    ["OverseerwrathSword"] = "zz"
+	}
+
+
 	local busy = true
 	local function renameAll()
 		if busy then 
 			busy = false
 		    for _, item in ipairs(container:GetChildren()) do
 		        if item:FindFirstChild("ToolName") then
-		            item.Name = item.ToolName.Text
+
+			        if namePrefixes[toolName] then
+			            item.Name = namePrefixes[toolName] .. item.ToolName.Text
+				else
+					item.Name = item.ToolName.Text
+			        end
+				
 				item.ToolName.Visible = true
 				item.ToolName.BackgroundTransparency = 0.5
 				local textLabel = item.ToolName
