@@ -1,4 +1,4 @@
-print("em544")
+print("em545")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17978,7 +17978,7 @@ addcmd('updateinv', {''}, function(args, speaker)
 	local function setPos()
 		local savedPosition = scrollingFrame.CanvasPosition.Y
 		local count = 0
-		while count <10 do
+		while count <3 do
 			count = count + 1
 	    		scrollingFrame.CanvasPosition = Vector2.new(0, savedPosition)
 			wait()
@@ -17987,7 +17987,7 @@ addcmd('updateinv', {''}, function(args, speaker)
 	end
 
 	local function renameItems()
-		renameAll()
+		--renameAll()
 		setPos()	
 	end
 	
