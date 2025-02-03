@@ -1,4 +1,4 @@
-print("em549")
+print("em55")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17978,8 +17978,9 @@ addcmd('updateinv', {''}, function(args, speaker)
 				textLabel.Size = UDim2.new(textLabel.Size.X.Scale, textLabel.Size.X.Offset, 0.25, textLabel.Size.Y.Offset)						
 		        end
 		    end	
-			wait()
+		task.delay(0.03, function()
 			busy = true
+		end)  
 		end
 	end
 
