@@ -1,4 +1,4 @@
-print("em57")
+print("em572")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -10931,9 +10931,9 @@ addcmd("spawnhp", {"spawnhp"}, function(args, speaker)
 	wait(0.1)
 	hum = speaker.Character:FindFirstChild("Humanoid")
 	hum:UnequipTools()
-	wait(0.1)
+	wait(0.4)
 	execCmd('et Carrot')
-	wait(0.1)
+	wait(0.2)
 	speaker.Character.Carrot:Activate()
 
 	local player = game:GetService("Players").LocalPlayer
@@ -10948,7 +10948,7 @@ addcmd("spawnhp", {"spawnhp"}, function(args, speaker)
 		wait()
     		humanoid:UnequipTools()
 	end
-	wait(0.5)
+	wait(1.1)
 	execCmd('giveblocks')
 end)
 
@@ -16427,6 +16427,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 		    local targetHRP = player.Character:FindFirstChild("HumanoidRootPart")
 		    if not myHRP or not targetHRP then return end
 			local nlocation = targetHRP.Position
+			local olocation = myHRP.Position
 		    --local distance = (myHRP.Position - targetHRP.Position).Magnitude
 		    --if distance > 70 then return end -- Проверяем дистанцию
 		
@@ -16434,6 +16435,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 			task.spawn(function()
 				task.wait(12)
 				execCmd('tc')
+				myHRP.CFrame = CFrame.new(olocation)
 			end)
 			local timeout = 9 -- Максимальное время ожидания в секундах
 			local elapsedTime = 0 -- Прошедшее время
@@ -16473,6 +16475,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 		    local myHRP = myCharacter:FindFirstChild("HumanoidRootPart")
 		    local targetHRP = player.Character:FindFirstChild("HumanoidRootPart")
 		    if not myHRP or not targetHRP then return end
+			local olocation = myHRP.Position
 			local nlocation = targetHRP.Position + Vector3.new(0, 120, 0)
 
 		    execCmd('tc') 
@@ -16481,8 +16484,11 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 				myHRP.Anchored = false
 				execCmd('tc')
 				execCmd('ungod')
+				wait()
 				execCmd('noanim')
+				wait()
 				execCmd('reanim')  
+				myHRP.CFrame = CFrame.new(olocation)
 			end)
 			task.wait(11)
 			if myCharacter.Torso.Transparency == 1 then
@@ -18321,11 +18327,11 @@ local NEWeventBinds = {
         {COMMAND = "0bkill others", DELAY = 0},
         {COMMAND = "autojump2 false", DELAY = 0},
         {COMMAND = "sfb", DELAY = 0},
-	{COMMAND = "spawnhp", DELAY = 9},
-	{COMMAND = "clogs", DELAY = 10},
+	{COMMAND = "spawnhp", DELAY = 10},
+	{COMMAND = "clogs", DELAY = 12},
 	{COMMAND = "updateinv", DELAY = 2},
-	{COMMAND = "antiafk", DELAY = 10},
-	{COMMAND = "peridef", DELAY = 10},
+	{COMMAND = "antiafk", DELAY = 11},
+	{COMMAND = "peridef", DELAY = 15},
         {COMMAND = "defend", DELAY = 1}
     },
     ["OnKilled"] = {},
