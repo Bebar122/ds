@@ -1,4 +1,4 @@
-print("em56")
+print("em561")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17989,8 +17989,8 @@ addcmd('updateinv', {''}, function(args, speaker)
 		    for _, item in ipairs(container:GetChildren()) do
 		        if item:FindFirstChild("ToolName") then
 
-			        if namePrefixes[toolName] then
-			            item.Name = namePrefixes[toolName] .. item.ToolName.Text
+			        if namePrefixes[item.ToolName.Text] then
+			            item.Name = namePrefixes[item.ToolName.Text] .. item.ToolName.Text
 				else
 					item.Name = item.ToolName.Text
 			        end
