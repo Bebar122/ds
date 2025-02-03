@@ -1,4 +1,4 @@
-print("em542")
+print("em543")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -18004,8 +18004,7 @@ addcmd('updateinv', {''}, function(args, speaker)
 	
 	-- Автоматический вызов при добавлении нового объекта
 	container.ChildAdded:Connect(function(child)
-		renameChild(child)
-		setPos()
+		renameItems()
 	end)
 	
 	-- Автоматический вызов при удалении объекта
