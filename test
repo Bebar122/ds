@@ -1,4 +1,4 @@
-print("em547")
+print("em548")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17972,7 +17972,8 @@ addcmd('updateinv', {''}, function(args, speaker)
 	            item.Name = item.ToolName.Text
 			item.ToolName.Visible = true
 			item.ToolName.BackgroundTransparency = 0.5
-			item.ToolName.Size.Y.Scale = 0.25			
+			local textLabel = item.ToolName
+			textLabel.Size = UDim2.new(textLabel.Size.X.Scale, textLabel.Size.X.Offset, 0.25, textLabel.Size.Y.Offset)						
 	        end
 	    end	
 	end
