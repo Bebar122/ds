@@ -1,4 +1,4 @@
-print("em543")
+print("em544")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17968,15 +17968,12 @@ addcmd('updateinv', {''}, function(args, speaker)
 
 	local function renameAll()
 	    for _, item in ipairs(container:GetChildren()) do
-		local name = item:WaitForChild("ToolName", 1) 
-		item.Name = name.Text
-	    end		
+	        if item:FindFirstChild("ToolName") then
+	            item.Name = item.ToolName.Text
+	        end
+	    end	
 	end
 
-	local function renameChild(item)
-		local name = item:WaitForChild("ToolName", 1) 
-		item.Name = name.Text
-	end
 
 	local function setPos()
 		local savedPosition = scrollingFrame.CanvasPosition.Y
@@ -17986,12 +17983,12 @@ addcmd('updateinv', {''}, function(args, speaker)
 	    		scrollingFrame.CanvasPosition = Vector2.new(0, savedPosition)
 			wait()
 		end
+		renameAll()
 	end
 
 	local function renameItems()
 		renameAll()
-		setPos()
-		renameAll()
+		setPos()	
 	end
 	
 	-- Устанавливаем сортировку по имени при первом запуске
