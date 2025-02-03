@@ -1,4 +1,4 @@
-print("em54")
+print("em541")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17964,28 +17964,36 @@ addcmd('updateinv', {''}, function(args, speaker)
 	local container = grid.Parent -- Укажи путь к UIGridFrame
 	local scrollingFrame = container.Parent
 	local gridLayout = container:FindFirstChildOfClass("UIGridLayout")
-	
-	local function renameItems(savedPosition)
-	    -- Сохраняем текущую позицию скролла
-	    
-	
+
+
+	local function renameAll()
 	    for _, item in ipairs(container:GetChildren()) do
 	        if item:FindFirstChild("ToolName") then
 	            item.Name = item.ToolName.Text
 	        end
-	    end
+	    end		
+	end
+
+	local function renameChild(item)
+	        if item:FindFirstChild("ToolName") then
+	            item.Name = item.ToolName.Text
+	        end	
+	end
+
+	local function setPos()
+		local savedPosition = scrollingFrame.CanvasPosition.Y
 		local count = 0
-		while count <5 do
+		while count <10 do
 			count = count + 1
 	    		scrollingFrame.CanvasPosition = Vector2.new(0, savedPosition)
 			wait()
 		end
-	
-	    for _, item in ipairs(container:GetChildren()) do
-	        if item:FindFirstChild("ToolName") then
-	            item.Name = item.ToolName.Text
-	        end
-	    end
+	end
+
+	local function renameItems()
+		renameAll()
+		setPos()
+		renameAll()
 	end
 	
 	-- Устанавливаем сортировку по имени при первом запуске
@@ -17998,16 +18006,13 @@ addcmd('updateinv', {''}, function(args, speaker)
 	
 	-- Автоматический вызов при добавлении нового объекта
 	container.ChildAdded:Connect(function(child)
-		local savedPosition = scrollingFrame.CanvasPosition.Y
-		print(savedPosition)
-	        --task.wait(0.1) -- Ждём, пока ToolName появится
-	        renameItems(savedPosition)
-	
+		renameChild(child)
+		setPos()
 	end)
 	
 	-- Автоматический вызов при удалении объекта
 	container.ChildRemoved:Connect(function()
-	    renameItems()
+		setPos()
 	end)
 end)
 
