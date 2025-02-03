@@ -1,4 +1,4 @@
-print("em561")
+print("em57")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17970,7 +17970,7 @@ addcmd('updateinv', {''}, function(args, speaker)
 	    ["Carrot"] = "7",
 	    ["CrimsonPeriastron"] = "7",
 	    ["DaggerOfShatteredDimensions"] = "7",
-	    ["CrescendoTheSoulStealer"] = "5",
+	    ["CrescendoTheSoulStealer"] = "4",
 	    ["BigRocketLauncher"] = "7",
 	    ["EasterPeriastron"] = "6",
 	    ["ElixirOfDreams"] = "6",
@@ -17978,6 +17978,14 @@ addcmd('updateinv', {''}, function(args, speaker)
 	    ["HyperlaserGun"] = "6",
 	    ["IvoryPeriastron"] = "7",
 	    ["LeprechaunPotion"] = "7",
+	    ["TriLaserGun"] = "6",
+	    ["WintersGreatSword"] = "7",
+	    ["TwoSeaterRainbowMagicCarpet"] = "5",
+	    ["TelamonsterTheChaosEdge"] = "4",
+	    ["SnowAndArrow"] = "7",
+	    ["RainbowMagicCarpet"] = "5",
+	    ["RidableRaptor"] = "6",
+	    ["Void"] = "zz",
 	    ["OverseerwrathSword"] = "zz"
 	}
 
