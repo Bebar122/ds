@@ -1,4 +1,4 @@
-print("em578")
+print("em579")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -18163,7 +18163,7 @@ local bindsConfig = {
     {KEY="Enum.KeyCode.F2", ISKEYUP=false, COMMAND="clset"},
     {KEY="Enum.KeyCode.F6", ISKEYUP=false, COMMAND="spawnhp"},
     {KEY="Enum.KeyCode.KeypadMultiply", ISKEYUP=false, COMMAND="tpsclone"},
-    {KEY="Enum.KeyCode.J", ISKEYUP=false, TOGGLE="stopprojectile", COMMAND="touchprojectile cursor"},
+    --{KEY="Enum.KeyCode.J", ISKEYUP=false, TOGGLE="stopprojectile", COMMAND="touchprojectile cursor"},
     {KEY="Enum.KeyCode.U", ISKEYUP=false, COMMAND="attach cursor"},
     {KEY="Enum.KeyCode.B", ISKEYUP=false, TOGGLE="3k", COMMAND="3k 0.06"},
     {KEY="Enum.KeyCode.End", ISKEYUP=false, TOGGLE="ws 25", COMMAND="ws 55"},
