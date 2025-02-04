@@ -1,4 +1,4 @@
-print("em579")
+print("em58")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17200,7 +17200,7 @@ local function moveObjectsToMouse(speaker)
         drawnLines = {}
         active = false
 
-	execCmd('unfreezeanims')
+	--execCmd('unfreezeanims')
 	task.delay(2.0, function()
 	    	execCmd('noanim')
 		execCmd('reanim')
@@ -17273,10 +17273,10 @@ local function moveObjectsToMouse(speaker)
     active = true -- Включаем команду
 
 	
-	execCmd('anim 86504773 2')
+	--[[execCmd('anim 86504773 2')
 	task.delay(2.5, function()
 	    execCmd('freezeanims')
-	end)
+	end)]]
 
 	--lockPos = false
 	--circleRadius = 10 -- Радиус окружности
@@ -17555,7 +17555,7 @@ addcmd('setlockpos', {'slp'}, function(args, speaker)
         skipNext = false -- Сбрасываем, чтобы следующий вызов сработал
         return -- Пропускаем выполнение команды
     end
-	execCmd('unfreezeanims')
+	--execCmd('unfreezeanims')
 	execCmd('noanim')
 	execCmd('reanim')    
     skipNext = true -- Устанавливаем пропуск для следующего вызова
