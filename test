@@ -1,4 +1,4 @@
-print("em577")
+print("em578")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17991,8 +17991,8 @@ addcmd('sethotbar', {'sethb'}, function(args, speaker)
 	AddToSlot(0x32, "RainbowMagicCarpet")
 	AddToSlot(0x33, "TelamonsterTheChaosEdge")
 	AddToSlot(0x34, "TriLaserGun")
-	AddToSlot(0x35, "WintersGreatSword")
-	AddToSlot(0x36, "DaggerOfShatteredDimensions")
+	AddToSlot(0x35, "GiantAnimeMallet")
+	AddToSlot(0x36, "WintersGreatSword")
 	AddToSlot(0x37, "ElixirOfDreams")
 
 end)
@@ -18009,8 +18009,8 @@ addcmd('updateinv', {''}, function(args, speaker)
 	local namePrefixes = {
 	    ["BoneSword"] = "7",
 	    ["Carrot"] = "7",
-	    ["CrimsonPeriastron"] = "7",
-	    ["DaggerOfShatteredDimensions"] = "7",
+	    ["CrimsonPeriastron"] = "5",
+	    ["DaggerOfShatteredDimensions"] = "5",
 	    ["CrescendoTheSoulStealer"] = "4",
 	    ["BigRocketLauncher"] = "7",
 	    ["EasterPeriastron"] = "6",
@@ -18020,13 +18020,14 @@ addcmd('updateinv', {''}, function(args, speaker)
 	    ["IvoryPeriastron"] = "7",
 	    ["LeprechaunPotion"] = "7",
 	    ["TriLaserGun"] = "6",
-	    ["WintersGreatSword"] = "7",
+	    ["WintersGreatSword"] = "5",
 	    ["TwoSeaterRainbowMagicCarpet"] = "5",
 	    ["TelamonsterTheChaosEdge"] = "4",
 	    ["SnowAndArrow"] = "7",
 	    ["RainbowMagicCarpet"] = "5",
 	    ["RidableRaptor"] = "6",
 	    ["TigerSkin"] = "5",
+	    ["GiantAnimeMallet"] = "5",
 	    ["Void"] = "zz",
 	    ["Diamond"] = "zz",
 	    ["Galaxy"] = "zz",
