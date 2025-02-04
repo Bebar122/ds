@@ -1,4 +1,4 @@
-print("em572")
+print("em573")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17963,9 +17963,37 @@ addcmd('defend', {'def'}, function(args, speaker)
 end)
 
 
+addcmd('sethotbar', {'sethb'}, function(args, speaker)
+	local hum = speaker.Character.Humanoid
+	local char = speaker.Character
+	local backp = speaker.Backpack
+	local function AddToSlot(key, tool)
+		--hum:UnequipTools()
+		keypress(key)
+		wait()
+		keyrelease(key)
+		wait()
+		local slottool = char:FindFirstChildWhichIsA("Tool")
+		local newslottool = backp:WaitForChild(slottool.Name, 3)
+		hum:UnequipTools()
+		wait()
+		if newslottool then
+			slottool:Destroy()
+			execCmd("et " .. tool)
+			wait()
+			execCmd("permhold 1")
+			local addedtool = backp:WaitForChild(tool, 3)
+			hum:UnequipTools()
+		end
+	end
+	AddToSlot(0x31, "SnowAndArrow")
+
+end)
+
+
 
 addcmd('updateinv', {''}, function(args, speaker)
-	local grid = game:GetService("CoreGui").RobloxGui.Backpack.Inventory.ScrollingFrame.UIGridFrame.UIGridLayout -- Укажи путь к UIGridLayout
+	local grid = game:GetService("CoreGui").RobloxGui.Backpack.Inventory.ScrollingFrame.UIGridFrame.UIGridLayout 
 	
 	local container = grid.Parent -- Укажи путь к UIGridFrame
 	local scrollingFrame = container.Parent
@@ -17993,7 +18021,12 @@ addcmd('updateinv', {''}, function(args, speaker)
 	    ["RidableRaptor"] = "6",
 	    ["TigerSkin"] = "5",
 	    ["Void"] = "zz",
-	    ["OverseerwrathSword"] = "zz"
+	    ["Diamond"] = "zz",
+	    ["Galaxy"] = "zz",
+	    ["Rainbow"] = "zz",
+	    ["Super"] = "zz",
+	    ["Lucky"] = "zz",
+	    ["OverseerwrathSword"] = "zzz"
 	}
 
 
