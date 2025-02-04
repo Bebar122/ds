@@ -1,4 +1,4 @@
-print("em573")
+print("em575")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -17974,7 +17974,7 @@ addcmd('sethotbar', {'sethb'}, function(args, speaker)
 		keyrelease(key)
 		wait()
 		local slottool = char:FindFirstChildWhichIsA("Tool")
-		local newslottool = backp:WaitForChild(slottool.Name, 3)
+		local newslottool = backp:WaitForChild(slottool.Name, 6)
 		hum:UnequipTools()
 		wait()
 		if newslottool then
@@ -17982,11 +17982,17 @@ addcmd('sethotbar', {'sethb'}, function(args, speaker)
 			execCmd("et " .. tool)
 			wait()
 			execCmd("permhold 1")
-			local addedtool = backp:WaitForChild(tool, 3)
+			local addedtool = backp:WaitForChild(tool, 6)
 			hum:UnequipTools()
 		end
 	end
-	AddToSlot(0x31, "SnowAndArrow")
+	AddToSlot(0x31, "CrescendoTheSoulStealer")
+	AddToSlot(0x32, "RainbowMagicCarpet")
+	AddToSlot(0x33, "TelamonsterTheChaosEdge")
+	AddToSlot(0x34, "TriLaserGun")
+	AddToSlot(0x35, "WintersGreatSword")
+	AddToSlot(0x36, "DaggerOfShatteredDimensions")
+	AddToSlot(0x37, "ElixirOfDreams")
 
 end)
 
