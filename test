@@ -1,4 +1,4 @@
-print("em575")
+print("em576")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -10933,7 +10933,7 @@ addcmd("spawnhp", {"spawnhp"}, function(args, speaker)
 	hum:UnequipTools()
 	wait(0.4)
 	execCmd('et Carrot')
-	wait(0.2)
+	wait(0.3)
 	speaker.Character.Carrot:Activate()
 
 	local player = game:GetService("Players").LocalPlayer
@@ -10941,6 +10941,7 @@ addcmd("spawnhp", {"spawnhp"}, function(args, speaker)
     	local humanoid = player.Character:FindFirstChildOfClass('Humanoid')
 
 	if not tigerskin or not tigerskin.Parent then
+		wait(0.2)
 		tigerskin = backpack:FindFirstChild("TigerSkin")	
 		tigerskin.Parent = player.Character
 		wait()
