@@ -1,4 +1,4 @@
-print("em582")
+print("em583")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16391,7 +16391,8 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	local crimsonPlayers = {}
 	local ivoryPlayers = {}
 	scanbool = true
-	
+	local busy = false
+
 	local function CheckRainbow()
 		task.wait(3)
 	    notify("CheckRainbow started scanning workspace")
@@ -16416,6 +16417,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 
 	
 	local function CheckCrimson(player)
+		if busy then return end
 		notify("CheckCrimson started scanning workspace")
 		local myCharacter = game.Players.LocalPlayer.Character
 		local vap = myCharacter:FindFirstChild("Vaporize")
@@ -16431,10 +16433,9 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 		    local myHRP = myCharacter:FindFirstChild("HumanoidRootPart")
 		    local targetHRP = player.Character:FindFirstChild("HumanoidRootPart")
 		    if not myHRP or not targetHRP then return end
-			local nlocation = targetHRP.Position + Vector3.new(0, 70, 0)
+			local nlocation = targetHRP.Position + Vector3.new(0, 80, 0)
 			local olocation = myHRP.Position
-		    --local distance = (myHRP.Position - targetHRP.Position).Magnitude
-		    --if distance > 70 then return end -- Проверяем дистанцию
+			busy = true
 		
 		    execCmd('tc') -- Выполняем команду, если игрок близко
 			task.spawn(function()
@@ -16444,6 +16445,8 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 				myHRP.CFrame = CFrame.new(olocation)
 				task.wait(1)
 				execCmd('tc')
+				execCmd('shield')
+				busy = false
 			end)
 			local timeout = 9 -- Максимальное время ожидания в секундах
 			local elapsedTime = 0 -- Прошедшее время
@@ -16455,6 +16458,8 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 			    elapsedTime = elapsedTime + waitInterval -- Увеличиваем таймер
 			end
 			if myCharacter.Torso.Transparency == 1 then
+				execCmd('stopshield')
+				wait(0.3)
 				myHRP.CFrame = CFrame.new(nlocation)
 				task.wait(0.5)
 				myHRP.Anchored = true
@@ -16469,6 +16474,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	end
 
 	local function CheckIvory(player)
+		
 		notify("CheckCrimson started scanning workspace")
 		local myCharacter = game.Players.LocalPlayer.Character
 		local vap = myCharacter:FindFirstChild("Stardust")
@@ -16480,15 +16486,18 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 			wait()
 	    		humanoid:UnequipTools()
 		end
-		if not vap then 			
+		if not vap then 
+			if busy then return end
 		    if not myCharacter or not player.Character then return end		
 		    local myHRP = myCharacter:FindFirstChild("HumanoidRootPart")
 		    local targetHRP = player.Character:FindFirstChild("HumanoidRootPart")
 		    if not myHRP or not targetHRP then return end
 			local olocation = myHRP.Position
 			local nlocation = targetHRP.Position + Vector3.new(0, 120, 0)
+
+			busy = true
 			execCmd('stopshield')
-		    execCmd('tc') 
+		    	execCmd('tc') 
 			
 			task.spawn(function()
 				task.wait(15)
@@ -16503,6 +16512,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 				wait()
 				execCmd('reanim')
 				execCmd('shield')
+				busy = false
 			end)
 			task.wait(11)
 			if myCharacter.Torso.Transparency == 1 then
@@ -17978,12 +17988,11 @@ addcmd('defend', {'def'}, function(args, speaker)
                     if table.find(unwantedNames, child.Name) then
                         child:Destroy()
 			character:FindFirstChildOfClass('Humanoid').WalkSpeed = 25
-			print('deleted')
                     end
                 end
             end
 		removeBlindObjects()
-		wait(0.2)
+		wait(0.1)
 	end
 
 end)
