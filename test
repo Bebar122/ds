@@ -1,4 +1,4 @@
-print("em58")
+print("em581")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13398,6 +13398,10 @@ addcmd('stophandleperiastron', {'stopshield'}, function(args, speaker)
 	if part then
 		part:Destroy()
 	end
+	local scrip = speaker.Character:WaitForChild("ShieldScript", 1)
+	if scrip then
+		scrip:Destroy()
+	end
 end)
 
 addcmd('playAllSounds', {'playsounds'}, function(args, speaker)
@@ -16427,7 +16431,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 		    local myHRP = myCharacter:FindFirstChild("HumanoidRootPart")
 		    local targetHRP = player.Character:FindFirstChild("HumanoidRootPart")
 		    if not myHRP or not targetHRP then return end
-			local nlocation = targetHRP.Position
+			local nlocation = targetHRP.Position + Vector3.new(0, 70, 0)
 			local olocation = myHRP.Position
 		    --local distance = (myHRP.Position - targetHRP.Position).Magnitude
 		    --if distance > 70 then return end -- Проверяем дистанцию
@@ -16435,8 +16439,10 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 		    execCmd('tc') -- Выполняем команду, если игрок близко
 			task.spawn(function()
 				task.wait(12)
-				execCmd('tc')
+				
 				myHRP.CFrame = CFrame.new(olocation)
+				task.wait(1)
+				execCmd('tc')
 			end)
 			local timeout = 9 -- Максимальное время ожидания в секундах
 			local elapsedTime = 0 -- Прошедшее время
@@ -16478,18 +16484,22 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 		    if not myHRP or not targetHRP then return end
 			local olocation = myHRP.Position
 			local nlocation = targetHRP.Position + Vector3.new(0, 120, 0)
-
+			execCmd('stopshield')
 		    execCmd('tc') 
+			
 			task.spawn(function()
 				task.wait(15)
 				myHRP.Anchored = false
-				execCmd('tc')
 				execCmd('ungod')
 				wait()
+  
+				myHRP.CFrame = CFrame.new(olocation)
+				task.wait(1)
+				execCmd('tc')
 				execCmd('noanim')
 				wait()
-				execCmd('reanim')  
-				myHRP.CFrame = CFrame.new(olocation)
+				execCmd('reanim')
+				execCmd('shield')
 			end)
 			task.wait(11)
 			if myCharacter.Torso.Transparency == 1 then
@@ -17947,6 +17957,17 @@ local unwantedNames = {"DecimateScript", "SelectionBox", "PointLight"}
 
 
 addcmd('defend', {'def'}, function(args, speaker)
+	local function removeBlindObjects()
+	        local playerGui = speaker:WaitForChild("PlayerGui")
+	        local blindObjects = playerGui:GetChildren()
+	
+	        for _, obj in ipairs(blindObjects) do
+	            if obj.Name == "Blind" then
+	                obj:Destroy()
+	            end
+	        end
+	end
+
 	while true do
             local character = speaker.Character
             if character then
@@ -17958,7 +17979,8 @@ addcmd('defend', {'def'}, function(args, speaker)
                     end
                 end
             end
-		wait(0.1)
+		removeBlindObjects()
+		wait(0.2)
 	end
 
 end)
@@ -17975,6 +17997,7 @@ addcmd('sethotbar', {'sethb'}, function(args, speaker)
 		keyrelease(key)
 		wait()
 		local slottool = char:FindFirstChildWhichIsA("Tool")
+		if slottool.Name == tool then return end
 		local newslottool = backp:WaitForChild(slottool.Name, 6)
 		hum:UnequipTools()
 		wait()
