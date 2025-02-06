@@ -1,4 +1,4 @@
-print("em581")
+print("em582")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16439,7 +16439,8 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 		    execCmd('tc') -- Выполняем команду, если игрок близко
 			task.spawn(function()
 				task.wait(12)
-				
+				myHRP.Anchored = false
+				wait()
 				myHRP.CFrame = CFrame.new(olocation)
 				task.wait(1)
 				execCmd('tc')
@@ -16455,6 +16456,8 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 			end
 			if myCharacter.Torso.Transparency == 1 then
 				myHRP.CFrame = CFrame.new(nlocation)
+				task.wait(0.5)
+				myHRP.Anchored = true
 			end
 			
 
