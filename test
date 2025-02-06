@@ -1,4 +1,4 @@
-print("em583")
+print("em584")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16493,7 +16493,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 		    local targetHRP = player.Character:FindFirstChild("HumanoidRootPart")
 		    if not myHRP or not targetHRP then return end
 			local olocation = myHRP.Position
-			local nlocation = targetHRP.Position + Vector3.new(0, 120, 0)
+			local nlocation = targetHRP.Position + Vector3.new(0, 165, 0)
 
 			busy = true
 			execCmd('stopshield')
