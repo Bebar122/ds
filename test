@@ -1,4 +1,4 @@
-print("em5841")
+print("em5842")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13331,18 +13331,9 @@ addcmd('handleperiastron', {'shield'}, function(args, speaker)
 		if periastron:FindFirstChild("Handle") then 
 			periastron.Handle:Destroy()
 		end
-		--if periastron.Server.ShieldScript:FindFirstChild("Reflect") then
-			--periastron.Server.ShieldScript.Reflect:Destroy()
-		--end
-		
-		--wait()
 		execCmd('actq')
-		--wait()
-		--periastron.Parent = speaker.Backpack
-		task.delay(1, function()
-			--periastron:Destroy()
+		task.delay(0.1, function()
 			periastron.Parent = speaker.Backpack
-			--speaker.Character.Humanoid:UnequipTools()
 		end)     
 	    else
 		return notify('Error', 'ChartreusePeriastron not found')
