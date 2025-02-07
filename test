@@ -1,4 +1,4 @@
-print("em585")
+print("em586")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -16415,7 +16415,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	local busy = false
 
 	local function CheckRainbow()
-		task.wait(3)
+		task.wait(2.5)
 	    notify("CheckRainbow started scanning workspace")
 	
 	    for i = 1, 20 do
