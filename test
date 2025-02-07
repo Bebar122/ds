@@ -1,4 +1,4 @@
-print("em5842")
+print("em585")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -9221,7 +9221,7 @@ end)
 
 addcmd('deletevelocity',{'dv','removevelocity','removeforces'},function(args, speaker)
 	for i,v in pairs(speaker.Character:GetDescendants()) do
-		if v:IsA("BodyVelocity") or v:IsA("BodyGyro") or v:IsA("RocketPropulsion") or v:IsA("BodyThrust") or v:IsA("BodyAngularVelocity") or v:IsA("AngularVelocity") or v:IsA("BodyForce") or v:IsA("VectorForce") or v:IsA("LineForce") then
+		if v:IsA("BodyVelocity") or v:IsA("BodyGyro") or v:IsA("RocketPropulsion") or v:IsA("BodyThrust") or v:IsA("BodyAngularVelocity") or v:IsA("AngularVelocity") or v:IsA("BodyForce") or v:IsA("VectorForce") or v:IsA("LineForce") or v:IsA("BodyPosition") then
 			v:Destroy()
 		end
 	end
@@ -15751,9 +15751,9 @@ end
 
 
 addcmd('fastkill',{'fkill'},function(args, speaker)
-	local fastb = false
+	local fastb = true
 	if args[2] == "1" then
-		fastb = true 
+		fastb = false 
 	end
 	local players = getPlayer(args[1], speaker)
 	for i,v in pairs(players) do
