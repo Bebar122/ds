@@ -1,4 +1,4 @@
-print("em586")
+print("em587")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13212,11 +13212,11 @@ addcmd('hatspin',{'spinhats'},function(args, speaker)
 end)
 
 addcmd('ding',{},function(args, speaker)
-	if workspace.Ding.Playing then
-		workspace.Ding.Playing=false
-	else
-		workspace.Ding.Playing=true
-	end
+	--if workspace.Ding.Playing then
+		--workspace.Ding.Playing=false
+	--else
+		--workspace.Ding.Playing=true
+	--end
 	workspace.FallenPartsDestroyHeight = -50000
 	soundModeEnabled = false
 	soundKeybinds = {
@@ -18434,7 +18434,7 @@ local NEWeventBinds = {
     },
     ["OnKilled"] = {},
     ["OnJoin"] = {
-        {COMMAND = "giveblocks", DELAY = 1},
+        --{COMMAND = "giveblocks", DELAY = 1},
         {COMMAND = "0bkill taetaesome", DELAY = 0},
         {COMMAND = "0kill taetaesome", DELAY = 0}
     },
