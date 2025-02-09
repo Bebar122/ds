@@ -17987,7 +17987,7 @@ end)
 
 
 local lockPos1 = false
-local unwantedNames = {"DecimateScript", "SelectionBox", "PointLight"}
+local unwantedNames = {"DecimateScript", "SelectionBox1", "PointLight1"}
 
 
 addcmd('defend', {'def'}, function(args, speaker)
@@ -18428,7 +18428,7 @@ local NEWeventBinds = {
 	{COMMAND = "spawnhp", DELAY = 10},
 	{COMMAND = "clogs", DELAY = 12},
 	{COMMAND = "updateinv", DELAY = 2},
-	{COMMAND = "antiafk", DELAY = 11},
+	--{COMMAND = "antiafk", DELAY = 11},
 	{COMMAND = "peridef", DELAY = 15},
         {COMMAND = "defend", DELAY = 1}
     },
