@@ -16466,7 +16466,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 				myHRP.CFrame = CFrame.new(olocation)
 				task.wait(1)
 				execCmd('tc')
-				execCmd('shield')
+				--execCmd('shield')
 				busy = false
 			end)
 			local timeout = 9 -- Максимальное время ожидания в секундах
@@ -16532,7 +16532,7 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 				execCmd('noanim')
 				wait()
 				execCmd('reanim')
-				execCmd('shield')
+				--execCmd('shield')
 				busy = false
 			end)
 			task.wait(11)
