@@ -16415,17 +16415,16 @@ addcmd('perisdefend',{'peridef'},function(args, speaker)
 	local busy = false
 
 	local function CheckRainbow()
-		task.wait(2.5)
+		task.wait(2.3)
 	    notify("CheckRainbow started scanning workspace")
 	
-	    for i = 1, 20 do
+	    for i = 1, 35 do
 	        for _, obj in pairs(workspace:GetChildren()) do
-	            if obj:IsA("BasePart") and obj.Name == "Part" then
+	            if obj.Name == "Part" then
 	                local touchInterest = obj:FindFirstChildOfClass("TouchTransmitter")
-	                
+	                obj.CanTouch = false
 	                if touchInterest then
 	                    touchInterest:Destroy() -- Удаляем TouchInterest
-	                    obj.CanTouch = false -- Отключаем касания
 	                    notify("Removed TouchInterest and disabled touch for: " .. obj:GetFullName())
 	                end
 	            end
