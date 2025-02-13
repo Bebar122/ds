@@ -10931,10 +10931,10 @@ addcmd("spawnhp", {"spawnhp"}, function(args, speaker)
 	wait(0.1)
 	hum = speaker.Character:FindFirstChild("Humanoid")
 	hum:UnequipTools()
-	wait(0.4)
+	--[[wait(0.4)
 	execCmd('et Carrot')
 	wait(0.3)
-	speaker.Character.Carrot:Activate()
+	speaker.Character.Carrot:Activate()]]
 
 	local player = game:GetService("Players").LocalPlayer
     	local backpack = player.Backpack
@@ -10950,7 +10950,8 @@ addcmd("spawnhp", {"spawnhp"}, function(args, speaker)
     		humanoid:UnequipTools()
 	end
 	wait(1.1)
-	execCmd('giveblocks')
+	execCmd('et Carrot')
+	--execCmd('giveblocks')
 end)
 
 addcmd("clsetup", {"clset"}, function(args, speaker)
