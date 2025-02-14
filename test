@@ -1,4 +1,4 @@
-print("em588")
+print("em589")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -14755,6 +14755,7 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
                 toolEquipped.Click:FireServer(unpack(args))
 		task.spawn(function()
 			if perm then
+				speaker.Character.Humanoid:UnequipTools()
 				task.wait(ktimer3/100*30)
 				attach(speaker, target)
 			end
