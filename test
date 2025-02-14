@@ -1,4 +1,4 @@
-print("em587")
+print("em588")
 if IY_LOADED and not _G.IY_DEBUG == true then
     -- error("Infinite Yield is already running!", 0)
     return
@@ -13233,6 +13233,9 @@ addcmd('ding',{},function(args, speaker)
 	greenshields = {}
 
 	shieldindex = 1
+
+	seranok = nil
+	ktimer3 = 2.5
 end)
 
 
@@ -14431,25 +14434,121 @@ function attach(speaker,target)
 		hum:Destroy()
 		workspace.CurrentCamera.CameraSubject = char
 		newHum.DisplayDistanceType = "None"
-		local tool = speaker:FindFirstChildOfClass("Backpack"):FindFirstChildOfClass("Tool") or speaker.Character:FindFirstChildOfClass("Tool")
+		local tool = speaker:FindFirstChildOfClass("Backpack"):FindFirstChild("RainbowPeriastron") or speaker:FindFirstChildOfClass("Backpack"):FindFirstChildOfClass("Tool") or speaker.Character:FindFirstChildOfClass("Tool")
 		tool.Parent = char
 		
 		hrp.CFrame = hrp2.CFrame * CFrame.new(0, 0, 0) * CFrame.new(math.random(-100, 100)/200,math.random(-100, 100)/200,math.random(-100, 100)/200)
+		--wait(.1)
+		--tool.Parent = char
 		local n = 0
 		repeat
 			wait(.1)
+			--local tool = speaker:FindFirstChildOfClass("Backpack"):FindFirstChild("RainbowPeriastron") or speaker:FindFirstChildOfClass("Backpack"):FindFirstChildOfClass("Tool") or speaker.Character:FindFirstChildOfClass("Tool")
+			--if n == 1 then tool.Parent = char end
 			n = n + 1
-			hrp.CFrame = hrp2.CFrame
+			hrp.CFrame = hrp2.CFrame * CFrame.new(0, 0, 0) * CFrame.new(math.random(-100, 100)/200,math.random(-100, 100)/200,math.random(-100, 100)/200)
 		until (tool.Parent ~= char or not hrp or not hrp2 or not hrp.Parent or not hrp2.Parent or n > 250) and n > 2
 	else
 		notify('Tool Required','You need to have an item in your inventory to use this command')
 	end
 end
 
+
+
+
+
+
+
+
+
+function attach2(speaker,target)
+	if tools(speaker) then
+		local char = speaker.Character
+		local tchar = target.Character
+		local hum = speaker.Character:FindFirstChildOfClass("Humanoid")
+		local hrp = getRoot(speaker.Character)
+		local hrp2 = getRoot(target.Character)
+		hum.Name = "1"
+		local newHum = hum:Clone()
+		newHum.Parent = char
+		newHum.Name = "Humanoid"
+		wait()
+		hum:Destroy()
+		workspace.CurrentCamera.CameraSubject = char
+		newHum.DisplayDistanceType = "None"
+		seranok.Parent = char
+		local hrp = char:FindFirstChildWhichIsA('Tool'):FindFirstChild("Handle")
+		hrp.CFrame = hrp2.CFrame
+		wait(0.04)
+		hrp.CFrame = hrp2.CFrame
+		wait(0.04)
+		hrp.CFrame = hrp2.CFrame
+		wait(0.04)
+		char['Right Arm'].RightGrip:Destroy()
+		wait()
+		speaker.Backpack:FindFirstChild('Railgun').Parent = char 
+		wait()
+		local hrp = char:FindFirstChildWhichIsA('Tool'):FindFirstChild("Handle")
+		local myhrp = getRoot(speaker.Character)
+		hrp.CFrame = target.Character.Torso.CFrame
+		myhrp.CFrame = target.Character.Torso.CFrame
+		wait(0.1)
+		hrp.CFrame = target.Character.Torso.CFrame
+		myhrp.CFrame = target.Character.Torso.CFrame
+		wait(0.1)
+		hrp.CFrame = target.Character.Torso.CFrame
+		myhrp.CFrame = target.Character.Torso.CFrame
+		wait(0.5)
+		hrp.CFrame = target.Character.Torso.CFrame
+		myhrp.CFrame = target.Character.Torso.CFrame
+		wait(0.5)
+
+	else
+		notify('Tool Required','You need to have an item in your inventory to use this command')
+	end
+end
+
+
 addcmd('attach',{},function(args, speaker)
 	local players = getPlayer(args[1], speaker)
 	for i,v in pairs(players) do
 		attach(speaker,Players[v])
+	end
+end)
+
+
+
+addcmd('giverocket',{'giver'},function(args, speaker)
+	local players = getPlayer(args[1], speaker)
+	
+	for i,v in pairs(players) do 
+		if Players[v] and Players[v].Character and Players[v].Character.Humanoid.Health > 0 then
+			execCmd('3laserkill ' .. v)
+			while Players[v] do
+				wait()
+				if not workspace:FindFirstChild(v) then
+					break
+				end
+				
+			end	
+		end
+		execCmd("et RocketJumper")
+		wait()
+		seranok = speaker.Character.RocketJumper
+		execCmd('ro CreateAndFireRocket')
+		wait()
+		speaker.Character.RocketJumper.Parent = speaker.Backpack
+		
+		while Players[v] do
+			local hum = Players[v].Character:FindFirstChild("Humanoid")
+			if hum and hum.Health > 0 then
+				break
+			end
+			wait()
+		end
+		speaker.Character.Humanoid:UnequipTools()
+		execCmd("unfly")
+		attach2(speaker,Players[v])
 	end
 end)
 
@@ -14610,8 +14709,12 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
     -- Установите скорость полета пули (можете настроить это значение под себя)
     local bulletSpeed = 120 -- Скорость пули в студии (измените на свою)
 	local flag = false
+	local perm = false
 	if args[2] == '1' then
 		flag = true
+	end
+	if args[2] == 'p' then
+		perm = true
 	end
     -- Проверяем наличие TriLaserGun в руках или экипируем его из инвентаря
     local toolEquipped = speaker.Character:FindFirstChild("TriLaserGun") or equipTool3(speaker, "TriLaserGun")
@@ -14650,6 +14753,28 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
 			toolEquipped.Handle.Fire:Destroy()
 		end
                 toolEquipped.Click:FireServer(unpack(args))
+		task.spawn(function()
+			if perm then
+				task.wait(ktimer3/100*30)
+				attach(speaker, target)
+			end
+		end)
+		startTime3 = os.clock()
+		task.spawn(function()
+			local count3 = 0
+			if Players[playerName] and Players[playerName].Character  then
+				while Players[playerName] or count3 < 200 do		
+					if not workspace:FindFirstChild(playerName) then
+						endTime3 = os.clock()
+						ktimer3 = endTime3 - startTime3
+						print("Затраченное время: " .. ktimer3 .. " секунд")
+						break
+					end
+					wait(0.1)
+					count3 = count3 + 1
+				end	
+			end
+		end)
 		touchEffect3(target, toolEquipped, flag)
                 wait(0.1) -- Задержка после выстрела
 		touchEffect3(target, toolEquipped, flag)
@@ -18220,7 +18345,7 @@ local bindsConfig = {
     {KEY="Enum.KeyCode.F6", ISKEYUP=false, COMMAND="spawnhp"},
     {KEY="Enum.KeyCode.KeypadMultiply", ISKEYUP=false, COMMAND="tpsclone"},
     --{KEY="Enum.KeyCode.J", ISKEYUP=false, TOGGLE="stopprojectile", COMMAND="touchprojectile cursor"},
-    {KEY="Enum.KeyCode.U", ISKEYUP=false, COMMAND="attach cursor"},
+    {KEY="Enum.KeyCode.U", ISKEYUP=false, COMMAND="3kill cursor p"},
     {KEY="Enum.KeyCode.B", ISKEYUP=false, TOGGLE="3k", COMMAND="3k 0.06"},
     {KEY="Enum.KeyCode.End", ISKEYUP=false, TOGGLE="ws 25", COMMAND="ws 55"},
     {KEY="Enum.KeyCode.F4", ISKEYUP=false, COMMAND="actcl"},
