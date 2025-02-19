@@ -13236,6 +13236,7 @@ addcmd('ding',{},function(args, speaker)
 
 	seranok = nil
 	ktimer3 = 2.5
+	bodyposdef = false
 end)
 
 
@@ -16767,6 +16768,34 @@ addcmd('stopscan',{'stops'},function(args, speaker)
 end)
 
 
+addcmd('bodyposdef',{''},function(args, speaker)
+	bodyposdef = not bodyposdef
+	--stopinv = bodyposdef
+	if not bodyposdef then
+		speaker.Character.Torso:FindFirstChild('posdef'):Destroy()
+	end
+	task.spawn(function()
+	while bodyposdef do
+		if not speaker.Character or not speaker.Character:FindFirstChild('Torso') then
+			wait()
+		else
+			if speaker.Character.Torso:FindFirstChild('posdef') then
+				speaker.Character.Torso.posdef.Position = Vector3.new(math.random(-999999, 999999), math.random(-49000, -5000), math.random(-999999, 999999))
+				wait(0.5)
+			else
+				local bg = Instance.new("BodyPosition")
+				bg.Name = 'posdef'
+				bg.Parent = speaker.Character.Torso
+				bg.MaxForce = Vector3.new(999999999, 999999999, 999999999)
+				bg.Position = Vector3.new(math.random(-999999, 999999), math.random(-49000, -5000), math.random(-999999, 999999))
+				wait(0.5)
+			end
+		end
+	end
+	end)
+end)
+
+
 addcmd('activateClone',{'actcl'},function(args, speaker)
 	-- Получаем персонажа игрока
 	local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
@@ -18298,7 +18327,7 @@ local bindsConfig = {
     {KEY="Enum.KeyCode.M", ISKEYUP=false, COMMAND="permhold 1"},
     --{KEY="Enum.KeyCode.RightBracket", ISKEYUP=false, COMMAND="ding"},
     {KEY="Enum.KeyCode.LeftBracket", ISKEYUP=false, COMMAND="copypos cursor"},
-    {KEY="Enum.KeyCode.Y", ISKEYUP=false, COMMAND="htouch cursor"},
+    {KEY="Enum.KeyCode.Y", ISKEYUP=false, COMMAND="bodyposdef"},
     {KEY="Enum.KeyCode.C", ISKEYUP=false, COMMAND="bkill cursor"},
     {KEY="Enum.KeyCode.KeypadPeriod", ISKEYUP=false, COMMAND="shop"},
     {KEY="Enum.KeyCode.L", ISKEYUP=false, TOGGLE="showiy", COMMAND="hideiy"},
