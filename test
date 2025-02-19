@@ -10931,6 +10931,12 @@ addcmd("spawnhp", {"spawnhp"}, function(args, speaker)
 	wait(0.1)
 	hum = speaker.Character:FindFirstChild("Humanoid")
 	hum:UnequipTools()
+	wait()
+	game:GetService("Players").LocalPlayer.Backpack.OverseerwrathSword.Parent = speaker.Character
+	wait()
+	execCmd('permhold 1')
+	hum:UnequipTools()
+	wait()
 	--[[wait(0.4)
 	execCmd('et Carrot')
 	wait(0.3)
@@ -14757,7 +14763,7 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
 		task.spawn(function()
 			if perm then
 				speaker.Character.Humanoid:UnequipTools()
-				task.wait(ktimer3/100*30)
+				task.wait(ktimer3 - 1.5*globalMultiPl)
 				attach(speaker, target)
 			end
 		end)
@@ -14766,7 +14772,7 @@ addcmd('3kill', {'3laserkill'}, function(args, speaker)
 			local count3 = 0
 			if Players[playerName] and Players[playerName].Character  then
 				while Players[playerName] or count3 < 200 do		
-					if not workspace:FindFirstChild(playerName) then
+					if not workspace:FindFirstChild(playerName) or workspace:FindFirstChild(playerName):FindFirstChild("Humanoid").Health <= 0 then
 						endTime3 = os.clock()
 						ktimer3 = endTime3 - startTime3
 						print("Затраченное время: " .. ktimer3 .. " секунд")
@@ -18165,6 +18171,9 @@ addcmd('defend', {'def'}, function(args, speaker)
                         child:Destroy()
 			character:FindFirstChildOfClass('Humanoid').WalkSpeed = 25
                     end
+			if child.Name == "Busy" then
+				execCmd("respawn")
+			end
                 end
             end
 		removeBlindObjects()
